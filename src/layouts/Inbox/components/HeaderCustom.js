@@ -1,6 +1,7 @@
 import React from "react";
-import { ErrorBoundary, Lang, Header, Table, InputLazy } from "fogito-core-ui";
+import { ErrorBoundary, Lang, Header, Table } from "fogito-core-ui";
 import { Link } from "react-router-dom";
+import AsyncSelect from "react-select/async";
 import { historyPushByName } from "@actions";
 
 export const HeaderCustom = ({
@@ -14,6 +15,7 @@ export const HeaderCustom = ({
   filters,
   name,
 }) => {
+ 
   const columns = [
     { name: Lang.get("From") },
     { name: Lang.get("Recipient") },
@@ -21,6 +23,7 @@ export const HeaderCustom = ({
     { name: Lang.get("Date") },
     { name: Lang.get("Actions") },
   ];
+
   return (
     <ErrorBoundary>
       <Header>
@@ -46,27 +49,58 @@ export const HeaderCustom = ({
               </button>
             </div>
           )}
-          <div className="col-md-4 col-12 mt-md-0 mt-3 order-md-2 order-3">
-            <div className="input-group input-group-alternative d-flex align-items-center">
+          <div className="col-md-3 col-6 mt-md-0 mt-3 order-md-2 order-2 ">
+            <div className="input-group input-group-alternative">
               <div className="input-group-prepend">
-                <span className="input-group-text">
-                  <i className="feather feather-search" />
-                </span>
+                <div
+                  className="input-group-text border__right cursor-pointer"
+                  onClick={() => {
+                    if (!USER) {
+                      setState({
+                        member: !state.member
+                          ? {
+                              label: Auth.get("fullname"),
+                              value: Auth.get("id"),
+                            }
+                          : null,
+                      });
+                      historyPushByName(
+                        {
+                          label: "member",
+                          value: !state.member ? Auth.get("id") : "",
+                        },
+                        name
+                      );
+                    }
+                  }}
+                >
+                  <i
+                    className={`feather feather-${
+                      !!state.member ? "user" : "users"
+                    } text-primary`}
+                  />
+                </div>
               </div>
-              <InputLazy
-                value={state.recipient}
-                onChange={(e) => {
-                  setState({ recipient: e.target.value });
+              <AsyncSelect
+                isClearable
+                cacheOptions
+                defaultOptions
+                value={state.member}
+                // loadOptions={loadUsers}
+                placeholder={Lang.get("All")}
+                onChange={(member) => {
+                  setState({
+                    member: member,
+                  });
                   historyPushByName(
                     {
-                      label: "recipient",
-                      value: e.target.value,
+                      label: "member",
+                      value: member?.value || "",
                     },
                     name
                   );
                 }}
                 className="form-control form-control-alternative"
-                placeholder={Lang.get("Recipient")}
               />
             </div>
           </div>

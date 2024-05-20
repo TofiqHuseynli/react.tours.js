@@ -1,7 +1,6 @@
 import moment from "moment";
-import Lang from "fogito-core-ui/build/library/Lang";
-import App from "fogito-core-ui/build/library/App";
 import { config } from "@config";
+import { App, Lang } from "fogito-core-ui";
 
 export const calculateDiscount = (row) => {
   let res = 0;

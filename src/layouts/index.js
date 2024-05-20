@@ -1,6 +1,4 @@
-export * from "./App";
-export * from "./GeneralSkeleton"; 
-export * from "./Inbox";
+ export * from "./Inbox";
 
 
 

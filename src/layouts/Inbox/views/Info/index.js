@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ErrorBoundary, Lang, Popup } from "fogito-core-ui";
 import { useParams } from "react-router-dom";
 import { mailsList } from "@actions";

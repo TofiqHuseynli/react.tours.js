@@ -186,7 +186,6 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
         ? null
         : state.filters.range,
   };
-
   return state.info ? (
     <ErrorBoundary>
       <Filters
@@ -197,9 +196,7 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
         state={state}
         setState={(key, value) => setState({ [key]: value })}
       />
-
       <ViewRoutes onClose={goBack} loadData={loadData} path={path} />
-
       <HeaderCustom
         state={state}
         setState={setState}
@@ -223,12 +220,10 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
     </ErrorBoundary>
   ) : (
     <ErrorBoundary>
-
       <Info
         state={state}
         setState={setState}
       />
-
     </ErrorBoundary>
   );
 };

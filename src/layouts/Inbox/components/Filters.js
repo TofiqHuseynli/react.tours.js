@@ -1,5 +1,5 @@
 import React from "react";
- import FilterBar from "fogito-core-ui/build/components/common/FilterBar";
+import FilterBar from "fogito-core-ui/build/components/common/FilterBar";
 import Tooltip from "antd/lib/tooltip";
 import DatePicker from "antd/lib/date-picker";
 import moment from "moment";

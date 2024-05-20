@@ -1,7 +1,6 @@
 import React from "react";
 import Skeleton from "antd/lib/skeleton";
-import ErrorBoundary from 'fogito-core-ui/build/components/error/ErrorBoundary';
-import Loading from 'fogito-core-ui/build/components/common/Loading';
+ import { ErrorBoundary, Loading } from "fogito-core-ui";
 export const GeneralSkeleton = () => {
   return (
     <ErrorBoundary>
