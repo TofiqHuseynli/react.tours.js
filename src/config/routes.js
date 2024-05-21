@@ -4,10 +4,7 @@ import {
 import React from "react";
 
 export const CORE_API_URL = "/core";
-export const FILE_API_URL = "/files";
 export const MICROSERVICE_URL = "/mails";
-export const INVOICE_API_URL = "/invoices";
-
 
 export const API_ROUTES = {
  // Settings
@@ -16,12 +13,6 @@ export const API_ROUTES = {
  coreActivitiesList: CORE_API_URL + "/activities/list",
  coreTimezonesList: CORE_API_URL + "/data/timezones",
  
-
- // Users
- usersList: CORE_API_URL + "/users/recommendations/list",
-
- //
- taxRatesList: INVOICE_API_URL + "/taxrates/list",
 
  // Mails
  mailsList: MICROSERVICE_URL + "/mails/list",

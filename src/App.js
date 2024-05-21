@@ -125,55 +125,7 @@ export const App = () => {
     Api.setParams({ app_id: config.appID, test: true });
     AppLib.setData({
       appName: config.appName,
-      months_list: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ],
-      discount_list: [
-        {
-          label: "%",
-          value: "percentage",
-        },
-        {
-          label: "DKK",
-          value: "dkk",
-        },
-        {
-          label: "EUR",
-          value: "eu",
-        },
-      ],
-
-      getStatusColor(status) {
-        let color = "#000";
-        switch (status) {
-          case 1:
-            color = "#A0841C";
-            break;
-          case 2:
-            color = "#4CAF50";
-            break;
-          case 3:
-            color = "#ffd600"; // "#717171"
-            break;
-          case 4:
-            color = "#DE0357";
-            break;
-        }
-        return color;
-      },
     });
-
     loadData();
   }, []);
 
