@@ -13,7 +13,7 @@ module.exports = (env, args) => {
       publicPath: args.publicPath || "/",
     },
     devServer: {
-      port: 4018,
+      port: 4026,
       compress: true,
       publicPath: "/",
       host: "localhost",

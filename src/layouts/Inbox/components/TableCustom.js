@@ -50,10 +50,10 @@ export const TableCustom = ({
               style={{ fontSize: "1.2rem", height: "22px", lineHeight: "1px" }}
             />
             <div className="dropdown-menu">
-              <Link onClick={showInfo} className="text-dark" to={`${path}/info/${data?.id}`}>
+              <Link className="text-dark" to={`${path}/info/${data?.id}`}>
                 <button className="dropdown-item">{Lang.get("Info")}</button>
               </Link>
-              <button className="dropdown-item">{Lang.get("Edit")}</button>
+              {/* <button className="dropdown-item">{Lang.get("Edit")}</button> */}
               <button
                 className="dropdown-item text-danger"
                 onClick={() => onDelete([data.id])}

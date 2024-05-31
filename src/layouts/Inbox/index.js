@@ -196,7 +196,7 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
         state={state}
         setState={(key, value) => setState({ [key]: value })}
       />
-      <ViewRoutes onClose={goBack} loadData={loadData} path={path} />
+      <ViewRoutes onClose={goBack} loadData={loadData} history={history} path={path} url={url} />
       <HeaderCustom
         state={state}
         setState={setState}
