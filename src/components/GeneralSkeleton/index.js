@@ -4,7 +4,7 @@ import Skeleton from "antd/lib/skeleton";
 export const GeneralSkeleton = () => {
   return (
     <ErrorBoundary>
-      <div className="d-flex px-2 pb-2 mt-4">
+      {/* <div className="d-flex px-2 pb-2 mt-4">
         {Array.from(new Array(4)).map((item, key) => (
           <Skeleton.Button
             active
@@ -12,7 +12,7 @@ export const GeneralSkeleton = () => {
             key={key}
           />
         ))}
-      </div>
+      </div> */}
       <div className="border__bottom mb-4 mt-1" />
       <div style={{ width: "100%", height: 300 }} className="position-relative">
         <Loading />

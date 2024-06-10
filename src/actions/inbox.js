@@ -12,3 +12,10 @@ export const mailsDelete = (params) => {
   return Api.post("mailsDelete", params);
 };
 
+export const mailsInfo = (params) => {
+  return Api.post("mailsInfo", { data: params });
+};
+
+
+
+

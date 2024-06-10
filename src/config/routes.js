@@ -18,6 +18,7 @@ export const API_ROUTES = {
  mailsList: MICROSERVICE_URL + "/mails/list",
  mailsAdd: MICROSERVICE_URL + "/mails/addmail",
  mailsDelete: MICROSERVICE_URL + "/mails/delete",
+ mailsInfo: MICROSERVICE_URL + "/mails/info"
 };
 export const MENU_ROUTES = [
   {
