@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { mailsInfo } from "@actions";
 import { GeneralSkeleton } from "@components";
 
-export const Info = ({}) => {
+export const Info = ({ }) => {
   let urlParams = useParams();
 
   const [state, setState] = React.useReducer(
@@ -76,36 +76,47 @@ export const Info = ({}) => {
                           lineHeight: "1px",
                         }}
                       />
-                      <div className="dropdown-menu">
-                        {/* <Link
-                          className="text-dark"
-                          to={`${path}/info/${data?.id}`}
-                        >
-                          <button className="dropdown-item">
-                            {Lang.get("Info")}
-                          </button>
-                        </Link> */}
-                        <button
-                          className="dropdown-item text-danger"
-                          onClick={() => onDelete([data.id])}
-                        >
-                          {Lang.get("Delete")}
-                        </button>
+                      <div className="dropdown-menu drop-details p-4">
+                        <div className="row">
+                          <div className="col-2 d-flex flex-column align-items-end">
+                            <span>{Lang.get("From:")}</span>
+                            <span>{Lang.get("To:")}</span>
+                            <span>{Lang.get("Date:")}</span>
+                            <span>{Lang.get("Subject:")}</span>
+                          </div>
+                          <div className="col-auto d-flex flex-column">
+                            <span className="fw-bold">{data.from}</span>
+                            <span>{data.to}</span>
+                            <span>{data.date}</span>
+                            <span>{data.subject}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-auto ml-auto mr-2">
-                  <button
-                    data-toggle="dropdown"
-                    className="btn shadow-none bg-transparent feather feather-more-vertical p-0"
-                    style={{
-                      fontSize: "1.2rem",
-                      height: "22px",
-                      lineHeight: "1px",
-                      transform: "rotate(90deg)",
-                    }}
-                  />
+                <div className="col-auto ml-auto d-flex">
+                  <div>{data.date}</div>
+                  <div className="dropleft">
+                    <button
+                      data-toggle="dropdown"
+                      className="btn shadow-none bg-transparent feather feather-more-vertical"
+                      style={{
+                        fontSize: "1.2rem",
+                        height: "22px",
+                        lineHeight: "1px",
+                        transform: "rotate(90deg)",
+                      }}
+                    />
+                    <div className="dropdown-menu">
+                      <button className="dropdown-item">{Lang.get("Replay")}</button>
+
+                      <button className="dropdown-item">{Lang.get("Forward")}</button>
+                    </div>
+
+                  </div>
+
+
                 </div>
               </div>
               <div className="inbox-message-content mt-3 container ml-0">
@@ -116,90 +127,6 @@ export const Info = ({}) => {
         ))
       )}
 
-      {/* <div className="pl-7 p-5 mb-1 bg-white rounded ">
-        <div className="row">
-          <div className="col-auto">
-            <img
-              src="https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp"
-              width={50}
-              height={50}
-              className="rounded-circle profil-img"
-            />
-          </div>
-          <div className="col-auto">
-            <span>Maryam Mahmudova</span>
-            <div className="d-flex test-bg align-items-center ">
-              <p className="receiver-mail">to me</p>
-              <i className="feather feather-chevron-down  mb-3" />
-            </div>
-          </div>
-          <div className="col-auto p-0">
-            <span>&lt;maryammahmudova6@gmail.com&gt;</span>
-          </div>
-          <div className="col-auto ml-auto mr-2">
-            <button
-              data-toggle="dropdown"
-              className="btn shadow-none bg-transparent feather feather-more-vertical p-0"
-              style={{
-                fontSize: "1.2rem",
-                height: "22px",
-                lineHeight: "1px",
-                transform: "rotate(90deg)",
-              }}
-            />
-          </div>
-        </div>
-        <div className="inbox-message-content mt-3 container ml-0">
-          <p>
-            Lorem Ipsum has been the industry's standard dummy text ever since
-            the 1500s, when an unknown pIpsum has been the industry's standard
-            dummy text ever since the 1500s, when. Ipsum has been the industry's
-            standard dummy text ever since the 1500s, when
-          </p>
-        </div>
-      </div>
-
-      <div className="p-5 mb-1 bg-white rounded ">
-        <div className="row">
-          <div className="col-auto">
-            <img
-              src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-              width={50}
-              height={50}
-              className="rounded-circle profil-img"
-            />
-          </div>
-          <div className="col-auto">
-            <span>Asif Huseynli</span>
-            <div className="d-flex test-bg align-items-center ">
-              <p className="receiver-mail">to Maryam</p>
-              <i className="feather feather-chevron-down  mb-3" />
-            </div>
-          </div>
-          <div className="col-auto p-0">
-            <span>&lt;asifhuseynli56@gmail.com&gt;</span>
-          </div>
-          <div className="col-auto ml-auto mr-2">
-            <button
-              data-toggle="dropdown"
-              className="btn shadow-none bg-transparent feather feather-more-vertical p-0"
-              style={{
-                fontSize: "1.2rem",
-                height: "22px",
-                lineHeight: "1px",
-                transform: "rotate(90deg)",
-              }}
-            />
-          </div>
-        </div>
-        <div className="inbox-message-content mt-3 container ml-0">
-          <p>
-            Still in their infancy. Various versions have evolved over the
-            years, sometimes by accident, sometimes on purpose injected humour
-            and the like, opposed to using.
-          </p>
-        </div>
-      </div> */}
     </ErrorBoundary>
   );
 };
