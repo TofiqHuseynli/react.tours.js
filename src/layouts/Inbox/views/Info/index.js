@@ -18,8 +18,6 @@ export const Info = ({ }) => {
     }
   );
 
-  console.log(state.data[0]);
-
   const loadData = async () => {
     setState({ loading: true });
     let response = await mailsInfo({ id: state.id });
@@ -65,7 +63,6 @@ export const Info = ({ }) => {
                   </div>
                   <div className="d-flex   ">
                     <p className="receiver-mail">{data.to}</p>
-
                     <div className="dropright ml-1">
                       <button
                         data-toggle="dropdown"
@@ -96,7 +93,7 @@ export const Info = ({ }) => {
                   </div>
                 </div>
                 <div className="col-auto ml-auto d-flex">
-                  <div>{data.date}</div>
+                  <div><button className="btn shadow-none bg-transparent feather feather-corner-up-left p-0"></button></div>
                   <div className="dropleft">
                     <button
                       data-toggle="dropdown"
@@ -109,14 +106,10 @@ export const Info = ({ }) => {
                       }}
                     />
                     <div className="dropdown-menu">
-                      <button className="dropdown-item">{Lang.get("Replay")}</button>
-
-                      <button className="dropdown-item">{Lang.get("Forward")}</button>
+                      <button className="dropdown-item"><i class="feather-corner-up-left"></i> {Lang.get("Replay")}</button>
+                      <button className="dropdown-item"><i class="feather-corner-up-right"></i> {Lang.get("Forward")}</button>
                     </div>
-
                   </div>
-
-
                 </div>
               </div>
               <div className="inbox-message-content mt-3 container ml-0">
