@@ -90,6 +90,7 @@ export const Info = ({ }) => {
                         </div>
                       </div>
                     </div>
+                    
                   </div>
                 </div>
                 <div className="col-auto ml-auto d-flex">
