@@ -49,7 +49,7 @@ export const HeaderCustom = ({
               </button>
             </div>
           )}
-          <div className="col-md-3 col-6 mt-md-0 mt-3 order-md-2 order-2 ">
+          <div className="col-md-3 col-6 mt-md-0 mt-3 order-md-2 order-3 ">
             <div className="input-group input-group-alternative">
               <div className="input-group-prepend">
                 <div
@@ -104,7 +104,7 @@ export const HeaderCustom = ({
               />
             </div>
           </div>
-          <div className="col-md-auto col-6 mt-md-0 mt-3 ml-md-auto order-md-2 order-3">
+          <div className="col-md-auto col-6 mt-md-0 ml-md-auto order-md-2 order-2">
             <Table.ColumnFilter
               className="btn btn-block btn-white"
               columns={{
@@ -131,7 +131,7 @@ export const HeaderCustom = ({
               {Lang.get("Filters")}
             </Header.FilterButton>
           </div>
-          <div className="col-md-auto col-6 order-md-5 order-2">
+          <div className="col-md-auto col-12 order-md-5 order-5 m-md-0 mt-3">
             <Link to={`${path}/add`} className="btn btn-primary btn-block">
               <i className="feather feather-plus" />
             </Link>
