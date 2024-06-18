@@ -34,16 +34,16 @@
   font-size: 14px ;
 }
 
-// .drop-details{
-//   width: 420px!important;
-// }
+.inbox-message-content{
+  width: 75%;
+}
 
 
 
 .tooltip_ {
   position: relative;
   display: inline-block;
-  height: 20px;
+  cursor:pointer;
 }
 
 .tooltip_ .tooltiptext {

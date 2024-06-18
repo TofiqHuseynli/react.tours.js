@@ -33,11 +33,9 @@ export const Info = ({ }) => {
     loadData();
   }, []);
 
-
   if (state.loading){
       return (<Loading/>);
   }
-
   return (
       <ErrorBoundary>
           <div className="p-3 mb-3  bg-white rounded d-flex ">
@@ -53,7 +51,6 @@ export const Info = ({ }) => {
                   />
               ))
           }
-
       </ErrorBoundary>
   );
 };

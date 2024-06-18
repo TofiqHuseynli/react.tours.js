@@ -1,11 +1,11 @@
 import React from "react";
-import {ErrorBoundary, Lang,} from "fogito-core-ui";
+import { ErrorBoundary, Lang, } from "fogito-core-ui";
 
-export const InfoCard = ({data, key}) => {
+export const InfoCard = ({ data, key }) => {
 
     return (
         <ErrorBoundary>
-            <div className="p-5 mb-1 bg-white rounded " key={key}>
+            <div className="p-4 mb-1 bg-white rounded " key={key}>
                 <div className="d-flex">
                     <div className="d-flex">
                         <img
@@ -15,37 +15,31 @@ export const InfoCard = ({data, key}) => {
                             height={50}
                             className="rounded-circle profil-img mr-2"
                         />
-
                         <div>
                             <span>{data.from}</span>
-
                             <div className='d-flex align-items-center'>
                                 <span className="fs-14">{data.to}</span>
                                 <div className="ml-1">
                                     <i
                                         data-toggle="dropdown"
-                                        style={{lineHeight:'30px'}}
+                                        style={{ lineHeight: '30px' }}
                                         className="feather feather-chevron-down fs-20 cursor-pointer"
                                     ></i>
                                     <div className="dropdown-menu p-3">
-                                        <ul className='m-0 p-0'>
-                                            <li>
-                                                <span>{Lang.get("From")}:</span>
-                                                <span className="fw-bold">{data.from}</span>
-                                            </li>
-                                            <li>
-                                                <span>{Lang.get("To")}:</span>
-                                                <span>{data.to}</span>
-                                            </li>
-                                            <li>
-                                                <span>{Lang.get("Date")}:</span>
-                                                <span>{data.date}</span>
-                                            </li>
-                                            <li>
-                                                <span>{Lang.get("Subject")}:</span>
-                                                <span>{data.subject}</span>
-                                            </li>
-                                        </ul>
+                                        <div className="d-flex">
+                                            <ul className="d-flex flex-column align-items-end p-0">
+                                                <li><span>{Lang.get("From")}:</span></li>
+                                                <li><span>{Lang.get("To")}:</span></li>
+                                                <li><span>{Lang.get("Date")}:</span></li>
+                                                <li><span>{Lang.get("Subject")}:</span></li>
+                                            </ul>
+                                            <ul className='pl-2'>
+                                                <li><span className="fw-bold">{data.from}</span></li>
+                                                <li><span>{data.to}</span></li>
+                                                <li><span>{data.date}</span></li>
+                                                <li><span>{data.subject}</span></li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -53,10 +47,10 @@ export const InfoCard = ({data, key}) => {
                     </div>
 
                     <div className="ml-auto d-flex">
-                        <div className="tooltip_">
+                        <div>
                             <button
-                                className="btn shadow-none bg-transparent feather feather-corner-up-left p-0 "></button>
-                            <span className="tooltiptext">Replay</span></div>
+                                className="btn shadow-none bg-transparent feather feather-corner-up-left p-0 m-0"></button>
+                        </div>
                         <div className="dropleft">
                             <button
                                 data-toggle="dropdown"
@@ -77,8 +71,8 @@ export const InfoCard = ({data, key}) => {
                         </div>
                     </div>
                 </div>
-                <div className="inbox-message-content mt-3 container ml-0">
-                    <p>{data.snippet}</p>
+                <div className="inbox-message-content mt-3 ml-0">
+                    <p className="text-break">{data.snippet}</p>
                 </div>
             </div>
 
