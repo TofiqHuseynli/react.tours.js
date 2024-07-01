@@ -34,7 +34,6 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
       count: 0,
       limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
       skip: 0,
-      info: true,
       hiddenColumns:
         JSON.parse(localStorage.getItem(`${VIEW}_columns_${config.appID}`)) ||
         [],
@@ -186,7 +185,7 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
         ? null
         : state.filters.range,
   };
-  return state.info ? (
+  return (
     <ErrorBoundary>
       <Filters
         show={state.showFilter}
@@ -218,12 +217,5 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
         />
       </section>
     </ErrorBoundary>
-  ) : (
-    <ErrorBoundary>
-      <Info
-        state={state}
-        setState={setState}
-      />
-    </ErrorBoundary>
-  );
+  )
 };
