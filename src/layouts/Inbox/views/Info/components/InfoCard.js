@@ -1,11 +1,10 @@
 import React from "react";
 import { ErrorBoundary, Lang, } from "fogito-core-ui";
 
-export const InfoCard = ({ data, key }) => {
-
+export const InfoCard = ({ data }) => {
     return (
         <ErrorBoundary>
-            <div className="p-4 mb-1 bg-white rounded " key={key}>
+            <div className="p-4 mb-1 bg-white rounded card-bg ">
                 <div className="d-flex">
                     <div className="d-flex">
                         <img
@@ -25,7 +24,7 @@ export const InfoCard = ({ data, key }) => {
                                         style={{ lineHeight: '30px' }}
                                         className="feather feather-chevron-down fs-20 cursor-pointer"
                                     ></i>
-                                    <div className="dropdown-menu p-3">
+                                    <div className="dropdown-menu p-3 card-more-bg">
                                         <div className="d-flex">
                                             <ul className="d-flex flex-column align-items-end p-0">
                                                 <li><span>{Lang.get("From")}:</span></li>
@@ -75,7 +74,6 @@ export const InfoCard = ({ data, key }) => {
                     <p className="text-break">{data.snippet}</p>
                 </div>
             </div>
-
         </ErrorBoundary>
     );
 };

@@ -158,7 +158,8 @@ export const Add = ({ onClose, reload }) => {
                 </div>
               </div>}
 
-            {state.showBcc && <div
+            {state.showBcc && 
+            <div
               className="form-group col-md-12"
             >
               <label className="form-control-label mx-1">

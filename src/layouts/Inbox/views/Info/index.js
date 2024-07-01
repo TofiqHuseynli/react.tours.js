@@ -38,7 +38,7 @@ export const Info = ({ }) => {
   }
   return (
       <ErrorBoundary>
-          <div className="p-3 mb-3  bg-white rounded d-flex ">
+          <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
               <h3 className="mr-1">Subject: </h3>
               <p>{state.data[0].subject}</p>
           </div>

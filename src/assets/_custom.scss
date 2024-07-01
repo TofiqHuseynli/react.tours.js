@@ -38,3 +38,10 @@
   width: 75%;
 }
 
+body.dark {
+  .card-bg, .card-more-bg {
+    background-color: #292929!important;
+    color: var(--lighter)!important;
+  }
+}
+

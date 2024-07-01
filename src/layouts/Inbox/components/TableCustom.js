@@ -10,10 +10,7 @@ export const TableCustom = ({
   VIEW,
   onDelete,
 }) => {
-  const showInfo = () => {
-    setState({ info: false });
-  };
-
+  
   const columns = [
     {
       name: Lang.get("From"),
