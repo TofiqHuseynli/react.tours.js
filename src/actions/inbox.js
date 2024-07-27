@@ -16,6 +16,12 @@ export const mailsInfo = (params) => {
   return Api.post("mailsInfo", { data: params });
 };
 
+export const mailList = (params) => {
+  return Api.post("mailList", params );
+};
+
+
+
 
 
 

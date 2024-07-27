@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
-import { API_ROUTES, MENU_ROUTES, config } from "@config";
-import { settings, translations } from "@actions";
+import { API_ROUTES, config } from "@config";
+import { mailList, settings, translations } from "@actions";
 import AppLib from "fogito-core-ui/build/library/App";
 import {
   BottomNavigation,
@@ -12,14 +12,16 @@ import {
   Sidebar,
   Auth,
   Lang,
-  Api
+  Api,
 } from "fogito-core-ui";
+import { Inbox } from "../Inbox";
 
 export const App = () => {
   const location = useLocation();
   const url = location.pathname.split("/")[1];
   const ifUser = url === "offer";
   const [loading, setLoading] = React.useState(true);
+  const [mailAddress, setMailAddress] = React.useState([]);
 
   const loadSettings = async (params) => {
     const response = await settings(params);
@@ -43,6 +45,38 @@ export const App = () => {
     }
   };
 
+  const loadMailList = async () => {
+    let response = await mailList();
+    if (response.status === "success") {
+      setMailAddress(response.data);
+    }
+  };
+
+  let nestedRotues = [];
+  mailAddress.map((item) => {
+    item.email.length &&
+    nestedRotues.push({
+      path: "/inbox",
+      name: item?.email,
+      permission: "tt_statistics",
+      permission_action: "view",
+      isExact: true,
+      component: (props) => <Inbox {...props} mailId={item.value} />,
+    });
+  });
+
+  const MENU_ROUTES = [
+    {
+      path: "/inbox",
+      name: "Inbox",
+      icon: <i className="symbol feather feather-mail text-danger" />,
+      isExact: false,
+      isHidden: false,
+      component: (props) => <Inbox {...props} type="inbox" />,
+      nestedRoutes: nestedRotues,
+    },
+  ];
+
   const loadData = async () => {
     const common = parent.window.common;
     if (common) {
@@ -51,6 +85,7 @@ export const App = () => {
       Auth.setData({ ...account_data });
       Lang.setData({ ...translations });
       setLoading(false);
+      loadMailList();
     } else {
       const settings = await loadSettings();
       const translations = await loadTranslations();
@@ -62,6 +97,7 @@ export const App = () => {
       });
       Lang.setData({ ...translations });
       setLoading(false);
+      loadMailList();
     }
   };
 
@@ -130,7 +166,7 @@ export const App = () => {
   }, []);
 
   if (loading) {
-    return <Loading type='whole' />;
+    return <Loading type="whole" />;
   }
 
   if (!Auth.isAuthorized() && url !== "inbox") {
@@ -148,7 +184,7 @@ export const App = () => {
       <Content>
         <Switch>
           {renderRoutes(routes)}
-          <Redirect from='*' to='/inbox' />
+          <Redirect from="*" to="/inbox" />
         </Switch>
       </Content>
       <BottomNavigation {...{ routes }} />

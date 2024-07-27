@@ -5,7 +5,11 @@ import { AppProvider } from "fogito-core-ui";
 import "fogito-core-ui/build/style.css";
 import "antd/dist/antd.css";
 import "./assets/index.scss";
-import { App } from "./App";
+import { App } from "./layouts/App";
+ 
+ 
+
+ 
 
 ReactDOM.render(
   <BrowserRouter basename={process.env.publicPath}>

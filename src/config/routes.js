@@ -18,16 +18,55 @@ export const API_ROUTES = {
  mailsList: MICROSERVICE_URL + "/mails/list",
  mailsAdd: MICROSERVICE_URL + "/mails/addmail",
  mailsDelete: MICROSERVICE_URL + "/mails/delete",
- mailsInfo: MICROSERVICE_URL + "/mails/info"
+ mailsInfo: MICROSERVICE_URL + "/mails/info",
+ mailList: MICROSERVICE_URL + "/mails/listmails",
+
+
+
 };
-export const MENU_ROUTES = [
-  {
-    path: "/inbox",
-    name: "Inbox",
-    id: "inbox",
-    icon: <i className="symbol feather feather-mail text-danger" />,
-    isExact: false,
-    isHidden: false,
-    component: (props) => <Inbox {...props} type="inbox" />,
-  },
-];
+
+// export const MENU_ROUTES = [
+//   {
+//     path: "/inbox",
+//     name: "Inbox",
+//     id: "inbox",
+//     icon: <i className="symbol feather feather-mail text-danger" />,
+//     isExact: false,
+//     isHidden: false,
+//     component: (props) => <Inbox {...props} type="inbox" />,
+//   },
+// ];
+
+
+
+
+
+
+
+
+
+// let nestedRotues = [];
+// mailAddress.map((item) => {
+//   nestedRotues.push({
+//     path: "/inbox",
+//     name: item.email,
+//     permission: "tt_statistics",
+//     permission_action: "view",
+//     isExact: true,
+//     component: (props) => <Inbox {...props} email={item.email} />,
+//   });
+// });
+
+// let MENU_ROUTES = [
+//   {
+//     path: "/allinbox",
+//     name: "All Inbox",
+//     // permission: "tt_statistics",
+//     // permission_action: "view",
+//     icon: <i className="symbol feather feather-mail text-danger" />,
+//     isExact: false,
+//     component: (props) => <Inbox {...props} />,
+
+//     nestedRoutes: nestedRotues,
+//   },
+// ];

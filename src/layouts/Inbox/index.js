@@ -11,6 +11,7 @@ import {
   onFilterStorageBySection,
   mailsList,
   mailsDelete,
+  mailList,
 } from "@actions";
 import moment from "moment";
 
@@ -18,7 +19,7 @@ import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
 import { config } from "@config";
 import { Info } from "./views";
 
-export const Inbox = ({ name, history, match: { path, url } }) => {
+export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
   const toast = useToast();
   const VIEW = "inbox";
 
@@ -58,10 +59,14 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
     }
   );
 
-  const loadData = async (params) => {
+  console.log(mailId)
+  const testId = '5e68dcb5a828d70794008642'
+
+   const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
     let response = await mailsList({
       limit: state.limit || "",
+      user_id: testId,
       skip: params?.skip || 0,
       sort: "created_at",
       recipient: state.recipient || "",
@@ -165,8 +170,11 @@ export const Inbox = ({ name, history, match: { path, url } }) => {
     }
   };
 
+ 
+
   React.useEffect(() => {
     loadData();
+ 
   }, [state.recipient, state.limit, state.filters]);
 
   React.useEffect(() => {
