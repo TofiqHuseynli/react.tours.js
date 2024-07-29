@@ -21,7 +21,7 @@ export const App = () => {
   const url = location.pathname.split("/")[1];
   const ifUser = url === "offer";
   const [loading, setLoading] = React.useState(true);
-  const [mailAddress, setMailAddress] = React.useState([]);
+  const [menuRoutes, setMenuRoutes] = React.useState([]);
 
   const loadSettings = async (params) => {
     const response = await settings(params);
@@ -47,35 +47,40 @@ export const App = () => {
 
   const loadMailList = async () => {
     let response = await mailList();
-    if (response.status === "success") {
-      setMailAddress(response.data);
+    if (response.status !== "success") {
+      //give error
     }
+
+    let nestedRotues = [];
+
+    response.data.map((item) => {
+      item.email.length &&
+      nestedRotues.push({
+        path: "/"+item?.value,
+        name: item?.email,
+        // permission: "tt_statistics",
+        // permission_action: "view",
+        isExact: false,
+        component: (props) => <Inbox {...props} mailId={item.value} />,
+      });
+    });
+
+    let MENU_ROUTES = [
+      {
+        path: "/inbox",
+        name: "Inbox",
+        icon: <i className="symbol feather feather-mail text-danger" />,
+        isExact: false,
+        isHidden: false,
+        component: (props) => <Inbox {...props} type="inbox" />,
+        nestedRoutes: nestedRotues,
+      },
+    ];
+
+    setMenuRoutes(MENU_ROUTES);
+
   };
 
-  let nestedRotues = [];
-  mailAddress.map((item) => {
-    item.email.length &&
-    nestedRotues.push({
-      path: "/inbox",
-      name: item?.email,
-      permission: "tt_statistics",
-      permission_action: "view",
-      isExact: true,
-      component: (props) => <Inbox {...props} mailId={item.value} />,
-    });
-  });
-
-  const MENU_ROUTES = [
-    {
-      path: "/inbox",
-      name: "Inbox",
-      icon: <i className="symbol feather feather-mail text-danger" />,
-      isExact: false,
-      isHidden: false,
-      component: (props) => <Inbox {...props} type="inbox" />,
-      nestedRoutes: nestedRotues,
-    },
-  ];
 
   const loadData = async () => {
     const common = parent.window.common;
@@ -84,8 +89,8 @@ export const App = () => {
       const translations = await loadTranslations({ lang: lang?.short_code });
       Auth.setData({ ...account_data });
       Lang.setData({ ...translations });
+      await loadMailList();
       setLoading(false);
-      loadMailList();
     } else {
       const settings = await loadSettings();
       const translations = await loadTranslations();
@@ -96,8 +101,8 @@ export const App = () => {
         timezone: settings.timezone,
       });
       Lang.setData({ ...translations });
+      await loadMailList();
       setLoading(false);
-      loadMailList();
     }
   };
 
@@ -173,14 +178,13 @@ export const App = () => {
     return <Error message={Lang.get("NotAuthorized")} />;
   }
 
-  const routes =
-    url === "inbox"
-      ? MENU_ROUTES
-      : MENU_ROUTES.filter((item) => Auth.isPermitted(item.id, "view"));
+  const routes = menuRoutes.filter((item) =>{
+    return item.id ? !!Auth.isPermitted(item.id, "view") : true
+  });
 
   return (
     <ErrorBoundary>
-      {!ifUser && <Sidebar {...{ routes }} />}
+      <Sidebar {...{ routes }} />
       <Content>
         <Switch>
           {renderRoutes(routes)}

@@ -60,13 +60,12 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
   );
 
   console.log(mailId)
-  const testId = '5e68dcb5a828d70794008642'
 
    const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
     let response = await mailsList({
       limit: state.limit || "",
-      user_id: testId,
+      user_id: mailId,
       skip: params?.skip || 0,
       sort: "created_at",
       recipient: state.recipient || "",

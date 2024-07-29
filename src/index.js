@@ -6,7 +6,7 @@ import "fogito-core-ui/build/style.css";
 import "antd/dist/antd.css";
 import "./assets/index.scss";
 import { App } from "./layouts/App";
- 
+   
  
 
  
