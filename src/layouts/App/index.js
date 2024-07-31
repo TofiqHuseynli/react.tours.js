@@ -51,15 +51,18 @@ export const App = () => {
       //give error
     }
 
-    let nestedRotues = [];
+    let nestedRotues = [{
+          path: "/all",
+          name: "Allinbox",
+          isExact: false,
+          component: (props) => <Inbox {...props} type="inbox" />,
+        },];
 
     response.data.map((item) => {
       item.email.length &&
       nestedRotues.push({
         path: "/"+item?.value,
         name: item?.email,
-        // permission: "tt_statistics",
-        // permission_action: "view",
         isExact: false,
         component: (props) => <Inbox {...props} mailId={item.value} />,
       });
@@ -72,15 +75,31 @@ export const App = () => {
         icon: <i className="symbol feather feather-mail text-danger" />,
         isExact: false,
         isHidden: false,
-        component: (props) => <Inbox {...props} type="inbox" />,
-        nestedRoutes: nestedRotues,
+        nestedRoutes:  nestedRotues 
+        
+        // [
+        //   {
+        //     path: "/all",
+        //     name: "Allinbox",
+        //     isExact: false,
+        //     component: (props) => <Inbox {...props} type="inbox" />,
+        //   },
+          
+        //     ...response.data.map((item) => (
+        //        {
+        //         path: "/" + item?.value,
+        //         name: item?.email,
+        //         isExact: false,
+        //         component: (props) => <Inbox {...props} mailId={item.value} />,
+        //       }
+        //     )),
+          
+        // ],
       },
     ];
 
     setMenuRoutes(MENU_ROUTES);
-
   };
-
 
   const loadData = async () => {
     const common = parent.window.common;
@@ -127,7 +146,7 @@ export const App = () => {
                   key={key}
                 />
               ))}
-              <Redirect to={route.path} />
+              <Redirect to={route.path + route.nestedRoutes[0].path} />
             </Switch>
           ) : (
             route.component({
@@ -178,8 +197,8 @@ export const App = () => {
     return <Error message={Lang.get("NotAuthorized")} />;
   }
 
-  const routes = menuRoutes.filter((item) =>{
-    return item.id ? !!Auth.isPermitted(item.id, "view") : true
+  const routes = menuRoutes.filter((item) => {
+    return item.id ? !!Auth.isPermitted(item.id, "view") : true;
   });
 
   return (

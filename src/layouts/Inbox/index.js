@@ -59,7 +59,9 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
     }
   );
 
-  console.log(mailId)
+  console.log("mail-id:" + mailId)
+  
+
 
    const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
