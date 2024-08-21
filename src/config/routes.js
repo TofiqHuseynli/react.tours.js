@@ -21,6 +21,11 @@ export const API_ROUTES = {
  mailsInfo: MICROSERVICE_URL + "/mails/info",
  mailList: MICROSERVICE_URL + "/mails/listmails",
 
+ // Connected
+ connectedList: MICROSERVICE_URL + "/mailconnections/list",
+ connectedDelete: MICROSERVICE_URL + "/mailconnections/delete",
+ connectedAdd: MICROSERVICE_URL + "/mailconnections/add",
+ 
 
 
 };
@@ -36,11 +41,6 @@ export const API_ROUTES = {
 //     component: (props) => <Inbox {...props} type="inbox" />,
 //   },
 // ];
-
-
-
-
-
 
 
 

@@ -15,6 +15,7 @@ import {
   Api,
 } from "fogito-core-ui";
 import { Inbox } from "../Inbox";
+import { Connected } from "../Connected";
 
 export const App = () => {
   const location = useLocation();
@@ -96,6 +97,16 @@ export const App = () => {
           
         // ],
       },
+      {
+        path: "/connected",
+        name: "Connected Email",
+        icon: <i class="symbol feather feather-sliders text-warning"/>,
+        isExact: false,
+        isHidden: false,
+        component : (props) => <Connected {...props} />
+
+
+      }
     ];
 
     setMenuRoutes(MENU_ROUTES);

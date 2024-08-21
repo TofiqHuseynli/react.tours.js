@@ -11,13 +11,11 @@ import {
   onFilterStorageBySection,
   mailsList,
   mailsDelete,
-  mailList,
 } from "@actions";
 import moment from "moment";
 
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
 import { config } from "@config";
-import { Info } from "./views";
 
 export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
   const toast = useToast();
@@ -58,10 +56,6 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       },
     }
   );
-
-  console.log("mail-id:" + mailId)
-  
-
 
    const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
@@ -170,8 +164,6 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       history.push("/mails");
     }
   };
-
- 
 
   React.useEffect(() => {
     loadData();
