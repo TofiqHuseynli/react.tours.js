@@ -1,10 +1,9 @@
 import React from "react";
-import { ErrorBoundary, Modal } from "fogito-core-ui";
+import { ErrorBoundary } from "fogito-core-ui";
 import { Route } from "react-router-dom";
-import { Add } from "../views";
- 
+import { Add, Info } from "../views";
 
-export const ViewRoutes = ({ onClose, history, loadData, path, url  }) => {
+export const ViewRoutes = ({ onClose, loadData, path }) => {
   return (
     <ErrorBoundary>
       <Route
@@ -13,17 +12,12 @@ export const ViewRoutes = ({ onClose, history, loadData, path, url  }) => {
           <Add {...routeProps} reload={() => loadData()} onClose={onClose} />
         )}
       />
-      {/* <Route
+      <Route
         path={`${path}/info/:id`}
         render={(routeProps) => (
-          <Modal show>
-            <Modal.Header onClose={() => history.push(url)}></Modal.Header>
-            <Modal.Body>
-              <Info {...routeProps} reloadTable={loadData} />
-            </Modal.Body>
-          </Modal>
+          <Info {...routeProps} reload={() => loadData()} onClose={onClose} />
         )}
-      /> */}
+      />
     </ErrorBoundary>
   );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { ErrorBoundary, Lang, Table, SimpleDate, Status } from "fogito-core-ui";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { connectedConnect } from "@actions";
 
 export const TableCustom = ({
   state,
@@ -10,7 +11,7 @@ export const TableCustom = ({
   VIEW,
   onDelete,
 }) => {
-  
+
   const columns = [
     {
       name: Lang.get("E-mail"),
@@ -48,12 +49,14 @@ export const TableCustom = ({
               style={{ fontSize: "1.2rem", height: "22px", lineHeight: "1px" }}
             />
             <div className="dropdown-menu">
-             
-                <button className="dropdown-item">{Lang.get("Connected")}</button>
-             
-              <button className="dropdown-item">{Lang.get("Select")}</button>
               <Link className="text-dark" to={`${path}/info/${data?.id}`}>
-              <button className="dropdown-item">{Lang.get("Edit")}</button>
+                <button onClick={onSubmit} className="dropdown-item">
+                  {Lang.get("Connected")}
+                </button>
+              </Link>
+
+              <Link className="text-dark" to={`${path}/info/${data?.id}`}>
+                <button className="dropdown-item">{Lang.get("Edit")}</button>
               </Link>
               <button
                 className="dropdown-item text-danger"

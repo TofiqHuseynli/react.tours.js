@@ -25,9 +25,9 @@ export const API_ROUTES = {
  connectedList: MICROSERVICE_URL + "/mailconnections/list",
  connectedDelete: MICROSERVICE_URL + "/mailconnections/delete",
  connectedAdd: MICROSERVICE_URL + "/mailconnections/add",
- 
-
-
+ connectedEdit: MICROSERVICE_URL + "/mailconnections/edit",
+ connectedInfo: MICROSERVICE_URL + "/mailconnections/info",
+ connectedConnect: MICROSERVICE_URL + "/mailconnections/connect",
 };
 
 // export const MENU_ROUTES = [

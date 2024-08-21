@@ -19,6 +19,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
     const VIEW = "connected";
   
     const { setProps } = React.useContext(AppContext);
+    
   
     const [state, setState] = React.useReducer(
       (prevState, newState) => ({ ...prevState, ...newState }),
@@ -31,6 +32,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
         limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
         skip: 0,
         mail: "",
+        connected: "",
         hiddenColumns:
           JSON.parse(localStorage.getItem(`${VIEW}_columns_${config.appID}`)) ||
           [],
@@ -46,6 +48,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
         user_id: mailId,
         skip: params?.skip || 0,
         mail: state.mail,
+        connected: state.connected,
         ...params,
       });
       if (response) {
@@ -58,9 +61,6 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
       }
     };
 
-    console.log("mail " + state.mail)
-
-   
     const onDelete = (ids) =>
       toast
         .fire({
@@ -121,9 +121,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
             }
           }
         });
-  
-  
-  
+
     const onClose = () => {
       history.push(url);
     };
@@ -139,7 +137,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
   
     React.useEffect(() => {
       loadData();
-    }, [state.limit, state.mail]);
+    }, [state.limit, state.mail, state.connected]);
   
     React.useEffect(() => {
       setProps({ activeRoute: { name, path } });
