@@ -1,7 +1,7 @@
 import React from "react";
-import { ErrorBoundary, Lang, Table, SimpleDate, Status } from "fogito-core-ui";
+import {ErrorBoundary, Lang, Table, SimpleDate, Status, useToast} from "fogito-core-ui";
 import { Link, useParams } from "react-router-dom";
-import { connectedConnect } from "@actions";
+import {connectedConnect} from "@actions";
 
 export const TableCustom = ({
   state,
@@ -10,7 +10,10 @@ export const TableCustom = ({
   loadData,
   VIEW,
   onDelete,
+  loadMailList
 }) => {
+
+  const toast = useToast();
 
   const columns = [
     {
@@ -49,11 +52,24 @@ export const TableCustom = ({
               style={{ fontSize: "1.2rem", height: "22px", lineHeight: "1px" }}
             />
             <div className="dropdown-menu">
-              <Link className="text-dark" to={`${path}/info/${data?.id}`}>
-                <button   className="dropdown-item">
-                  {Lang.get("Connected")}
-                </button>
-              </Link>
+              {data.is_connected ?
+                  (
+                      <button
+                          onClick={()=>onConnect(data.id,0)}
+                          className="dropdown-item"
+                      >
+                        {Lang.get("Disconnect")}
+                      </button>
+                  ) :
+                  (
+                      <button
+                          onClick={()=>onConnect(data.id,1)}
+                          className="dropdown-item"
+                      >
+                        {Lang.get("Connect")}
+                      </button>
+                  )
+              }
 
               <Link className="text-dark" to={`${path}/info/${data?.id}`}>
                 <button className="dropdown-item">{Lang.get("Edit")}</button>
@@ -70,6 +86,29 @@ export const TableCustom = ({
       },
     },
   ];
+
+
+  const onConnect = async (id,value) => {
+    let response = await connectedConnect({
+      id,
+      value
+    });
+    if (response) {
+      setState({ loading: false, progressVisible: false });
+
+      toast.fire({
+        title: Lang.get(response?.description),
+        icon: response.status,
+      });
+
+      if (response.status === "success") {
+        loadData();
+        loadMailList();
+      }
+    }
+  };
+
+
   const onSelect = (id) => {
     if (state.selectedIDs.includes(id)) {
       setState({
@@ -87,6 +126,7 @@ export const TableCustom = ({
       setState({ selectedIDs: state.data.map((item) => item.id) });
     }
   };
+
   return (
     <ErrorBoundary>
       <Table

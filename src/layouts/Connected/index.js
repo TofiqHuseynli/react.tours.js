@@ -14,7 +14,7 @@ import {
 import { HeaderCustom, TableCustom, ViewRoutes } from "./components";
 import { config } from "@config";
  
-export const Connected = ({ name, mailId, history, match: { path, url } }) => {
+export const Connected = ({ name, mailId, history, loadMailList, match: { path, url } }) => {
     const toast = useToast();
     const VIEW = "connected";
   
@@ -32,7 +32,6 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
         limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
         skip: 0,
         mail: "",
-        connected: "",
         hiddenColumns:
           JSON.parse(localStorage.getItem(`${VIEW}_columns_${config.appID}`)) ||
           [],
@@ -40,6 +39,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
         
       }
     );
+
   
      const loadData = async (params) => {
       setState({ loading: true, skip: params?.skip || 0 });
@@ -48,8 +48,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
         user_id: mailId,
         skip: params?.skip || 0,
         mail: state.mail,
-        connected: state.connected,
-        ...params,
+         ...params,
       });
       if (response) {
         setState({ loading: false, progressVisible: false });
@@ -137,7 +136,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
   
     React.useEffect(() => {
       loadData();
-    }, [state.limit, state.mail, state.connected]);
+    }, [state.limit, state.mail]);
   
     React.useEffect(() => {
       setProps({ activeRoute: { name, path } });
@@ -166,6 +165,7 @@ export const Connected = ({ name, mailId, history, match: { path, url } }) => {
             loadData={loadData}
             VIEW={VIEW}
             onDelete={onDelete}
+            loadMailList={loadMailList}
           />
         </section>
       </ErrorBoundary>

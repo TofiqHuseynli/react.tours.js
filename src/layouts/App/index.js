@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { API_ROUTES, config } from "@config";
-import { mailList, settings, translations } from "@actions";
+import { connectedList, mailList, settings, translations } from "@actions";
 import AppLib from "fogito-core-ui/build/library/App";
 import {
   BottomNavigation,
@@ -47,7 +47,9 @@ export const App = () => {
   };
 
   const loadMailList = async () => {
-    let response = await mailList();
+    let response = await connectedList({
+      connected:true,
+    });
     if (response.status !== "success") {
       //give error
     }
@@ -60,12 +62,12 @@ export const App = () => {
         },];
 
     response.data.map((item) => {
-      item.email.length &&
+      item.mail.length &&
       nestedRotues.push({
-        path: "/"+item?.value,
-        name: item?.email,
+        path: "/"+item?.user_id,
+        name: item?.mail,
         isExact: false,
-        component: (props) => <Inbox {...props} mailId={item.value} />,
+        component: (props) => <Inbox {...props} mailId={item.user_id} />,
       });
     });
 
@@ -103,7 +105,7 @@ export const App = () => {
         icon: <i class="symbol feather feather-sliders text-warning"/>,
         isExact: false,
         isHidden: false,
-        component : (props) => <Connected {...props} />
+        component : (props) => <Connected {...props} loadMailList={loadMailList} />
 
 
       }

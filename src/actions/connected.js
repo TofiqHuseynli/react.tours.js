@@ -21,7 +21,7 @@ export const connectedList = (params) => {
   };
 
   export const connectedConnect = (params) => {
-    return Api.post("connectedConnect",  params );
+    return Api.post("connectedConnect", { data: params } );
   };
 
 
