@@ -50,7 +50,7 @@ export const TableCustom = ({
             />
             <div className="dropdown-menu">
               <Link className="text-dark" to={`${path}/info/${data?.id}`}>
-                <button onClick={onSubmit} className="dropdown-item">
+                <button   className="dropdown-item">
                   {Lang.get("Connected")}
                 </button>
               </Link>
