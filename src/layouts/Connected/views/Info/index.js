@@ -3,7 +3,6 @@ import {ErrorBoundary, Lang, Loading, Popup} from "fogito-core-ui";
 import { useParams } from "react-router-dom";
 import { connectedEdit, connectedInfo } from "@actions";
 
-
 export const Info = ({ onClose, reload }) => {
   let urlParams = useParams();
 
@@ -60,7 +59,6 @@ export const Info = ({ onClose, reload }) => {
       }
     }
   };
-
 
   React.useEffect(() => {
     loadData();

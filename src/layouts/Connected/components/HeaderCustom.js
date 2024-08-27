@@ -11,9 +11,6 @@ export const HeaderCustom = ({
   path,
   name,
 }) => {
- 
- 
-
   return (
     <ErrorBoundary>
       <Header>
@@ -64,7 +61,6 @@ export const HeaderCustom = ({
               />
             </div>
           </div>
-           
           <div className="col-md-auto col-12 order-md-5 order-5 m-md-0 mt-3">
             <Link to={`${path}/add`} className="btn btn-primary btn-block">
               <i className="feather feather-plus" />

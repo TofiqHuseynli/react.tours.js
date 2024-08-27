@@ -1,6 +1,6 @@
 import React from "react";
 import {ErrorBoundary, Lang, Table, SimpleDate, Status, useToast} from "fogito-core-ui";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {connectedConnect} from "@actions";
 
 export const TableCustom = ({
@@ -70,7 +70,6 @@ export const TableCustom = ({
                       </button>
                   )
               }
-
               <Link className="text-dark" to={`${path}/info/${data?.id}`}>
                 <button className="dropdown-item">{Lang.get("Edit")}</button>
               </Link>
@@ -86,7 +85,6 @@ export const TableCustom = ({
       },
     },
   ];
-
 
   const onConnect = async (id,value) => {
     let response = await connectedConnect({
@@ -107,7 +105,6 @@ export const TableCustom = ({
       }
     }
   };
-
 
   const onSelect = (id) => {
     if (state.selectedIDs.includes(id)) {

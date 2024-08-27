@@ -3,13 +3,13 @@ import { ErrorBoundary } from "fogito-core-ui";
 import { Route } from "react-router-dom";
 import { Add, Info } from "../views";
 
-export const ViewRoutes = ({ onClose, loadData, path }) => {
+export const ViewRoutes = ({ onClose, loadData, path, loadMailList }) => {
   return (
     <ErrorBoundary>
       <Route
         path={`${path}/add`}
         render={(routeProps) => (
-          <Add {...routeProps} reload={() => loadData()} onClose={onClose} />
+          <Add loadMailList={loadMailList} {...routeProps} reload={() => loadData()} onClose={onClose} />
         )}
       />
       <Route

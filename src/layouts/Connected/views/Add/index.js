@@ -12,7 +12,7 @@ import {
   connectedAdd,
  } from "@actions";
 
-export const Add = ({ onClose, reload }) => {
+export const Add = ({ onClose, reload, loadMailList }) => {
   const toast = useToast();
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
@@ -36,6 +36,7 @@ export const Add = ({ onClose, reload }) => {
         setState({ updateLoading: false });
         if (response?.status === "success") {
           onClose();
+          loadMailList();
           await reload();
           toast.fire({
             title: Lang.get(response?.description),
@@ -61,7 +62,6 @@ export const Add = ({ onClose, reload }) => {
       <Popup show size="l" onClose={onClose} header={renderModalHeader()}>
         <Popup.Body>
           {state.loading && <Loading />}
-          
           <div className="form-group col-md-12">
           <div className="form-group col-md-12">
             <h3>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { API_ROUTES, config } from "@config";
-import { connectedList, mailList, settings, translations } from "@actions";
+import { connectedList, settings, translations } from "@actions";
 import AppLib from "fogito-core-ui/build/library/App";
 import {
   BottomNavigation,
@@ -106,8 +106,6 @@ export const App = () => {
         isExact: false,
         isHidden: false,
         component : (props) => <Connected {...props} loadMailList={loadMailList} />
-
-
       }
     ];
 
