@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import { ErrorBoundary, Lang, useToast, Popup, Loading } from "fogito-core-ui";
 import { Spinner, WYSIWYGEditor } from "@components";
 import { useForm, Controller } from "react-hook-form";
 import { mailsAdd } from "@actions";
 
 export const Add = ({ onClose, reload }) => {
+  const inputRef = useRef();
+  const inputccRef = useRef();
+  const inputbccRef = useRef();
   const toast = useToast();
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
@@ -16,7 +19,9 @@ export const Add = ({ onClose, reload }) => {
       to: "",
       emails: [],
       carbon_copy: "",
+      ccEmails: [],
       black_carbon_copy: "",
+      bccEmails: [],
       message: "",
     }
   );
@@ -29,9 +34,9 @@ export const Add = ({ onClose, reload }) => {
       response = await mailsAdd({
         data: {
           subject: state.subject,
-          to: state.to,
-          carbon_copy: state.carbon_copy,
-          black_carbon_copy: state.black_carbon_copy,
+          to: state.emails,
+          carbon_copy: state.ccEmails,
+          black_carbon_copy: state.bccEmails,
           message: state.message,
         },
       });
@@ -54,25 +59,81 @@ export const Add = ({ onClose, reload }) => {
     }
   };
 
-  // const addTag = (e) => {
-  //   let tag = e.target.value.replace(/\s+/g, "");
-  //   if (tag.length > 1 && !state.to.includes(tag)) {
-  //     tag.split(",").forEach((tag) => {
-  //       setState({ to: state.to.push(tag) });
-  //     });
-  //   }
-  // };
+  const isEmail = (email) =>
+    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
   const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === "," ) {
+      e.preventDefault();
+      if (isEmail(state.to) && state.to.length < 40) {
+        const newEmails = state.to.split(",").map((email) => email.trim());
+        setState({
+          emails: [
+            ...state.emails,
+            ...newEmails.filter((email) => email !== ""),
+          ],
+        });
+        setState({ to: "" });
+      }
+      else{
+        toast.fire({
+          title: Lang.get("Enter valid email address"),
+          icon: "error",
+        });
+      }
+    }
+  
+  };
+
+  const handleccKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
-      const newEmails = state.to.split(",").map((email) => email.trim());
-      setState({
-        emails: [...state.emails, ...newEmails.filter((email) => email !== "")],
-      });
-      setState({ to: "" });
+      if (isEmail(state.carbon_copy) && state.carbon_copy.length < 40) {
+        const newEmails = state.carbon_copy
+          .split(",")
+          .map((email) => email.trim());
+        setState({
+          ccEmails: [
+            ...state.ccEmails,
+            ...newEmails.filter((email) => email !== ""),
+          ],
+        });
+        setState({ carbon_copy: "" });
+      }
+      else{
+        toast.fire({
+          title: Lang.get("Enter valid email address"),
+          icon: "error",
+        });
+      }
     }
   };
+
+  const handlebccKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === "," && state.black_carbon_copy.langth < 50) {
+      e.preventDefault();
+      if (isEmail(state.black_carbon_copy) && state.black_carbon_copy.length < 40) {
+        const newEmails = state.black_carbon_copy
+          .split(",")
+          .map((email) => email.trim());
+        setState({
+          bccEmails: [
+            ...state.bccEmails,
+            ...newEmails.filter((email) => email !== ""),
+          ],
+        });
+        setState({ black_carbon_copy: "" });
+      }
+      else{
+        toast.fire({
+          title: Lang.get("Enter valid email address"),
+          icon: "error",
+        });
+    }
+  };
+}
+
+  
 
   const removeEmail = (index) => {
     setState({
@@ -80,7 +141,29 @@ export const Add = ({ onClose, reload }) => {
     });
   };
 
-  console.log("to: " + state.to);
+  const removeccEmail = (index) => {
+    setState({
+      ccEmails: state.ccEmails.filter((_, i) => i !== index),
+    });
+  };
+
+  const removebccEmail = (index) => {
+    setState({
+      bccEmails: state.bccEmails.filter((_, i) => i !== index),
+    });
+  };
+
+  const inputFocus = () => {
+    inputRef.current.focus();
+  };
+
+  const inputccFocus = () => {
+    inputccRef.current.focus();
+  };
+
+  const inputbccFocus = () => {
+    inputbccRef.current.focus();
+  };
 
   const { control } = useForm({
     mode: "onChange",
@@ -96,7 +179,7 @@ export const Add = ({ onClose, reload }) => {
   const renderModalHeader = () => <div>{Lang.get("NewMessage")}</div>;
   return (
     <ErrorBoundary>
-      <Popup show size="l" onClose={onClose} header={renderModalHeader()}>
+      <Popup show size="xl" onClose={onClose} header={renderModalHeader()}>
         <Popup.Body>
           {state.loading && <Loading />}
           <div className="form-group col-md-12">
@@ -105,7 +188,7 @@ export const Add = ({ onClose, reload }) => {
                 {Lang.get("Subject")}
               </label>
               <input
-                className="form-control"
+                className="form-control subject-input"
                 placeholder={Lang.get("Subject")}
                 value={state.subject}
                 onChange={(e) => setState({ subject: e.target.value })}
@@ -114,22 +197,31 @@ export const Add = ({ onClose, reload }) => {
             <div className="form-group col-md-12">
               <label className="form-control-label">{Lang.get("To")}</label>
               <div className="position-relative">
-                <div className="tag-container d-flex align-items-center">
+                <div
+                  className={
+                    !state.showCc && !state.showBcc
+                      ? "tag-container d-flex align-items-center"
+                      : "tag-container-free d-flex align-items-center"
+                  }
+                  onClick={inputFocus}
+                >
                   {state.emails.map((email, index) => (
                     <div key={index} className="tag">
                       <span>{email}</span>
-                     
-                        <i className="feather feather-x" onClick={()=>removeEmail(index)}></i>
-                       
+                      <i
+                        className="feather feather-x"
+                        onClick={() => removeEmail(index)}
+                      ></i>
                     </div>
                   ))}
                   <input
+                    ref={inputRef}
+                    type="email"
                     className={
                       !state.showCc && !state.showBcc
                         ? "custom-input-fill  "
                         : "custom-input-fillCc  "
                     }
-                    // placeholder={Lang.get("To")}
                     value={state.to}
                     onChange={(e) => setState({ to: e.target.value })}
                     onKeyDown={handleKeyDown}
@@ -146,23 +238,44 @@ export const Add = ({ onClose, reload }) => {
                 </div>
               </div>
             </div>
-
             {state.showCc && (
               <div className="form-group col-md-12">
                 <label className="form-control-label mx-1">
                   {Lang.get("Cc")}
                 </label>
                 <div className="position-relative">
-                  <input
+                  <div
                     className={
                       !state.showBcc
-                        ? "form-control cc-input-fill w-100"
-                        : "form-control cc-input-full w-100"
+                        ? "tag-container-carbon d-flex align-items-center"
+                        : "tag-container-free d-flex align-items-center"
                     }
-                    placeholder={Lang.get("Cc")}
-                    value={state.carbon_copy}
-                    onChange={(e) => setState({ carbon_copy: e.target.value })}
-                  />
+                    onClick={inputccFocus}
+                  >
+                    {state.ccEmails.map((email, index) => (
+                      <div key={index} className="tag">
+                        <span>{email}</span>
+                        <i
+                          className="feather feather-x"
+                          onClick={() => removeccEmail(index)}
+                        ></i>
+                      </div>
+                    ))}
+                    <input
+                      ref={inputccRef}
+                      type="email"
+                      className={
+                        !state.showCc && !state.showBcc
+                          ? "custom-input-fill  "
+                          : "custom-input-fillCc  "
+                      }
+                      value={state.carbon_copy}
+                      onChange={(e) =>
+                        setState({ carbon_copy: e.target.value })
+                      }
+                      onKeyDown={handleccKeyDown}
+                    />
+                  </div>
                   <div className="custom-btn-input d-flex justify-content-center  ">
                     {!state.showBcc && (
                       <button onClick={handleBccOnclick}>Bcc</button>
@@ -178,18 +291,38 @@ export const Add = ({ onClose, reload }) => {
                   {Lang.get("Bcc")}
                 </label>
                 <div className="position-relative">
-                  <input
+                  <div
                     className={
                       !state.showCc
-                        ? "form-control bcc-input-fill w-100"
-                        : "form-control bcc-input-full w-100"
+                        ? "tag-container-carbon d-flex align-items-center"
+                        : "tag-container-free d-flex align-items-center"
                     }
-                    placeholder={Lang.get("Bcc")}
-                    value={state.black_carbon_copy}
-                    onChange={(e) =>
-                      setState({ black_carbon_copy: e.target.value })
-                    }
-                  />
+                    onClick={inputbccFocus}
+                  >
+                    {state.bccEmails.map((email, index) => (
+                      <div key={index} className="tag">
+                        <span>{email}</span>
+                        <i
+                          className="feather feather-x"
+                          onClick={() => removebccEmail(index)}
+                        ></i>
+                      </div>
+                    ))}
+                    <input
+                      ref={inputbccRef}
+                      type="email"
+                      className={
+                        !state.showCc && !state.showBcc
+                          ? "custom-input-fill  "
+                          : "custom-input-fillCc  "
+                      }
+                      value={state.black_carbon_copy}
+                      onChange={(e) =>
+                        setState({ black_carbon_copy: e.target.value })
+                      }
+                      onKeyDown={handlebccKeyDown}
+                    />
+                  </div>
                   <div className="custom-btn-input d-flex justify-content-center  ">
                     {!state.showCc && state.showBcc && (
                       <button onClick={handleCcOnclick}>Cc</button>

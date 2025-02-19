@@ -87,7 +87,7 @@ export const TableCustom = ({
         loading={state.loading}
         progressLoading={state.progressVisible}
         data={state.data}
-        columns={{ all: columns, hidden: state.hiddenColumns }}
+        columns={{ all: columns, hidden: state.hiddenColumns}}
         pagination={{
           skip: state.skip,
           limit: state.limit,

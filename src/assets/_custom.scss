@@ -13,23 +13,37 @@
   }
 }
 
-.tags-container{
+.tags-container {
   display: inline-block;
-  
 }
 
-.tag-container{
-  border: 1px solid rgba(255, 255, 255, .15);
+.tag-container {
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 5px;
   flex-wrap: wrap;
-  padding: 8px 80px 8px 8px;
+  padding: 8px 70px 8px 8px;
   background-color: #363636;
-
 }
 
-.tag-container .tag{
+.tag-container-free {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  flex-wrap: wrap;
+  padding: 8px 8px 8px 8px;
+  background-color: #363636;
+}
+
+.tag-container-carbon {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  flex-wrap: wrap;
+  padding: 8px 40px 8px 8px;
+  background-color: #363636;
+}
+
+.tag {
   color: var(--white);
-  margin: 0 5px 5px 0;
+  margin: 0 0 4px 4px;
   padding: 5px;
   border: 1px solid rgb(129, 129, 129);
   border-radius: 5px;
@@ -38,62 +52,70 @@
   align-items: center;
 }
 
-.tag-container .tag i{
-   margin-left: 2px;
+.tag i {
+  margin-left: 2px;
+}
+
+.subject-input{
+  height: 52px;
 }
 
 .custom-input-fill {
   border: none;
   background-color: transparent;
- 
   color: var(--white);
   outline: none;
-  margin: 0 5px 5px 0;
-  padding-top: 0;
+  margin: 6px;
   flex: 1;
-  
 }
-
 
 .custom-input-fillCc {
   padding-right: 10px;
+  border: none;
+  background-color: transparent;
+  color: var(--white);
+  outline: none;
+  margin: 6px;
+  padding-top: 0;
+  flex: 1;
 }
-.cc-input-fill, .bcc-input-fill{
-    padding-right: 50px;
+.cc-input-fill,
+.bcc-input-fill {
+  padding-right: 50px;
 }
-.cc-input-full, .bcc-input-full{
-    padding-right: 10px;
+.cc-input-full,
+.bcc-input-full {
+  padding-right: 10px;
 }
 
-.profil-img{
+.profil-img {
   object-fit: cover;
 }
 
-.receiver-mail{
-  font-size: 14px ;
+.receiver-mail {
+  font-size: 14px;
 }
 
-.inbox-message-content{
+.inbox-message-content {
   width: 75%;
 }
 
-.core-sidebar .navbar .navbar-nav .nav-item .nav-link{
+.core-sidebar .navbar .navbar-nav .nav-item .nav-link {
   color: var(--white);
 }
 
 body.dark {
-  .card-bg, .card-more-bg {
-    background-color: #292929!important;
-    color: var(--lighter)!important;
+  .card-bg,
+  .card-more-bg {
+    background-color: #292929 !important;
+    color: var(--lighter) !important;
   }
 
-  .core-sidebar .navbar .navbar-nav .nav-item .nav-link{
-    color: var(--darker)
+  .core-sidebar .navbar .navbar-nav .nav-item .nav-link {
+    color: var(--darker);
   }
 }
 
 .dropleft {
   position: static;
 }
-
-
