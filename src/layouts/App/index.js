@@ -20,7 +20,7 @@ import { Connected } from "../Connected";
 export const App = () => {
   const location = useLocation();
   const url = location.pathname.split("/")[1];
- 
+
   const [loading, setLoading] = React.useState(true);
   const [menuRoutes, setMenuRoutes] = React.useState([]);
 
@@ -78,8 +78,8 @@ export const App = () => {
         icon: <i className="symbol feather feather-mail text-danger" />,
         isExact: false,
         isHidden: false,
-        nestedRoutes:  nestedRotues 
-        
+        nestedRoutes:  nestedRotues
+
         // [
         //   {
         //     path: "/all",
@@ -87,7 +87,7 @@ export const App = () => {
         //     isExact: false,
         //     component: (props) => <Inbox {...props} type="inbox" />,
         //   },
-          
+
         //     ...response.data.map((item) => (
         //        {
         //         path: "/" + item?.value,
@@ -96,7 +96,7 @@ export const App = () => {
         //         component: (props) => <Inbox {...props} mailId={item.value} />,
         //       }
         //     )),
-          
+
         // ],
       },
       {
@@ -193,7 +193,7 @@ export const App = () => {
 
   React.useEffect(() => {
     Api.setRoutes(API_ROUTES);
-    Api.setParams({ app_id: config.appID, test: true });
+    Api.setParams({ app_id: config.appID });
     AppLib.setData({
       appName: config.appName,
     });
