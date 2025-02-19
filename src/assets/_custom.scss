@@ -13,9 +13,48 @@
   }
 }
 
-.custom-input-fill {
-  padding-right: 80px;
+.tags-container{
+  display: inline-block;
+  
 }
+
+.tag-container{
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 5px;
+  flex-wrap: wrap;
+  padding: 8px 80px 8px 8px;
+  background-color: #363636;
+
+}
+
+.tag-container .tag{
+  color: var(--white);
+  margin: 0 5px 5px 0;
+  padding: 5px;
+  border: 1px solid rgb(129, 129, 129);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tag-container .tag i{
+   margin-left: 2px;
+}
+
+.custom-input-fill {
+  border: none;
+  background-color: transparent;
+ 
+  color: var(--white);
+  outline: none;
+  margin: 0 5px 5px 0;
+  padding-top: 0;
+  flex: 1;
+  
+}
+
+
 .custom-input-fillCc {
   padding-right: 10px;
 }

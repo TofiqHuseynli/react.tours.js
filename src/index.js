@@ -8,9 +8,6 @@ import "./assets/index.scss";
 import { App } from "./layouts/App";
    
  
-
- 
-
 ReactDOM.render(
   <BrowserRouter basename={process.env.publicPath}>
     <AppProvider>

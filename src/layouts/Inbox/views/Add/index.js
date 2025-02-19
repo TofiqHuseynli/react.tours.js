@@ -1,16 +1,8 @@
 import React from "react";
-import {
-  ErrorBoundary,
-  Lang,
-  useToast,
-  Popup,
-  Loading,
-} from "fogito-core-ui";
+import { ErrorBoundary, Lang, useToast, Popup, Loading } from "fogito-core-ui";
 import { Spinner, WYSIWYGEditor } from "@components";
 import { useForm, Controller } from "react-hook-form";
-import {
-  mailsAdd,
-} from "@actions";
+import { mailsAdd } from "@actions";
 
 export const Add = ({ onClose, reload }) => {
   const toast = useToast();
@@ -20,11 +12,12 @@ export const Add = ({ onClose, reload }) => {
       loading: false,
       showCc: false,
       showBcc: false,
-      subject: '',
-      to: '',
-      carbon_copy: '',
-      black_carbon_copy: '',
-      message: '',
+      subject: "",
+      to: "",
+      emails: [],
+      carbon_copy: "",
+      black_carbon_copy: "",
+      message: "",
     }
   );
 
@@ -61,6 +54,34 @@ export const Add = ({ onClose, reload }) => {
     }
   };
 
+  // const addTag = (e) => {
+  //   let tag = e.target.value.replace(/\s+/g, "");
+  //   if (tag.length > 1 && !state.to.includes(tag)) {
+  //     tag.split(",").forEach((tag) => {
+  //       setState({ to: state.to.push(tag) });
+  //     });
+  //   }
+  // };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      const newEmails = state.to.split(",").map((email) => email.trim());
+      setState({
+        emails: [...state.emails, ...newEmails.filter((email) => email !== "")],
+      });
+      setState({ to: "" });
+    }
+  };
+
+  const removeEmail = (index) => {
+    setState({
+      emails: state.emails.filter((_, i) => i !== index),
+    });
+  };
+
+  console.log("to: " + state.to);
+
   const { control } = useForm({
     mode: "onChange",
   });
@@ -87,49 +108,47 @@ export const Add = ({ onClose, reload }) => {
                 className="form-control"
                 placeholder={Lang.get("Subject")}
                 value={state.subject}
-                onChange={(e) =>
-                  setState({ subject: e.target.value })
-                }
+                onChange={(e) => setState({ subject: e.target.value })}
               />
             </div>
             <div className="form-group col-md-12">
-              <label className="form-control-label">
-                {Lang.get("To")}
-              </label>
+              <label className="form-control-label">{Lang.get("To")}</label>
               <div className="position-relative">
-                <input
-                  className={
-                    !state.showCc && !state.showBcc
-                      ? "form-control custom-input-fill w-100"
-                      : "form-control custom-input-fillCc w-100"
-                  }
-                  placeholder={Lang.get("To")}
-                  value={state.to}
-                  onChange={(e) =>
-                    setState({ to: e.target.value })
-                  }
-                />
+                <div className="tag-container d-flex align-items-center">
+                  {state.emails.map((email, index) => (
+                    <div key={index} className="tag">
+                      <span>{email}</span>
+                     
+                        <i className="feather feather-x" onClick={()=>removeEmail(index)}></i>
+                       
+                    </div>
+                  ))}
+                  <input
+                    className={
+                      !state.showCc && !state.showBcc
+                        ? "custom-input-fill  "
+                        : "custom-input-fillCc  "
+                    }
+                    // placeholder={Lang.get("To")}
+                    value={state.to}
+                    onChange={(e) => setState({ to: e.target.value })}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+
                 <div className="custom-btn-input d-flex justify-content-center  ">
-                  {!state.showCc && !state.showBcc &&
-                    <button
-                      onClick={handleCcOnclick}
-                    >
-                      Cc
-                    </button>}
-                  {!state.showCc && !state.showBcc &&
-                    <button
-                      onClick={handleBccOnclick}
-                    >
-                      Bcc
-                    </button>}
+                  {!state.showCc && !state.showBcc && (
+                    <button onClick={handleCcOnclick}>Cc</button>
+                  )}
+                  {!state.showCc && !state.showBcc && (
+                    <button onClick={handleBccOnclick}>Bcc</button>
+                  )}
                 </div>
               </div>
             </div>
 
-            {state.showCc &&
-              <div
-                className="form-group col-md-12"
-              >
+            {state.showCc && (
+              <div className="form-group col-md-12">
                 <label className="form-control-label mx-1">
                   {Lang.get("Cc")}
                 </label>
@@ -142,54 +161,43 @@ export const Add = ({ onClose, reload }) => {
                     }
                     placeholder={Lang.get("Cc")}
                     value={state.carbon_copy}
+                    onChange={(e) => setState({ carbon_copy: e.target.value })}
+                  />
+                  <div className="custom-btn-input d-flex justify-content-center  ">
+                    {!state.showBcc && (
+                      <button onClick={handleBccOnclick}>Bcc</button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {state.showBcc && (
+              <div className="form-group col-md-12">
+                <label className="form-control-label mx-1">
+                  {Lang.get("Bcc")}
+                </label>
+                <div className="position-relative">
+                  <input
+                    className={
+                      !state.showCc
+                        ? "form-control bcc-input-fill w-100"
+                        : "form-control bcc-input-full w-100"
+                    }
+                    placeholder={Lang.get("Bcc")}
+                    value={state.black_carbon_copy}
                     onChange={(e) =>
-                      setState({ carbon_copy: e.target.value })
+                      setState({ black_carbon_copy: e.target.value })
                     }
                   />
                   <div className="custom-btn-input d-flex justify-content-center  ">
-                    {!state.showBcc &&
-                      <button
-                        onClick={handleBccOnclick}
-                      >
-                        Bcc
-                      </button>}
-
+                    {!state.showCc && state.showBcc && (
+                      <button onClick={handleCcOnclick}>Cc</button>
+                    )}
                   </div>
                 </div>
-              </div>}
-
-            {state.showBcc && 
-            <div
-              className="form-group col-md-12"
-            >
-              <label className="form-control-label mx-1">
-                {Lang.get("Bcc")}
-              </label>
-              <div className="position-relative">
-                <input
-                  className={
-                    !state.showCc
-                      ? "form-control bcc-input-fill w-100"
-                      : "form-control bcc-input-full w-100"
-                  }
-                  placeholder={Lang.get("Bcc")}
-                  value={state.black_carbon_copy}
-                  onChange={(e) =>
-                    setState({ black_carbon_copy: e.target.value })
-                  }
-                />
-                <div className="custom-btn-input d-flex justify-content-center  ">
-                  {!state.showCc && state.showBcc &&
-                    <button
-                      onClick={handleCcOnclick}
-                    >
-                      Cc
-                    </button>
-                  }
-
-                </div>
               </div>
-            </div>}
+            )}
 
             <div className="form-group col-12">
               <label className="form-control-label">

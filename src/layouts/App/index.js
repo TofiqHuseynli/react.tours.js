@@ -20,7 +20,7 @@ import { Connected } from "../Connected";
 export const App = () => {
   const location = useLocation();
   const url = location.pathname.split("/")[1];
-  const ifUser = url === "offer";
+ 
   const [loading, setLoading] = React.useState(true);
   const [menuRoutes, setMenuRoutes] = React.useState([]);
 
@@ -50,7 +50,7 @@ export const App = () => {
     let response = await connectedList({
       connected:true,
     });
-    if (response.status !== "success") {
+    if (response?.status !== "success") {
       //give error
     }
 
@@ -102,7 +102,7 @@ export const App = () => {
       {
         path: "/connected",
         name: "Connected Email",
-        icon: <i class="symbol feather feather-sliders text-warning"/>,
+        icon: <i className="symbol feather feather-sliders text-warning"/>,
         isExact: false,
         isHidden: false,
         component : (props) => <Connected {...props} loadMailList={loadMailList} />
