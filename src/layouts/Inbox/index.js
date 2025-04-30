@@ -57,7 +57,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
     }
   );
 
-   const loadData = async (params) => {
+  const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
     let response = await mailsList({
       limit: state.limit || "",
@@ -68,6 +68,9 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       subject: state.filters.subject,
       start_date: state.filters.range.start_date
         ? moment(`${state.filters.range.start_date} 00:00:00`).unix()
+        : "",
+      end_date: state.filters.range.end_date
+        ? moment(`${state.filters.range.end_date} 23:59:59`).unix()
         : "",
       ...params,
     });
@@ -167,7 +170,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
 
   React.useEffect(() => {
     loadData();
- 
+
   }, [state.recipient, state.limit, state.filters]);
 
   React.useEffect(() => {
