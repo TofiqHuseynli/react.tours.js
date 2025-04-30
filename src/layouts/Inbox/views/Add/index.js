@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { ErrorBoundary, Lang, useToast, Popup, Loading } from "fogito-core-ui";
 import { Spinner, WYSIWYGEditor } from "@components";
 import { useForm, Controller } from "react-hook-form";
@@ -26,11 +26,14 @@ export const Add = ({ onClose, reload }) => {
     }
   );
 
+  const isEmail = (email) =>
+    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setState({ updateLoading: true });
     let response = null;
-    if (!state.updateLoading) {
+    if (!state.updateLoading && state.emails.length>0) {
       response = await mailsAdd({
         data: {
           subject: state.subject,
@@ -57,13 +60,107 @@ export const Add = ({ onClose, reload }) => {
         }
       }
     }
+    else{
+      setState({ updateLoading: false });
+      toast.fire({
+        title: Lang.get("Enter valid email address"),
+        icon: "error",
+      });
+    }
   };
 
-  const isEmail = (email) =>
-    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+
+
+  const onClickOutsideTo = () => {
+    if (isEmail(state.to) && state.to.length < 40) {
+      const newEmails = state.to.split(",").map((email) => email.trim());
+      setState({
+        emails: [
+          ...state.emails,
+          ...newEmails.filter((email) => email !== ""),
+        ],
+      });
+      setState({ to: "" });
+    }
+  }
+
+
+  const onClickOutsideCc = () => {
+    if (isEmail(state.carbon_copy) && state.carbon_copy.length < 40) {
+      const newEmails = state.carbon_copy
+        .split(",")
+        .map((email) => email.trim());
+      setState({
+        ccEmails: [
+          ...state.ccEmails,
+          ...newEmails.filter((email) => email !== ""),
+        ],
+      });
+      setState({ carbon_copy: "" });
+    }
+  }
+
+  const onClickOutsideBcc = () => {
+    if (isEmail(state.black_carbon_copy) && state.black_carbon_copy.length < 40) {
+      const newEmails = state.black_carbon_copy
+        .split(",")
+        .map((email) => email.trim());
+      setState({
+        bccEmails: [
+          ...state.bccEmails,
+          ...newEmails.filter((email) => email !== ""),
+        ],
+      });
+      setState({ black_carbon_copy: "" });
+    }
+  }
+
+  console.log("email: " + state.emails + state.emails.length)
+
+  useEffect(() => {
+    const handleClickOutsideTo = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        onClickOutsideTo();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutsideTo);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideTo);
+    };
+  }, [onClickOutsideTo]);
+
+
+  useEffect(() => {
+    const handleClickOutsideCc = (event) => {
+      if (inputccRef.current && !inputccRef.current.contains(event.target)) {
+        onClickOutsideCc();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutsideCc);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideCc);
+    };
+  }, [onClickOutsideCc]);
+
+  useEffect(() => {
+    const handleClickOutsideBcc = (event) => {
+      if (inputccRef.current && !inputccRef.current.contains(event.target)) {
+        onClickOutsideBcc();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutsideBcc);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideBcc);
+    };
+  }, [onClickOutsideBcc]);
+
+
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === "," ) {
+    if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       if (isEmail(state.to) && state.to.length < 40) {
         const newEmails = state.to.split(",").map((email) => email.trim());
@@ -75,14 +172,14 @@ export const Add = ({ onClose, reload }) => {
         });
         setState({ to: "" });
       }
-      else{
+      else {
         toast.fire({
           title: Lang.get("Enter valid email address"),
           icon: "error",
         });
       }
     }
-  
+
   };
 
   const handleccKeyDown = (e) => {
@@ -100,7 +197,7 @@ export const Add = ({ onClose, reload }) => {
         });
         setState({ carbon_copy: "" });
       }
-      else{
+      else {
         toast.fire({
           title: Lang.get("Enter valid email address"),
           icon: "error",
@@ -124,16 +221,16 @@ export const Add = ({ onClose, reload }) => {
         });
         setState({ black_carbon_copy: "" });
       }
-      else{
+      else {
         toast.fire({
           title: Lang.get("Enter valid email address"),
           icon: "error",
         });
-    }
-  };
-}
+      }
+    };
+  }
 
-  
+
 
   const removeEmail = (index) => {
     setState({
