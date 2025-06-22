@@ -5,6 +5,8 @@ import {
   Lang,
   useToast,
   Actions,
+  useModal,
+  Popup,
 } from "fogito-core-ui";
 import {
   getFilterToLocal,
@@ -13,16 +15,15 @@ import {
   mailsDelete,
 } from "@actions";
 import moment from "moment";
-
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
 import { config } from "@config";
+import { Create } from "./views";
 
 export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
   const toast = useToast();
+  const modal = useModal();
   const VIEW = "inbox";
-
   const { setProps } = React.useContext(AppContext);
-
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     {
@@ -44,13 +45,13 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
         range: {
           start_date: getFilterToLocal(name, "date")
             ? moment
-              .unix(getFilterToLocal(name, "date")?.split("T")[0] || "")
-              .format("YYYY-MM-DD")
+                .unix(getFilterToLocal(name, "date")?.split("T")[0] || "")
+                .format("YYYY-MM-DD")
             : null,
           end_date: getFilterToLocal(name, "date")
             ? moment
-              .unix(getFilterToLocal(name, "date")?.split("T")[1] || "")
-              .format("YYYY-MM-DD")
+                .unix(getFilterToLocal(name, "date")?.split("T")[1] || "")
+                .format("YYYY-MM-DD")
             : null,
         },
       },
@@ -78,6 +79,9 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       setState({ loading: false, progressVisible: false });
       if (response.status === "success") {
         setState({ data: response.data, count: response.count });
+      } else if (response.code === "NO_ACCESS_TOKEN") {
+        console.log("Isledi");
+        modal.show("add");
       } else {
         setState({ data: [], count: 0 });
       }
@@ -170,7 +174,6 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
 
   React.useEffect(() => {
     loadData();
-
   }, [state.recipient, state.limit, state.filters]);
 
   React.useEffect(() => {
@@ -185,12 +188,19 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
     subject: state.filters.subject === "" ? null : state.filters.subject,
     range:
       state.filters.range?.start_date === null &&
-        state.filters.range?.end_date === null
+      state.filters.range?.end_date === null
         ? null
         : state.filters.range,
   };
   return (
     <ErrorBoundary>
+      <Popup
+        title={Lang.get("Add")}
+        show={modal.modals.includes("add")}
+        onClose={() => modal.hide("add")}
+      >
+        <Create onClose={() => modal.hide("add")} reload={() => loadData()} />
+      </Popup>
       <Filters
         show={state.showFilter}
         name={name}
@@ -199,7 +209,13 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
         state={state}
         setState={(key, value) => setState({ [key]: value })}
       />
-      <ViewRoutes onClose={goBack} loadData={loadData} history={history} path={path} url={url} />
+      <ViewRoutes
+        onClose={goBack}
+        loadData={loadData}
+        history={history}
+        path={path}
+        url={url}
+      />
       <HeaderCustom
         state={state}
         setState={setState}
@@ -221,5 +237,5 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
         />
       </section>
     </ErrorBoundary>
-  )
+  );
 };
