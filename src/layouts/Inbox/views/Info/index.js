@@ -1,12 +1,12 @@
 import React from "react";
-import {ErrorBoundary, Loading} from "fogito-core-ui";
+import {ErrorBoundary, Loading, useToast} from "fogito-core-ui";
 import { useParams } from "react-router-dom";
 import { mailsInfo } from "@actions";
 import {InfoCard} from "./components";
 
 export const Info = ({ }) => {
   let urlParams = useParams();
-
+  const toast = useToast();
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     {
@@ -23,9 +23,13 @@ export const Info = ({ }) => {
     let response = await mailsInfo({ id: state.id });
     if (response) {
       if (response.status === "success" && response.data) {
-        setState({ data: response.data });
+        setState({ data: response.data, loading: false });
+      }else{
+        toast.fire({
+          title: response.message,
+          icon: response.status,
+        });
       }
-      setState({ loading: false });
     }
   };
 
@@ -40,7 +44,7 @@ export const Info = ({ }) => {
       <ErrorBoundary>
           <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
               <h3 className="mr-1">Subject: </h3>
-              <p>{state.data[0].subject}</p>
+              {/* <p>{state.data[0].subject}</p> */}
           </div>
 
           {
