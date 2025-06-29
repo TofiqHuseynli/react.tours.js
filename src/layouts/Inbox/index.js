@@ -34,6 +34,8 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       count: 0,
       limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
       skip: 0,
+      googleUserId: "",
+      nextPageToken: null,
       hiddenColumns:
         JSON.parse(localStorage.getItem(`${VIEW}_columns_${config.appID}`)) ||
         [],
@@ -78,7 +80,11 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
     if (response) {
       setState({ loading: false, progressVisible: false });
       if (response.status === "success") {
-        setState({ data: response.data, count: response.count });
+        setState({
+          data: response.data,
+          count: response.count,
+          googleUserId: response.google_user_id,
+        });
       } else if (response.code === "NO_ACCESS_TOKEN") {
         console.log("Isledi");
         modal.show("add");
@@ -215,6 +221,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
         history={history}
         path={path}
         url={url}
+        inboxState={state.googleUserId}
       />
       <HeaderCustom
         state={state}

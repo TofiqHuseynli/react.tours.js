@@ -3,7 +3,14 @@ import { ErrorBoundary, Modal } from "fogito-core-ui";
 import { Route } from "react-router-dom";
 import { Add, Info } from "../views";
 
-export const ViewRoutes = ({ onClose, history, loadData, path, url  }) => {
+export const ViewRoutes = ({
+  onClose,
+  history,
+  loadData,
+  path,
+  url,
+  inboxState,
+}) => {
   return (
     <ErrorBoundary>
       <Route
@@ -18,7 +25,11 @@ export const ViewRoutes = ({ onClose, history, loadData, path, url  }) => {
           <Modal show>
             <Modal.Header onClose={() => history.push(url)}></Modal.Header>
             <Modal.Body>
-              <Info {...routeProps} reloadTable={loadData} />
+              <Info
+                {...routeProps}
+                reloadTable={loadData}
+                inboxState={inboxState}
+              />
             </Modal.Body>
           </Modal>
         )}

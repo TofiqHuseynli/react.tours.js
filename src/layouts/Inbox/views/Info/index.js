@@ -1,10 +1,10 @@
 import React from "react";
-import {ErrorBoundary, Loading, useToast} from "fogito-core-ui";
+import { ErrorBoundary, Loading, useToast } from "fogito-core-ui";
 import { useParams } from "react-router-dom";
 import { mailsInfo } from "@actions";
-import {InfoCard} from "./components";
+import { InfoCard } from "./components";
 
-export const Info = ({ }) => {
+export const Info = ({ inboxState }) => {
   let urlParams = useParams();
   const toast = useToast();
   const [state, setState] = React.useReducer(
@@ -20,11 +20,17 @@ export const Info = ({ }) => {
 
   const loadData = async () => {
     setState({ loading: true });
-    let response = await mailsInfo({ id: state.id });
+    let response = await mailsInfo({
+      id: state.id,
+      google_user_id: "114389651835405574925",
+    });
     if (response) {
       if (response.status === "success" && response.data) {
-        setState({ data: response.data, loading: false });
-      }else{
+        setState({
+          data: response.data.conversation,
+          loading: false,
+        });
+      } else {
         toast.fire({
           title: response.message,
           icon: response.status,
@@ -32,29 +38,23 @@ export const Info = ({ }) => {
       }
     }
   };
-
+  console.log("dsd" + inboxState);
   React.useEffect(() => {
     loadData();
   }, []);
 
-  if (state.loading){
-      return (<Loading/>);
+  if (state.loading) {
+    return <Loading />;
   }
   return (
-      <ErrorBoundary>
-          <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
-              <h3 className="mr-1">Subject: </h3>
-              {/* <p>{state.data[0].subject}</p> */}
-          </div>
-
-          {
-              state.data.map((data, key) => (
-                  <InfoCard
-                      data={data}
-                      key={key}
-                  />
-              ))
-          }
-      </ErrorBoundary>
+    <ErrorBoundary>
+      <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
+        <h3 className="mr-1">Subject: </h3>
+        {/* <p>{state.data[0].subject}</p> */}
+      </div>
+      {state.data.map((data, key) => (
+        <InfoCard data={data} key={key} />
+      ))}
+    </ErrorBoundary>
   );
 };

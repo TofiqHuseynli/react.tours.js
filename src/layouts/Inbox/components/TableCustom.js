@@ -26,6 +26,7 @@ export const TableCustom = ({
       name: Lang.get("Subject"),
       center: false,
       key: "subject",
+      render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("Date"),
