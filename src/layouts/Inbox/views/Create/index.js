@@ -59,7 +59,6 @@ export const Create = ({ onClose, reload }) => {
   const renderModalHeader = () => <div>{Lang.get("Connect")}</div>;
   return (
     <ErrorBoundary>
-    
         <Popup.Body>
           {state.loading && <Loading />}
           <div className="form-group col-md-12">

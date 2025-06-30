@@ -10,6 +10,7 @@ export const ViewRoutes = ({
   path,
   url,
   inboxState,
+  modal
 }) => {
   return (
     <ErrorBoundary>
@@ -29,6 +30,7 @@ export const ViewRoutes = ({
                 {...routeProps}
                 reloadTable={loadData}
                 inboxState={inboxState}
+                modal={modal}
               />
             </Modal.Body>
           </Modal>

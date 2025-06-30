@@ -17,7 +17,7 @@ import {
 import moment from "moment";
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
 import { config } from "@config";
-import { Create } from "./views";
+import { Create, Forward } from "./views";
 
 export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
   const toast = useToast();
@@ -207,6 +207,17 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       >
         <Create onClose={() => modal.hide("add")} reload={() => loadData()} />
       </Popup>
+      <Popup
+        title={Lang.get("Forward")}
+        show={modal.modals.includes("forward")}
+        onClose={() => modal.hide("forward")}
+        size="xl"
+      >
+        <Forward
+          onClose={() => modal.hide("forward")}
+          reload={() => loadData()}
+        />
+      </Popup>
       <Filters
         show={state.showFilter}
         name={name}
@@ -222,6 +233,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
         path={path}
         url={url}
         inboxState={state.googleUserId}
+        modal={modal}
       />
       <HeaderCustom
         state={state}

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { mailsInfo } from "@actions";
 import { InfoCard } from "./components";
 
-export const Info = ({ inboxState }) => {
+export const Info = ({ inboxState, modal }) => {
   let urlParams = useParams();
   const toast = useToast();
   const [state, setState] = React.useReducer(
@@ -38,7 +38,7 @@ export const Info = ({ inboxState }) => {
       }
     }
   };
-  console.log("dsd" + inboxState);
+  
   React.useEffect(() => {
     loadData();
   }, []);
@@ -50,10 +50,10 @@ export const Info = ({ inboxState }) => {
     <ErrorBoundary>
       <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
         <h3 className="mr-1">Subject: </h3>
-        {/* <p>{state.data[0].subject}</p> */}
+        <p>{state.data[0].subject}</p>
       </div>
       {state.data.map((data, key) => (
-        <InfoCard data={data} key={key} />
+        <InfoCard data={data} key={key}  modal={modal} />
       ))}
     </ErrorBoundary>
   );
