@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorBoundary, Lang, Header, Table } from "fogito-core-ui";
+import { ErrorBoundary, Lang, Header, Table, InputLazy } from "fogito-core-ui";
 import { Link } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import { historyPushByName } from "@actions";
@@ -104,6 +104,35 @@ export const HeaderCustom = ({
               />
             </div>
           </div>
+
+
+          <div className="col-md-3 col-12 mt-md-0 mt-3 order-md-2 order-3">
+            <div className="input-group input-group-alternative d-flex align-items-center">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <i className="feather feather-search" />
+                </span>
+              </div>
+              <InputLazy
+                value={state.email}
+                onChange={(e) => {
+                  setState({ email: e.target.value });
+                  historyPushByName(
+                    {
+                      label: "email",
+                      value: e.target.value,
+                    },
+                    name
+                  );
+                }}
+                action={() => { }}
+                className="form-control form-control-alternative"
+                placeholder={Lang.get("Email")}
+              />
+            </div>
+          </div>
+
+
           <div className="col-md-auto col-6 mt-md-0 ml-md-auto order-md-2 order-2">
             <Table.ColumnFilter
               className="btn btn-block btn-white"

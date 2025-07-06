@@ -13,6 +13,7 @@ export const Info = ({ inboxState, modal }) => {
     {
       id: urlParams?.id,
       loading: true,
+      forwardData: null,
       skip: 0,
       data: [],
       subject:"",
@@ -28,8 +29,16 @@ export const Info = ({ inboxState, modal }) => {
     });
     if (response) {
       if (response.status === "success" && response.data) {
+
+        //format data. seperate message with /r/n
+        const formattedConversation = response.data.conversation.map((msg) => ({
+          ...msg,
+          message: msg.body.split('\r\n\r\nOn ')[0].trim(),
+          message_info: msg.body.split('\r\n\r\nOn ')[1],
+        }));
+
         setState({
-          data: response.data.conversation,
+          data: formattedConversation,
           subject: response.data.conversation[0].subject,
           loading: false,
         });
@@ -60,8 +69,20 @@ export const Info = ({ inboxState, modal }) => {
         <Forward
           onClose={() => modal.hide("forward")}
           reload={() => loadData()}
-          infoState={state}
-          infoSetState={setState}
+          infoState={state} 
+        />
+      </Popup>
+
+      <Popup
+        title={Lang.get("Forward")}
+        show={modal.modals.includes("forward")}
+        onClose={() => modal.hide("forward")}
+        size="xl"
+      >
+        <Forward
+          onClose={() => modal.hide("forward")}
+          reload={() => loadData()}
+          infoState={state} 
         />
       </Popup>
       <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
@@ -69,7 +90,7 @@ export const Info = ({ inboxState, modal }) => {
         <p>{state.subject}</p>
       </div>
       {state.data.map((data, key) => (
-        <InfoCard data={data} key={key} modal={modal} />
+        <InfoCard data={data} key={key} modal={modal} setState={setState}  />
       ))}
     </ErrorBoundary>
   );

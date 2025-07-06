@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorBoundary, Lang } from "fogito-core-ui";
 
-export const InfoCard = ({ data, modal }) => {
+export const InfoCard = ({ data, modal, setState }) => {
   return (
     <ErrorBoundary>
       <div className="p-4 mb-1 bg-white rounded card-bg ">
@@ -83,7 +83,10 @@ export const InfoCard = ({ data, modal }) => {
                 </button>
                 <button
                   className="dropdown-item"
-                  onClick={() => modal.show("forward")}
+                  onClick={() => {
+                    setState({ forwardData: data})
+                    modal.show("forward")
+                  }}
                 >
                   <i className="feather-corner-up-right"></i>{" "}
                   {Lang.get("Forward")}
@@ -93,7 +96,7 @@ export const InfoCard = ({ data, modal }) => {
           </div>
         </div>
         <div className="inbox-message-content mt-3 ml-0">
-          <p className="text-break">{data.snippet}</p>
+          <p className="text-break">{data.message}</p>
         </div>
       </div>
     </ErrorBoundary>

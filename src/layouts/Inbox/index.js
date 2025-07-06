@@ -42,6 +42,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       paramsList: [],
       recipient: getFilterToLocal(name, "recipient") || null,
       showFilter: false,
+      email: "",
       filters: {
         subject: "",
         range: {
@@ -69,6 +70,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       sort: "created_at",
       recipient: state.recipient || "",
       subject: state.filters.subject,
+      email: state.email,
       start_date: state.filters.range.start_date
         ? moment(`${state.filters.range.start_date} 00:00:00`).unix()
         : "",
@@ -111,23 +113,28 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       })
       .then(async (res) => {
         if (res?.value) {
-          if (state.selectedIDs?.length === 1) {
-            setState({ setLoading: true });
-            let response = null;
-            response = await mailsDelete({ data: { id: ids[0] } });
-            if (response) {
-              setState({ loading: false, selectedIDs: [] });
-              toast.fire({
-                icon: response.status,
-              });
-              if (response?.status === "success") {
-                const skip =
-                  state.data?.length === 1 && state.skip >= state.limit
-                    ? state.skip - state.limit
-                    : state.skip;
-                loadData({ skip });
+          if (ids?.length === 1) {
+
+            ids.map(async (selectedId) =>{
+ 
+              setState({ setLoading: true });
+              let response = null;
+              response = await mailsDelete({ data: { id: selectedId, google_user_id:state.googleUserId  } });
+              if (response) {
+                setState({ loading: false, selectedIDs: [] });
+                toast.fire({
+                  icon: response.status,
+                });
+                if (response?.status === "success") {
+                  const skip =
+                    state.data?.length === 1 && state.skip >= state.limit
+                      ? state.skip - state.limit
+                      : state.skip;
+                  loadData({ skip });
+                }
               }
-            }
+
+            })
           } else {
             setState({ progressVisible: true });
             Actions.multiAction({
@@ -180,7 +187,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
 
   React.useEffect(() => {
     loadData();
-  }, [state.recipient, state.limit, state.filters]);
+  }, [state.recipient, state.limit, state.filters, state.email]);
 
   React.useEffect(() => {
     setProps({ activeRoute: { name, path } });

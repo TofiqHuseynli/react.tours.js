@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { mailMessage, mailsAdd, mailsInfo } from "@actions";
 import { useParams } from "react-router-dom";
 
-export const Forward = ({ onClose, reload, infoState }) => {
+export const Reply = ({ onClose, reload, infoState }) => {
   const inputRef = useRef();
   const inputccRef = useRef();
   const inputbccRef = useRef();
@@ -24,7 +24,7 @@ export const Forward = ({ onClose, reload, infoState }) => {
       ccEmails: [],
       black_carbon_copy: "",
       bccEmails: [],
-      message: infoState.forwardData.message,
+      message: infoState.forwardData.snippet,
     }
   );
   
