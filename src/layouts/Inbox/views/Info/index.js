@@ -1,8 +1,9 @@
 import React from "react";
-import { ErrorBoundary, Loading, useToast } from "fogito-core-ui";
+import { ErrorBoundary, Loading, useToast, Popup, Lang } from "fogito-core-ui";
 import { useParams } from "react-router-dom";
 import { mailsInfo } from "@actions";
 import { InfoCard } from "./components";
+import { Forward } from "../Forward";
 
 export const Info = ({ inboxState, modal }) => {
   let urlParams = useParams();
@@ -14,6 +15,7 @@ export const Info = ({ inboxState, modal }) => {
       loading: true,
       skip: 0,
       data: [],
+      subject:"",
       params: {},
     }
   );
@@ -28,6 +30,7 @@ export const Info = ({ inboxState, modal }) => {
       if (response.status === "success" && response.data) {
         setState({
           data: response.data.conversation,
+          subject: response.data.conversation[0].subject,
           loading: false,
         });
       } else {
@@ -38,7 +41,7 @@ export const Info = ({ inboxState, modal }) => {
       }
     }
   };
-  
+
   React.useEffect(() => {
     loadData();
   }, []);
@@ -48,12 +51,25 @@ export const Info = ({ inboxState, modal }) => {
   }
   return (
     <ErrorBoundary>
+      <Popup
+        title={Lang.get("Forward")}
+        show={modal.modals.includes("forward")}
+        onClose={() => modal.hide("forward")}
+        size="xl"
+      >
+        <Forward
+          onClose={() => modal.hide("forward")}
+          reload={() => loadData()}
+          infoState={state}
+          infoSetState={setState}
+        />
+      </Popup>
       <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
         <h3 className="mr-1">Subject: </h3>
-        <p>{state.data[0].subject}</p>
+        <p>{state.subject}</p>
       </div>
       {state.data.map((data, key) => (
-        <InfoCard data={data} key={key}  modal={modal} />
+        <InfoCard data={data} key={key} modal={modal} />
       ))}
     </ErrorBoundary>
   );

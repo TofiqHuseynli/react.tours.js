@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { ErrorBoundary, Lang, useToast, Popup, Loading } from "fogito-core-ui";
 import { Spinner, WYSIWYGEditor } from "@components";
 import { useForm, Controller } from "react-hook-form";
-import { mailsAdd, mailsInfo } from "@actions";
+import { mailMessage, mailsAdd, mailsInfo } from "@actions";
 import { useParams } from "react-router-dom";
 
-export const Forward = ({ onClose, reload }) => {
+export const Forward = ({ onClose, reload, infoState, infoSetState }) => {
   const inputRef = useRef();
   const inputccRef = useRef();
   const inputbccRef = useRef();
@@ -31,8 +31,8 @@ export const Forward = ({ onClose, reload }) => {
 
   const loadData = async () => {
     setState({ loading: true });
-    let response = await mailsInfo({
-      id: state.id,
+    let response = await mailMessage({
+      message_id: state.id,
       google_user_id: "114389651835405574925",
     });
     if (response) {
@@ -49,8 +49,6 @@ export const Forward = ({ onClose, reload }) => {
       }
     }
   };
-
-  console.log("id:" + state.id)
 
   const isEmail = (email) =>
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
@@ -304,8 +302,8 @@ export const Forward = ({ onClose, reload }) => {
             <input
               className="form-control subject-input"
               placeholder={Lang.get("Subject")}
-              value={state.subject}
-              onChange={(e) => setState({ subject: e.target.value })}
+              value={infoState.subject}
+              onChange={(e) => infoSetState({ subject: e.target.value })}
             />
           </div>
           <div className="form-group col-md-12">

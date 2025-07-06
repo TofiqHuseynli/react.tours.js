@@ -17,11 +17,9 @@ export const mailsInfo = (params) => {
 };
 
 export const mailList = (params) => {
-  return Api.post("mailList", params );
+  return Api.post("mailList", params);
 };
 
-
-
-
-
-
+export const mailMessage = (params) => {
+  return Api.post("mailMessage", { data: params });
+};

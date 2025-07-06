@@ -1,33 +1,31 @@
-import {
-  Inbox,
-} from "@layouts";
+import { Inbox } from "@layouts";
 import React from "react";
 
 export const CORE_API_URL = "/core";
 export const MICROSERVICE_URL = "/mails";
 
 export const API_ROUTES = {
- // Settings
- settings: CORE_API_URL + "/settings",
- translations: CORE_API_URL + "/settings/translations",
- coreActivitiesList: CORE_API_URL + "/activities/list",
- coreTimezonesList: CORE_API_URL + "/data/timezones",
- 
+  // Settings
+  settings: CORE_API_URL + "/settings",
+  translations: CORE_API_URL + "/settings/translations",
+  coreActivitiesList: CORE_API_URL + "/activities/list",
+  coreTimezonesList: CORE_API_URL + "/data/timezones",
 
- // Mails
- mailsList: MICROSERVICE_URL + "/mails/list",
- mailsAdd: MICROSERVICE_URL + "/mails/addmail",
- mailsDelete: MICROSERVICE_URL + "/mails/delete",
- mailsInfo: MICROSERVICE_URL + "/mails/info",
- mailList: MICROSERVICE_URL + "/mails/listmails",
+  // Mails
+  mailsList: MICROSERVICE_URL + "/mails/list",
+  mailsAdd: MICROSERVICE_URL + "/mails/addmail",
+  mailsDelete: MICROSERVICE_URL + "/mails/delete",
+  mailsInfo: MICROSERVICE_URL + "/mails/info",
+  mailList: MICROSERVICE_URL + "/mails/listmails",
+  mailMessage: MICROSERVICE_URL + "/mails/singlemessage",
 
- // Connected
- connectedList: MICROSERVICE_URL + "/mailconnections/list",
- connectedDelete: MICROSERVICE_URL + "/mailconnections/delete",
- connectedAdd: MICROSERVICE_URL + "/mailconnections/add",
- connectedEdit: MICROSERVICE_URL + "/mailconnections/edit",
- connectedInfo: MICROSERVICE_URL + "/mailconnections/info",
- connectedConnect: MICROSERVICE_URL + "/mailconnections/connect",
+  // Connected
+  connectedList: MICROSERVICE_URL + "/mailconnections/list",
+  connectedDelete: MICROSERVICE_URL + "/mailconnections/delete",
+  connectedAdd: MICROSERVICE_URL + "/mailconnections/add",
+  connectedEdit: MICROSERVICE_URL + "/mailconnections/edit",
+  connectedInfo: MICROSERVICE_URL + "/mailconnections/info",
+  connectedConnect: MICROSERVICE_URL + "/mailconnections/connect",
 };
 
 // export const MENU_ROUTES = [
@@ -41,9 +39,6 @@ export const API_ROUTES = {
 //     component: (props) => <Inbox {...props} type="inbox" />,
 //   },
 // ];
-
-
-
 
 // let nestedRotues = [];
 // mailAddress.map((item) => {

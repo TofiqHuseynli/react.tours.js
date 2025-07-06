@@ -69,8 +69,6 @@ export const Add = ({ onClose, reload }) => {
     }
   };
 
-
-
   const onClickOutsideTo = () => {
     if (isEmail(state.to) && state.to.length < 40) {
       const newEmails = state.to.split(",").map((email) => email.trim());
@@ -83,7 +81,6 @@ export const Add = ({ onClose, reload }) => {
       setState({ to: "" });
     }
   }
-
 
   const onClickOutsideCc = () => {
     if (isEmail(state.carbon_copy) && state.carbon_copy.length < 40) {
@@ -157,8 +154,6 @@ export const Add = ({ onClose, reload }) => {
     };
   }, [onClickOutsideBcc]);
 
-
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
@@ -229,8 +224,6 @@ export const Add = ({ onClose, reload }) => {
       }
     };
   }
-
-
 
   const removeEmail = (index) => {
     setState({
