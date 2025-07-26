@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { ErrorBoundary, Lang, useToast, Popup, Loading } from "fogito-core-ui";
 import { Spinner, WYSIWYGEditor } from "@components";
 import { useForm, Controller } from "react-hook-form";
-import { mailMessage, mailsAdd, mailsInfo } from "@actions";
+import { mailMessage, mailsReply } from "@actions";
 import { useParams } from "react-router-dom";
 
 export const Reply = ({ onClose, reload, infoState }) => {
@@ -11,23 +11,28 @@ export const Reply = ({ onClose, reload, infoState }) => {
   const inputbccRef = useRef();
   const toast = useToast();
   let urlParams = useParams();
+  const extractEmail = (from) => {
+    const match = from.match(/<([^>]+)>/);
+    return match ? match[1] : "";
+  };
+  const emailFrom = extractEmail(infoState.replyDate.from);
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
-    { 
+    {
       loading: false,
       showCc: false,
       showBcc: false,
-      subject: infoState.forwardData.subject,
-      to: "",
+      subject: infoState.replyDate.subject,
+      to: emailFrom,
       emails: [],
       carbon_copy: "",
       ccEmails: [],
       black_carbon_copy: "",
       bccEmails: [],
-      message: infoState.forwardData.snippet,
+      message: "",
+      original_mail_id: infoState.replyDate.message_id,
     }
   );
-  
 
   const loadData = async () => {
     setState({ loading: true });
@@ -58,13 +63,14 @@ export const Reply = ({ onClose, reload, infoState }) => {
     setState({ updateLoading: true });
     let response = null;
     if (!state.updateLoading && state.emails.length > 0) {
-      response = await mailsAdd({
+      response = await mailsReply({
         data: {
           subject: state.subject,
           to: state.emails,
           carbon_copy: state.ccEmails,
           black_carbon_copy: state.bccEmails,
-          message: state.message,
+          original_mail_id: state.original_mail_id,
+          reply_text: state.message,
         },
       });
       if (response) {
@@ -91,6 +97,8 @@ export const Reply = ({ onClose, reload, infoState }) => {
       });
     }
   };
+
+  console.log("reply" + state.message)
 
   const onClickOutsideTo = () => {
     if (isEmail(state.to) && state.to.length < 40) {

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { ErrorBoundary, Lang, useToast, Popup, Loading } from "fogito-core-ui";
 import { Spinner, WYSIWYGEditor } from "@components";
 import { useForm, Controller } from "react-hook-form";
-import { mailMessage, mailsAdd, mailsInfo } from "@actions";
+import { mailMessage, mailsAdd, mailsForward } from "@actions";
 import { useParams } from "react-router-dom";
 
 export const Forward = ({ onClose, reload, infoState }) => {
@@ -13,7 +13,7 @@ export const Forward = ({ onClose, reload, infoState }) => {
   let urlParams = useParams();
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
-    { 
+    {
       loading: false,
       showCc: false,
       showBcc: false,
@@ -25,13 +25,13 @@ export const Forward = ({ onClose, reload, infoState }) => {
       black_carbon_copy: "",
       bccEmails: [],
       message: infoState.forwardData.message,
+      original_mail_id: infoState.forwardData.message_id
     }
   );
-  
 
   const loadData = async () => {
     setState({ loading: true });
-    let response = await mailMessage({
+    let response = await mailsForward({
       message_id: state.id,
       google_user_id: "114389651835405574925",
     });
@@ -58,13 +58,14 @@ export const Forward = ({ onClose, reload, infoState }) => {
     setState({ updateLoading: true });
     let response = null;
     if (!state.updateLoading && state.emails.length > 0) {
-      response = await mailsAdd({
+      response = await mailsForward({
         data: {
           subject: state.subject,
           to: state.emails,
           carbon_copy: state.ccEmails,
           black_carbon_copy: state.bccEmails,
           message: state.message,
+          original_mail_id: state.original_mail_id
         },
       });
       if (response) {

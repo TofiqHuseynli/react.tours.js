@@ -214,17 +214,6 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       >
         <Create onClose={() => modal.hide("add")} reload={() => loadData()} />
       </Popup>
-      {/* <Popup
-        title={Lang.get("Forward")}
-        show={modal.modals.includes("forward")}
-        onClose={() => modal.hide("forward")}
-        size="xl"
-      >
-        <Forward
-          onClose={() => modal.hide("forward")}
-          reload={() => loadData()}
-        />
-      </Popup> */}
       <Filters
         show={state.showFilter}
         name={name}

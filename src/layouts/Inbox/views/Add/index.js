@@ -112,8 +112,6 @@ export const Add = ({ onClose, reload }) => {
     }
   }
 
-  console.log("email: " + state.emails + state.emails.length)
-
   useEffect(() => {
     const handleClickOutsideTo = (event) => {
       if (inputRef.current && !inputRef.current.contains(event.target)) {

@@ -18,6 +18,8 @@ export const API_ROUTES = {
   mailsInfo: MICROSERVICE_URL + "/mails/info",
   mailList: MICROSERVICE_URL + "/mails/listmails",
   mailMessage: MICROSERVICE_URL + "/mails/singlemessage",
+  mailsForward: MICROSERVICE_URL + "/mails/forward",
+  mailsReply: MICROSERVICE_URL + "/mails/reply",
 
   // Connected
   connectedList: MICROSERVICE_URL + "/mailconnections/list",

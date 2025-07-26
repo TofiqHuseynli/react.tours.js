@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { mailsInfo } from "@actions";
 import { InfoCard } from "./components";
 import { Forward } from "../Forward";
+import { Reply } from "../Reply";
 
 export const Info = ({ inboxState, modal }) => {
   let urlParams = useParams();
@@ -14,6 +15,7 @@ export const Info = ({ inboxState, modal }) => {
       id: urlParams?.id,
       loading: true,
       forwardData: null,
+      replyData: null,
       skip: 0,
       data: [],
       subject:"",
@@ -72,15 +74,14 @@ export const Info = ({ inboxState, modal }) => {
           infoState={state} 
         />
       </Popup>
-
       <Popup
-        title={Lang.get("Forward")}
-        show={modal.modals.includes("forward")}
-        onClose={() => modal.hide("forward")}
+        title={Lang.get("Reply")}
+        show={modal.modals.includes("reply")}
+        onClose={() => modal.hide("reply")}
         size="xl"
       >
-        <Forward
-          onClose={() => modal.hide("forward")}
+        <Reply
+          onClose={() => modal.hide("reply")}
           reload={() => loadData()}
           infoState={state} 
         />

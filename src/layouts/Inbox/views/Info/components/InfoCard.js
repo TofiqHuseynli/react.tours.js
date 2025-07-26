@@ -63,7 +63,13 @@ export const InfoCard = ({ data, modal, setState }) => {
 
           <div className="ml-auto d-flex">
             <div>
-              <button className="btn shadow-none bg-transparent feather feather-corner-up-left p-0 m-0"></button>
+              <button
+                className="btn shadow-none bg-transparent feather feather-corner-up-left p-0 m-0"
+                onClick={() => {
+                  setState({ replyDate: data });
+                  modal.show("reply");
+                }}
+              ></button>
             </div>
             <div className="dropleft">
               <button
@@ -77,15 +83,21 @@ export const InfoCard = ({ data, modal, setState }) => {
                 }}
               />
               <div className="dropdown-menu">
-                <button className="dropdown-item">
+                <button
+                  className="dropdown-item"
+                  onClick={() => {
+                    setState({ replyDate: data });
+                    modal.show("reply");
+                  }}
+                >
                   <i className="feather-corner-up-left"></i>{" "}
                   {Lang.get("Replay")}
                 </button>
                 <button
                   className="dropdown-item"
                   onClick={() => {
-                    setState({ forwardData: data})
-                    modal.show("forward")
+                    setState({ forwardData: data });
+                    modal.show("forward");
                   }}
                 >
                   <i className="feather-corner-up-right"></i>{" "}

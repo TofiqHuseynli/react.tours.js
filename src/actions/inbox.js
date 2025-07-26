@@ -23,3 +23,11 @@ export const mailList = (params) => {
 export const mailMessage = (params) => {
   return Api.post("mailMessage", { data: params });
 };
+
+export const mailsForward = (params) => {
+  return Api.post("mailsForward",  params);
+};
+
+export const mailsReply = (params) => {
+  return Api.post("mailsReply",  params);
+};
