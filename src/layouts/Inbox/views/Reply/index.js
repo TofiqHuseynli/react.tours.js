@@ -72,6 +72,7 @@ export const Reply = ({ onClose, reload, infoState }) => {
           original_mail_id: state.original_mail_id,
           reply_text: state.message,
         },
+        
       });
       if (response) {
         setState({ updateLoading: false });
