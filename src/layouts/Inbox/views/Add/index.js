@@ -33,7 +33,14 @@ export const Add = ({ onClose, reload }) => {
     e.preventDefault();
     setState({ updateLoading: true });
     let response = null;
-    if (!state.updateLoading && state.emails.length>0) {
+    if (!state.updateLoading &&
+      state.emails.length > 0 &&
+      state.ccEmails.length > 0 &&
+      state.bccEmails.length > 0 &&
+      state.to.length == 0 &&
+      state.carbon_copy.length == 0 &&
+      state.black_carbon_copy.length == 0
+    ) {
       response = await mailsAdd({
         data: {
           subject: state.subject,
@@ -60,7 +67,7 @@ export const Add = ({ onClose, reload }) => {
         }
       }
     }
-    else{
+    else {
       setState({ updateLoading: false });
       toast.fire({
         title: Lang.get("Enter valid email address"),
@@ -68,6 +75,8 @@ export const Add = ({ onClose, reload }) => {
       });
     }
   };
+
+  console.log("to: " + state.to)
 
   const onClickOutsideTo = () => {
     if (isEmail(state.to) && state.to.length < 40) {

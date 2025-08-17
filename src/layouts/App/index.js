@@ -16,6 +16,8 @@ import {
 } from "fogito-core-ui";
 import { Inbox } from "../Inbox";
 import { Connected } from "../Connected";
+import { Add } from "../Connected/views";
+
 
 export const App = () => {
   const location = useLocation();
@@ -59,7 +61,14 @@ export const App = () => {
           name: "Allinbox",
           isExact: false,
           component: (props) => <Inbox {...props} type="inbox" />,
-        },];
+        },
+        {
+          path: "/add",
+          name: "Add new mail",
+          isExact: false,
+          component: (props) => <Add {...props} type="inbox" />,
+        },
+      ];
 
     response.data.map((item) => {
       item.mail.length &&
@@ -193,7 +202,7 @@ export const App = () => {
 
   React.useEffect(() => {
     Api.setRoutes(API_ROUTES);
-    Api.setParams({ app_id: config.appID });
+    Api.setParams({ app_id: config.appID, test: false });
     AppLib.setData({
       appName: config.appName,
     });

@@ -23,8 +23,8 @@ export const Reply = ({ onClose, reload, infoState }) => {
       showCc: false,
       showBcc: false,
       subject: infoState.replyDate.subject,
-      to: emailFrom,
-      emails: [],
+      to: "",
+      emails: [emailFrom],
       carbon_copy: "",
       ccEmails: [],
       black_carbon_copy: "",
@@ -207,6 +207,8 @@ export const Reply = ({ onClose, reload, infoState }) => {
       }
     }
   };
+
+  console.log("tes: " + state.emails)
 
   const handleccKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {
