@@ -11,6 +11,8 @@ export const API_ROUTES = {
   coreActivitiesList: CORE_API_URL + "/activities/list",
   coreTimezonesList: CORE_API_URL + "/data/timezones",
 
+  oauthConnect: MICROSERVICE_URL + "/mails/oauth",
+
   // Mails
   mailsList: MICROSERVICE_URL + "/mails/list",
   mailsAdd: MICROSERVICE_URL + "/mails/addmail",

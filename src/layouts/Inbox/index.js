@@ -65,7 +65,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
     setState({ loading: true, skip: params?.skip || 0 });
     let response = await mailsList({
       limit: state.limit || "",
-      user_id: mailId,
+      google_user_id: mailId,
       skip: params?.skip || 0,
       sort: "created_at",
       recipient: state.recipient || "",

@@ -61,23 +61,28 @@ export const App = () => {
           name: "Allinbox",
           isExact: false,
           component: (props) => <Inbox {...props} type="inbox" />,
-        },
-        {
-          path: "/add",
-          name: "Add new mail",
-          isExact: false,
-          component: (props) => <Add {...props} type="inbox" />,
-        },
+        }, 
       ];
 
     response.data.map((item) => {
       item.google_user_email.length &&
       nestedRotues.push({
-        path: "/"+item?.user_id,
+        path: "/"+item?.google_user_id,
         name: item?.google_user_email,
         isExact: false,
-        component: (props) => <Inbox {...props} mailId={item.user_id} />,
+        component: (props) => <Inbox {...props} mailId={item.google_user_id} />,
       });
+    });
+
+    nestedRotues.push({
+      path: "/add",
+      name: "Add new mail",
+      icon: <i className="symbol feather feather-plus text-dar" />,
+      isExact: false,
+      component: () => {
+        window.open(Api.convert(API_ROUTES.oauthConnect,true), "_blank", "noopener,noreferrer");
+        return null; // nothing to render inside app
+      },
     });
 
     let MENU_ROUTES = [

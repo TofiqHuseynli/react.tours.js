@@ -35,8 +35,6 @@ export const Add = ({ onClose, reload }) => {
     let response = null;
     if (!state.updateLoading &&
       state.emails.length > 0 &&
-      state.ccEmails.length > 0 &&
-      state.bccEmails.length > 0 &&
       state.to.length == 0 &&
       state.carbon_copy.length == 0 &&
       state.black_carbon_copy.length == 0
@@ -53,12 +51,13 @@ export const Add = ({ onClose, reload }) => {
       if (response) {
         setState({ updateLoading: false });
         if (response?.status === "success") {
-          onClose();
-          await reload();
           toast.fire({
             title: Lang.get(response?.description),
             icon: "success",
           });
+          onClose();
+          await reload();
+          
         } else {
           toast.fire({
             title: Lang.get(response?.description || "TitleIsEmpty"),

@@ -1,7 +1,8 @@
 import React from "react";
-import { ErrorBoundary, Lang, Header, InputLazy } from "fogito-core-ui";
+import { ErrorBoundary, Lang, Header, InputLazy, Api } from "fogito-core-ui";
 import { Link } from "react-router-dom";
- import { historyPushByName } from "@actions";
+import { historyPushByName } from "@actions";
+import { API_ROUTES } from "@config";
 
 export const HeaderCustom = ({
   state,
@@ -36,7 +37,7 @@ export const HeaderCustom = ({
               </button>
             </div>
           )}
-             <div className="col-md-4 col-12 mt-md-0 mt-3 order-md-2 order-3 mr-auto">
+          <div className="col-md-4 col-12 mt-md-0 mt-3 order-md-2 order-3 mr-auto">
             <div className="input-group input-group-alternative d-flex align-items-center">
               <div className="input-group-prepend">
                 <span className="input-group-text">
@@ -62,9 +63,15 @@ export const HeaderCustom = ({
             </div>
           </div>
           <div className="col-md-auto col-12 order-md-5 order-5 m-md-0 mt-3">
-            <Link to={`${path}/add`} className="btn btn-primary btn-block">
+            <a
+              href={Api.convert(API_ROUTES.oauthConnect,true)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary btn-block"
+            >
               <i className="feather feather-plus" />
-            </Link>
+            </a>
+
           </div>
         </div>
       </Header>
