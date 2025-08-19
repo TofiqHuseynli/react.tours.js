@@ -55,6 +55,8 @@ export const Reply = ({ onClose, reload, infoState }) => {
     }
   };
 
+
+
   const isEmail = (email) =>
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
@@ -207,8 +209,6 @@ export const Reply = ({ onClose, reload, infoState }) => {
       }
     }
   };
-
-  console.log("tes: " + state.emails)
 
   const handleccKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {

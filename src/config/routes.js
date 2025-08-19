@@ -22,7 +22,7 @@ export const API_ROUTES = {
   mailsReply: MICROSERVICE_URL + "/mails/reply",
 
   // Connected
-  connectedList: MICROSERVICE_URL + "/mailconnections/list",
+  connectedList: MICROSERVICE_URL + "/mails/oauth/info",
   connectedDelete: MICROSERVICE_URL + "/mailconnections/delete",
   connectedAdd: MICROSERVICE_URL + "/mailconnections/add",
   connectedEdit: MICROSERVICE_URL + "/mailconnections/edit",

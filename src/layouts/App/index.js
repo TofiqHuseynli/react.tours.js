@@ -71,10 +71,10 @@ export const App = () => {
       ];
 
     response.data.map((item) => {
-      item.mail.length &&
+      item.google_user_email.length &&
       nestedRotues.push({
         path: "/"+item?.user_id,
-        name: item?.mail,
+        name: item?.google_user_email,
         isExact: false,
         component: (props) => <Inbox {...props} mailId={item.user_id} />,
       });
@@ -202,7 +202,7 @@ export const App = () => {
 
   React.useEffect(() => {
     Api.setRoutes(API_ROUTES);
-    Api.setParams({ app_id: config.appID, test: false });
+    Api.setParams({ app_id: config.appID, test: true });
     AppLib.setData({
       appName: config.appName,
     });

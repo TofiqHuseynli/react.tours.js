@@ -76,8 +76,6 @@ export const Add = ({ onClose, reload }) => {
     }
   };
 
-  console.log("to: " + state.to)
-
   const onClickOutsideTo = () => {
     if (isEmail(state.to) && state.to.length < 40) {
       const newEmails = state.to.split(",").map((email) => email.trim());
