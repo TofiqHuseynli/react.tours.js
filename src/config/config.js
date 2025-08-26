@@ -1,4 +1,4 @@
 export const config = {
-  appName: "Email",
-  appID: 461,
+  appName: "Tour",
+  appID: 276,
 };

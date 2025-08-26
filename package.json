@@ -1,10 +1,10 @@
 {
-  "name": "emailmanagement",
+  "name": "tourmanagament",
   "author": "Tofiq",
   "scripts": {
-    "start-on-crm": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server --mode=development --publicPath=/service/emailmanagement --frameMode=true",
+    "start-on-crm": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server --mode=development --publicPath=/service/tourmanagament --frameMode=true",
     "start": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server --mode=development --publicPath= --open",
-    "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack --mode=production --publicPath=/service/emailmanagement --frameMode=true"
+    "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack --mode=production --publicPath=/service/tourmanagament --frameMode=true"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^29.2.0",

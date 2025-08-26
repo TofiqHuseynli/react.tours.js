@@ -13,23 +13,59 @@ export const TableCustom = ({
   
   const columns = [
     {
-      name: Lang.get("From"),
+      name: Lang.get("TourCode"),
       center: false,
       render: (data) => <div>{data.sender_data.fullname}</div>,
     },
     {
-      name: Lang.get("Recipient"),
+      name: Lang.get("Arrival"),
       center: false,
       render: (data) => <div>{data.recipient_data.fullname}</div>,
     },
     {
-      name: Lang.get("Subject"),
+      name: Lang.get("Departure"),
       center: false,
       key: "subject",
       render: (data) => <div>{data.subject}</div>,
     },
     {
-      name: Lang.get("Date"),
+      name: Lang.get("CarType"),
+      center: false,
+      key: "subject",
+      render: (data) => <div>{data.subject}</div>,
+    },
+    {
+      name: Lang.get("Night"),
+      center: false,
+      key: "subject",
+      render: (data) => <div>{data.subject}</div>,
+    },
+    {
+      name: Lang.get("SimCards"),
+      center: false,
+      key: "subject",
+      render: (data) => <div>{data.subject}</div>,
+    },
+    {
+      name: Lang.get("Partner"),
+      center: false,
+      key: "subject",
+      render: (data) => <div>{data.subject}</div>,
+    },
+    {
+      name: Lang.get("Customer"),
+      center: false,
+      key: "subject",
+      render: (data) => <div>{data.subject}</div>,
+    },
+    {
+      name: Lang.get("Status"),
+      center: false,
+      key: "subject",
+      render: (data) => <div>{data.subject}</div>,
+    },
+    {
+      name: Lang.get("CreateDate"),
       sort: "date",
       center: false,
       width: 150,

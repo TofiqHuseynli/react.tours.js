@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
-import { API_ROUTES, config } from "@config";
-import { connectedList, settings, translations } from "@actions";
+import { API_ROUTES, MENU_ROUTES, config } from "@config";
+import { settings, translations } from "@actions";
 import AppLib from "fogito-core-ui/build/library/App";
 import {
   BottomNavigation,
@@ -12,19 +12,14 @@ import {
   Sidebar,
   Auth,
   Lang,
-  Api,
+  Api
 } from "fogito-core-ui";
-import { Inbox } from "../Inbox";
-import { Connected } from "../Connected";
-import { Add } from "../Connected/views";
-
 
 export const App = () => {
   const location = useLocation();
   const url = location.pathname.split("/")[1];
-
+  const ifUser = url === "tours";
   const [loading, setLoading] = React.useState(true);
-  const [menuRoutes, setMenuRoutes] = React.useState([]);
 
   const loadSettings = async (params) => {
     const response = await settings(params);
@@ -48,84 +43,6 @@ export const App = () => {
     }
   };
 
-  const loadMailList = async () => {
-    let response = await connectedList({
-      connected:true,
-    });
-    if (response?.status !== "success") {
-      //give error
-    }
-
-    let nestedRotues = [{
-          path: "/all",
-          name: "Allinbox",
-          isExact: false,
-          component: (props) => <Inbox {...props} type="inbox" />,
-        }, 
-      ];
-
-    response.data.map((item) => {
-      item.google_user_email.length &&
-      nestedRotues.push({
-        path: "/"+item?.google_user_id,
-        name: item?.google_user_email,
-        isExact: false,
-        component: (props) => <Inbox {...props} mailId={item.google_user_id} />,
-      });
-    });
-
-    nestedRotues.push({
-      path: "/add",
-      name: "Add new mail",
-      icon: <i className="symbol feather feather-plus text-dar" />,
-      isExact: false,
-      component: () => {
-        window.open(Api.convert(API_ROUTES.oauthConnect,true), "_blank", "noopener,noreferrer");
-        return null; // nothing to render inside app
-      },
-    });
-
-    let MENU_ROUTES = [
-      {
-        path: "/inbox",
-        name: "Inbox",
-        icon: <i className="symbol feather feather-mail text-danger" />,
-        isExact: false,
-        isHidden: false,
-        nestedRoutes:  nestedRotues
-
-        // [
-        //   {
-        //     path: "/all",
-        //     name: "Allinbox",
-        //     isExact: false,
-        //     component: (props) => <Inbox {...props} type="inbox" />,
-        //   },
-
-        //     ...response.data.map((item) => (
-        //        {
-        //         path: "/" + item?.value,
-        //         name: item?.email,
-        //         isExact: false,
-        //         component: (props) => <Inbox {...props} mailId={item.value} />,
-        //       }
-        //     )),
-
-        // ],
-      },
-      {
-        path: "/connected",
-        name: "Connected Email",
-        icon: <i className="symbol feather feather-sliders text-warning"/>,
-        isExact: false,
-        isHidden: false,
-        component : (props) => <Connected {...props} loadMailList={loadMailList} />
-      }
-    ];
-
-    setMenuRoutes(MENU_ROUTES);
-  };
-
   const loadData = async () => {
     const common = parent.window.common;
     if (common) {
@@ -133,7 +50,6 @@ export const App = () => {
       const translations = await loadTranslations({ lang: lang?.short_code });
       Auth.setData({ ...account_data });
       Lang.setData({ ...translations });
-      await loadMailList();
       setLoading(false);
     } else {
       const settings = await loadSettings();
@@ -145,7 +61,6 @@ export const App = () => {
         timezone: settings.timezone,
       });
       Lang.setData({ ...translations });
-      await loadMailList();
       setLoading(false);
     }
   };
@@ -171,7 +86,7 @@ export const App = () => {
                   key={key}
                 />
               ))}
-              <Redirect to={route.path + route.nestedRoutes[0].path} />
+              <Redirect to={route.path} />
             </Switch>
           ) : (
             route.component({
@@ -198,7 +113,7 @@ export const App = () => {
       if (parent.window?.historyPush) {
         parent.window.historyPush(path);
       } else {
-        if (url !== "offer") {
+        if (url !== "tours") {
           window.location.replace(path);
         }
       }
@@ -207,35 +122,86 @@ export const App = () => {
 
   React.useEffect(() => {
     Api.setRoutes(API_ROUTES);
-    Api.setParams({ app_id: config.appID, test: true });
+    Api.setParams({ app_id: config.appID,
+      //  test: true 
+      });
     AppLib.setData({
       appName: config.appName,
+      months_list: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+      discount_list: [
+        {
+          label: "%",
+          value: "percentage",
+        },
+        {
+          label: "DKK",
+          value: "dkk",
+        },
+        {
+          label: "EUR",
+          value: "eu",
+        },
+      ],
+
+      getStatusColor(status) {
+        let color = "#000";
+        switch (status) {
+          case 1:
+            color = "#A0841C";
+            break;
+          case 2:
+            color = "#4CAF50";
+            break;
+          case 3:
+            color = "#ffd600"; // "#717171"
+            break;
+          case 4:
+            color = "#DE0357";
+            break;
+        }
+        return color;
+      },
     });
+
     loadData();
   }, []);
 
   if (loading) {
-    return <Loading type="whole" />;
+    return <Loading type='whole' />;
   }
 
-  if (!Auth.isAuthorized() && url !== "inbox") {
+  if (!Auth.isAuthorized() && url !== "tours") {
     return <Error message={Lang.get("NotAuthorized")} />;
   }
 
-  const routes = menuRoutes.filter((item) => {
-    return item.id ? !!Auth.isPermitted(item.id, "view") : true;
-  });
+  const routes =
+    url === "tours"
+      ? MENU_ROUTES
+      : MENU_ROUTES.filter((item) => Auth.isPermitted(item.id, "view"));
 
   return (
     <ErrorBoundary>
-      <Sidebar {...{ routes }} />
-      <Content>
-        <Switch>
-          {renderRoutes(routes)}
-          <Redirect from="*" to="/inbox" />
-        </Switch>
-      </Content>
-      <BottomNavigation {...{ routes }} />
-    </ErrorBoundary>
+    <Sidebar {...{ routes }} />
+    <Content>
+      <Switch>
+        {renderRoutes(routes)}
+        <Redirect from="*" to="/tours" />
+      </Switch>
+    </Content>
+    <BottomNavigation {...{ routes }} />
+  </ErrorBoundary>
   );
 };

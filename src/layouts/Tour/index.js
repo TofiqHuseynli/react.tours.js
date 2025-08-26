@@ -11,18 +11,17 @@ import {
 import {
   getFilterToLocal,
   onFilterStorageBySection,
-  mailsList,
   mailsDelete,
+  tourList,
 } from "@actions";
 import moment from "moment";
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
 import { config } from "@config";
-import { Create, Forward } from "./views";
 
-export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
+export const Tour = ({ name, history, match: { path, url } }) => {
   const toast = useToast();
   const modal = useModal();
-  const VIEW = "inbox";
+  const VIEW = "tour";
   const { setProps } = React.useContext(AppContext);
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
@@ -34,7 +33,6 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       count: 0,
       limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
       skip: 0,
-      googleUserId: "",
       nextPageToken: null,
       hiddenColumns:
         JSON.parse(localStorage.getItem(`${VIEW}_columns_${config.appID}`)) ||
@@ -42,7 +40,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       paramsList: [],
       recipient: getFilterToLocal(name, "recipient") || null,
       showFilter: false,
-      email: "",
+      tourCode: "",
       filters: {
         subject: "",
         range: {
@@ -63,20 +61,18 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
 
   const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
-    let response = await mailsList({
+    let response = await tourList({
       limit: state.limit || "",
-      google_user_id: mailId,
       skip: params?.skip || 0,
       sort: "created_at",
-      recipient: state.recipient || "",
-      subject: state.filters.subject,
-      email: state.email,
-      start_date: state.filters.range.start_date
-        ? moment(`${state.filters.range.start_date} 00:00:00`).unix()
-        : "",
-      end_date: state.filters.range.end_date
-        ? moment(`${state.filters.range.end_date} 23:59:59`).unix()
-        : "",
+      // recipient: state.recipient || "",
+      // subject: state.filters.subject,
+      // start_date: state.filters.range.start_date
+      //   ? moment(`${state.filters.range.start_date} 00:00:00`).unix()
+      //   : "",
+      // end_date: state.filters.range.end_date
+      //   ? moment(`${state.filters.range.end_date} 23:59:59`).unix()
+      //   : "",
       ...params,
     });
     if (response) {
@@ -85,11 +81,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
         setState({
           data: response.data,
           count: response.count,
-          googleUserId: response.google_user_id,
         });
-      } else if (response.code === "NO_ACCESS_TOKEN") {
-        console.log("Isledi");
-        modal.show("add");
       } else {
         setState({ data: [], count: 0 });
       }
@@ -114,12 +106,12 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
       .then(async (res) => {
         if (res?.value) {
           if (ids?.length === 1) {
-
-            ids.map(async (selectedId) =>{
- 
+            ids.map(async (selectedId) => {
               setState({ setLoading: true });
               let response = null;
-              response = await mailsDelete({ data: { id: selectedId, google_user_id:state.googleUserId  } });
+              response = await mailsDelete({
+                data: { id: selectedId, google_user_id: state.googleUserId },
+              });
               if (response) {
                 setState({ loading: false, selectedIDs: [] });
                 toast.fire({
@@ -133,8 +125,7 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
                   loadData({ skip });
                 }
               }
-
-            })
+            });
           } else {
             setState({ progressVisible: true });
             Actions.multiAction({
@@ -207,13 +198,6 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
   };
   return (
     <ErrorBoundary>
-      <Popup
-        title={Lang.get("Add")}
-        show={modal.modals.includes("add")}
-        onClose={() => modal.hide("add")}
-      >
-        <Create onClose={() => modal.hide("add")} reload={() => loadData()} />
-      </Popup>
       <Filters
         show={state.showFilter}
         name={name}
@@ -222,15 +206,14 @@ export const Inbox = ({ name, mailId, history, match: { path, url } }) => {
         state={state}
         setState={(key, value) => setState({ [key]: value })}
       />
-      <ViewRoutes
+      {/* <ViewRoutes
         onClose={goBack}
         loadData={loadData}
         history={history}
         path={path}
         url={url}
-        inboxState={state.googleUserId}
         modal={modal}
-      />
+      /> */}
       <HeaderCustom
         state={state}
         setState={setState}

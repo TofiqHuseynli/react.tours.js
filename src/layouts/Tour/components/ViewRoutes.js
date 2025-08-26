@@ -10,7 +10,7 @@ export const ViewRoutes = ({
   path,
   url,
   inboxState,
-  modal
+  modal,
 }) => {
   return (
     <ErrorBoundary>

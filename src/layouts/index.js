@@ -1,6 +1,6 @@
  export * from "./App";
  export * from "./Connected";
- export * from "./Inbox";
+ export * from "./Tour";
 
 
 

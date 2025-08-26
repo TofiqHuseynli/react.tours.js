@@ -2,9 +2,8 @@ import React from "react";
 import { ErrorBoundary, Loading, useToast, Popup, Lang } from "fogito-core-ui";
 import { useParams } from "react-router-dom";
 import { mailsInfo } from "@actions";
+ 
 import { InfoCard } from "./components";
-import { Forward } from "../Forward";
-import { Reply } from "../Reply";
 
 export const Info = ({ inboxState, modal }) => {
   let urlParams = useParams();
@@ -62,7 +61,7 @@ export const Info = ({ inboxState, modal }) => {
   }
   return (
     <ErrorBoundary>
-      <Popup
+      {/* <Popup
         title={Lang.get("Forward")}
         show={modal.modals.includes("forward")}
         onClose={() => modal.hide("forward")}
@@ -73,8 +72,8 @@ export const Info = ({ inboxState, modal }) => {
           reload={() => loadData()}
           infoState={state} 
         />
-      </Popup>
-      <Popup
+      </Popup> */}
+      {/* <Popup
         title={Lang.get("Reply")}
         show={modal.modals.includes("reply")}
         onClose={() => modal.hide("reply")}
@@ -85,7 +84,7 @@ export const Info = ({ inboxState, modal }) => {
           reload={() => loadData()}
           infoState={state} 
         />
-      </Popup>
+      </Popup> */}
       <div className="p-3 mb-3 bg-white rounded d-flex card-bg ">
         <h3 className="mr-1">Subject: </h3>
         <p>{state.subject}</p>

@@ -17,10 +17,16 @@ export const HeaderCustom = ({
 }) => {
  
   const columns = [
-    { name: Lang.get("From") },
-    { name: Lang.get("Recipient") },
-    { name: Lang.get("Subject") },
-    { name: Lang.get("Date") },
+    { name: Lang.get("TourCode") },
+    { name: Lang.get("Arrival") },
+    { name: Lang.get("Departure") },
+    { name: Lang.get("CarType") },
+    { name: Lang.get("Night") },
+    { name: Lang.get("SimCards") },
+    { name: Lang.get("Partner") },
+    { name: Lang.get("Customer") },
+    { name: Lang.get("Status") },
+    { name: Lang.get("CreateDate") },
     { name: Lang.get("Actions") },
   ];
 
@@ -49,63 +55,6 @@ export const HeaderCustom = ({
               </button>
             </div>
           )}
-          <div className="col-md-3 col-6 mt-md-0 mt-3 order-md-2 order-3 ">
-            <div className="input-group input-group-alternative">
-              <div className="input-group-prepend">
-                <div
-                  className="input-group-text border__right cursor-pointer"
-                  onClick={() => {
-                    if (!USER) {
-                      setState({
-                        member: !state.member
-                          ? {
-                              label: Auth.get("fullname"),
-                              value: Auth.get("id"),
-                            }
-                          : null,
-                      });
-                      historyPushByName(
-                        {
-                          label: "member",
-                          value: !state.member ? Auth.get("id") : "",
-                        },
-                        name
-                      );
-                    }
-                  }}
-                >
-                  <i
-                    className={`feather feather-${
-                      !!state.member ? "user" : "users"
-                    } text-primary`}
-                  />
-                </div>
-              </div>
-              <AsyncSelect
-                isClearable
-                cacheOptions
-                defaultOptions
-                value={state.member}
-                // loadOptions={loadUsers}
-                placeholder={Lang.get("All")}
-                onChange={(member) => {
-                  setState({
-                    member: member,
-                  });
-                  historyPushByName(
-                    {
-                      label: "member",
-                      value: member?.value || "",
-                    },
-                    name
-                  );
-                }}
-                className="form-control form-control-alternative"
-              />
-            </div>
-          </div>
-
-
           <div className="col-md-3 col-12 mt-md-0 mt-3 order-md-2 order-3">
             <div className="input-group input-group-alternative d-flex align-items-center">
               <div className="input-group-prepend">
@@ -114,12 +63,12 @@ export const HeaderCustom = ({
                 </span>
               </div>
               <InputLazy
-                value={state.email}
+                value={state.tourCode}
                 onChange={(e) => {
-                  setState({ email: e.target.value });
+                  setState({ tourCode: e.target.value });
                   historyPushByName(
                     {
-                      label: "email",
+                      label: "tourCode",
                       value: e.target.value,
                     },
                     name
@@ -127,12 +76,11 @@ export const HeaderCustom = ({
                 }}
                 action={() => { }}
                 className="form-control form-control-alternative"
-                placeholder={Lang.get("Email")}
+                placeholder={Lang.get("Tour Code")}
               />
             </div>
           </div>
-
-
+          
           <div className="col-md-auto col-6 mt-md-0 ml-md-auto order-md-2 order-2">
             <Table.ColumnFilter
               className="btn btn-block btn-white"
