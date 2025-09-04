@@ -12,13 +12,13 @@ import {
   Sidebar,
   Auth,
   Lang,
-  Api
+  Api,
 } from "fogito-core-ui";
 
 export const App = () => {
   const location = useLocation();
-  const url = location.pathname.split("/")[1];
-  const ifUser = url === "tours";
+  let url = location.pathname.split("/")[1];
+  const ifUser = url === "tour";
   const [loading, setLoading] = React.useState(true);
 
   const loadSettings = async (params) => {
@@ -113,7 +113,7 @@ export const App = () => {
       if (parent.window?.historyPush) {
         parent.window.historyPush(path);
       } else {
-        if (url !== "tours") {
+        if (url !== "tour") {
           window.location.replace(path);
         }
       }
@@ -122,9 +122,10 @@ export const App = () => {
 
   React.useEffect(() => {
     Api.setRoutes(API_ROUTES);
-    Api.setParams({ app_id: config.appID,
-      //  test: true 
-      });
+    Api.setParams({
+      app_id: config.appID,
+       test: true
+    });
     AppLib.setData({
       appName: config.appName,
       months_list: [
@@ -180,28 +181,29 @@ export const App = () => {
   }, []);
 
   if (loading) {
-    return <Loading type='whole' />;
+    return <Loading type="whole" />;
   }
 
-  if (!Auth.isAuthorized() && url !== "tours") {
+  if (!Auth.isAuthorized() && url !== "tour") {
     return <Error message={Lang.get("NotAuthorized")} />;
   }
+ 
 
   const routes =
-    url === "tours"
+    url !== "tour"
       ? MENU_ROUTES
       : MENU_ROUTES.filter((item) => Auth.isPermitted(item.id, "view"));
 
   return (
     <ErrorBoundary>
-    <Sidebar {...{ routes }} />
-    <Content>
-      <Switch>
-        {renderRoutes(routes)}
-        <Redirect from="*" to="/tours" />
-      </Switch>
-    </Content>
-    <BottomNavigation {...{ routes }} />
-  </ErrorBoundary>
+       <Sidebar {...{ routes }} />
+      <Content>
+        <Switch>
+          {renderRoutes(routes)}
+          <Redirect from="*" to="/tours" />
+        </Switch>
+      </Content>
+      <BottomNavigation {...{ routes }} />
+    </ErrorBoundary>
   );
 };

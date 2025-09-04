@@ -1,0 +1,48 @@
+.activities {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  .activities-item {
+    display: flex;
+    flex-direction: row;
+    .activities-owner {
+      width: 30px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .a-bottom {
+      width: 2px;
+      height: 100%;
+      background-color: $secondary;
+      margin: 4px 0;
+      border-radius: 0.5rem;
+    }
+
+    .activities-content {
+      margin-left: 1rem;
+      margin-bottom: 1.3rem;
+    }
+  }
+}
+
+body.dark {
+  .activities {
+    .activities-item {
+      .a-bottom {
+        background-color: var(--dark);
+      }
+    }
+  }
+}
+
+body.night {
+  .activities {
+    .activities-item {
+      .a-bottom {
+        background-color: #1a2a32;
+      }
+    }
+  }
+}

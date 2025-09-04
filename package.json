@@ -1,10 +1,10 @@
 {
-  "name": "tourmanagament",
+  "name": "tours",
   "author": "Tofiq",
   "scripts": {
-    "start-on-crm": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server --mode=development --publicPath=/service/tourmanagament --frameMode=true",
+    "start-on-crm": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server --mode=development --publicPath=/service/tours --frameMode=true",
     "start": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server --mode=development --publicPath= --open",
-    "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack --mode=production --publicPath=/service/tourmanagament --frameMode=true"
+    "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' webpack --mode=production --publicPath=/service/tours --frameMode=true"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^29.2.0",
@@ -21,13 +21,18 @@
     "moment": "^2.29.4",
     "npm": "^10.2.4",
     "react": "16.13.1",
-    "react-beautiful-dnd": "^13.1.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "16.13.1",
     "react-draft-wysiwyg": "^1.15.0",
+    "react-dropzone": "^14.3.8",
     "react-hook-form": "^5.7.2",
+    "react-media-recorder": "^1.7.2",
     "react-router-dom": "5.2.0",
     "react-select": "^5.7.0",
-    "react-string-replace": "^1.1.1"
+    "react-string-replace": "^1.1.1",
+    "react-uuid": "^2.0.0",
+    "uuid": "^11.1.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",

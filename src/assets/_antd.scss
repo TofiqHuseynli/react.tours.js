@@ -1,0 +1,20 @@
+// ant range select input-group ichinde olanda bu kod ishdenilmelidir (input-group-prepend)..
+.ant-picker-range .ant-picker-active-bar {
+  margin-left: 0 !important;
+}
+
+body.dark {
+  .ant-progress {
+    .ant-progress-circle-trail {
+      stroke: var(--dark);
+    }
+    .ant-progress-text {
+      color: var(--white);
+    }
+  }
+  .ant-slider {
+    .ant-slider-rail {
+      background-color: var(--dark);
+    }
+  }
+}

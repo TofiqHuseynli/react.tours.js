@@ -1,0 +1,45 @@
+.attachments {
+  display: flex;
+  flex-wrap: wrap;
+  .attachment-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 20%;
+    height: 100px;
+    margin-bottom: 20px;
+    &:hover {
+      .attachment-icon {
+        opacity: 1;
+      }
+    }
+    .attachment-icon {
+      opacity: 0;
+    }
+    .attachment-download-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      position: absolute;
+      top: -10px;
+      right: 30px;
+    }
+    .feather-x {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      position: absolute;
+      top: -10px;
+      right: -7px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+    .ant-progress-inner {
+      width: 100px !important;
+      height: 100px !important;
+    }
+  }
+}

@@ -4,9 +4,9 @@ export const tourList = (params) => {
   return Api.post("tourList", { data: params });
 };
 
-// export const mailsAdd = (params) => {
-//   return Api.post("mailsAdd", params);
-// };
+export const tourAdd = (params) => {
+  return Api.post("tourAdd", { data: params });
+};
 
 // export const mailsDelete = (params) => {
 //   return Api.post("mailsDelete", params);

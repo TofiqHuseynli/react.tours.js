@@ -1,0 +1,95 @@
+.hover-container:hover i,
+.hover-container:hover span {
+  display: inline-block !important;
+  color: #5087b0 !important;
+}
+.custom-collapse {
+  .ant-collapse-header {
+    padding: 0 !important;
+  }
+  .ant-collapse-content-box {
+    padding: 0 !important;
+  }
+  .active-tab {
+    border: none;
+  }
+  .ant-collapse-item-active {
+    .active-tab {
+      // border-bottom: 3px solid #5087b0;
+      // bele olan halda box-shadow propertysi vermek daha yaxsi usuldur, olculerin oynamaginin qarsini alir.
+      box-shadow: inset 0 -2px 0 0 #5087b0;
+    }
+  }
+}
+@media (min-width: 968px) {
+  .col-md-2-4 {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+
+.t-main {
+  border: 1px solid #eaecf0;
+  border-radius: 10px;
+  .t-main-header {
+    display: flex;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    background-color: #f9fafb;
+  }
+  .resize-border {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid #eaecf0;
+  }
+  .t-main-body {
+    .row-border:not(:last-child) {
+      border-bottom: 1px solid #eaecf0;
+    }
+    .t-main-body-row {
+      padding: 0.8rem 1rem;
+      display: flex;
+      transition: all 0.4s;
+      &.hover-affected-row:hover {
+        background-color: #f9fafb;
+      }
+    }
+  }
+}
+
+.t-result {
+  .editable-text-container {
+    .editable-text {
+      border: 1px solid transparent;
+      border-radius: 5px;
+      padding: 0 6px;
+      cursor: pointer;
+      transition: border 0.3s ease-in-out;
+      &:hover {
+        font-size: 12px;
+        width: 60px;
+        border: 1px solid #ccc;
+        outline: none;
+      }
+    }
+
+    select {
+      font-size: 12px;
+      border: 1px solid #ccc;
+      outline: none;
+      border-radius: 5px;
+    }
+
+    input {
+      font-size: 12px;
+      width: 60px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+  }
+}
+
+.editor-class {
+  min-height: 160px;
+}

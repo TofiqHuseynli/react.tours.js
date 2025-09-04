@@ -1,0 +1,154 @@
+.checklist {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  .checklist-delete-icon {
+    width: 30px;
+    height: 30px;
+    z-index: 4;
+    position: absolute;
+    border: 2px solid var(--white);
+    background-color: var(--danger);
+    top: -12px;
+    right: -19px;
+    padding: 0;
+    transition: none;
+    visibility: hidden;
+    font-size: 14px;
+    color: var(--white);
+  }
+  &:hover {
+    .checklist-delete-icon {
+      visibility: visible;
+    }
+  }
+  .checklist-title {
+    color: #525f7f;
+    display: flex;
+    align-items: center;
+    margin-left: 2.6rem;
+    button {
+      word-break: break-all;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+  }
+  .checklist-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    margin-left: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--secondary);
+    img {
+      visibility: hidden;
+    }
+    .form-check {
+      display: flex;
+      padding: 0;
+      .custom-checkbox {
+        margin-top: 3px;
+      }
+    }
+    label {
+      margin-bottom: 0;
+    }
+    .close {
+      opacity: 0;
+    }
+    &:hover {
+      background-color: rgba(217, 217, 217, 0.12);
+      .close {
+        opacity: 1;
+      }
+      img {
+        visibility: visible;
+      }
+    }
+    &:last-child {
+      border-bottom: none !important;
+    }
+  }
+  //Checklist Progress
+  .checklist-progress {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #f0f1f3;
+    height: 0.6rem;
+    border-radius: 5rem;
+
+    .percent {
+      transition: all 0.3s;
+      border-radius: 5rem;
+      height: 100%;
+    }
+  }
+}
+
+body.dark {
+  .checklist {
+    border: 1px solid var(--dark);
+    .checklist-delete-icon {
+      border: 2px solid var(--darker);
+    }
+    .checklist-title {
+      color: #cdcdcd;
+    }
+    .checklist-line {
+      border-bottom: 1px solid var(--dark);
+      &:hover {
+        background-color: #40404021;
+      }
+    }
+    //Checklist Progress
+    .checklist-progress {
+      background-color: var(--dark);
+    }
+  }
+}
+
+body.night {
+  .checklist {
+    border: 1px solid #0f2d37;
+    .checklist-delete-icon {
+      border: 2px solid var(--night);
+    }
+    .checklist-title {
+      color: #cdcdcd;
+    }
+    .checklist-line {
+      border-bottom: 1px solid #0f2d37;
+      &:hover {
+        background-color: #40404021;
+      }
+    }
+    //Checklist Progress
+    .checklist-progress {
+      background-color: #0f2d37;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .checklist {
+    .checklist-delete-icon {
+      visibility: visible;
+    }
+    .checklist-line {
+      img {
+        visibility: hidden;
+      }
+      label {
+        margin-bottom: 0;
+      }
+      .close {
+        opacity: 1;
+      }
+    }
+  }
+}

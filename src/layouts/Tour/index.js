@@ -198,22 +198,22 @@ export const Tour = ({ name, history, match: { path, url } }) => {
   };
   return (
     <ErrorBoundary>
-      <Filters
+      {/* <Filters
         show={state.showFilter}
         name={name}
         paramsList={state.paramsList}
         filters={state.filters}
         state={state}
         setState={(key, value) => setState({ [key]: value })}
-      />
-      {/* <ViewRoutes
+      /> */}
+      <ViewRoutes
         onClose={goBack}
         loadData={loadData}
         history={history}
         path={path}
         url={url}
         modal={modal}
-      /> */}
+      />
       <HeaderCustom
         state={state}
         setState={setState}

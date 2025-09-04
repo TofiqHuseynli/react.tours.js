@@ -1,4 +1,11 @@
-import { Tour } from "@layouts";
+import {
+  CarType,
+  Hotel,
+  RoomType,
+  Services,
+  Tour,
+  TourProgram,
+} from "@layouts";
 import React from "react";
 
 export const CORE_API_URL = "/core";
@@ -15,7 +22,7 @@ export const API_ROUTES = {
 
   // Tour
   tourList: MICROSERVICE_URL + "/tours/list",
-  // mailsAdd: MICROSERVICE_URL + "/mails/addmail",
+  tourAdd: MICROSERVICE_URL + "/tours/add",
   // mailsDelete: MICROSERVICE_URL + "/mails/delete",
   // mailsInfo: MICROSERVICE_URL + "/mails/info",
   // mailList: MICROSERVICE_URL + "/mails/listmails",
@@ -30,34 +37,52 @@ export const API_ROUTES = {
   // connectedEdit: MICROSERVICE_URL + "/mailconnections/edit",
   // connectedInfo: MICROSERVICE_URL + "/mailconnections/info",
   // connectedConnect: MICROSERVICE_URL + "/mailconnections/connect",
+
+  // Service
+
+  serviceList: MICROSERVICE_URL + "/service_templates/list",
+  serviceAdd: MICROSERVICE_URL + "/service_templates/add",
+
+  //Car Type
+  carTypeList: MICROSERVICE_URL + "/car_types/list",
+  carTypeAdd: MICROSERVICE_URL + "/car_types/add",
+
+  //Room Type
+  roomTypeList: MICROSERVICE_URL + "/room_types/list",
+  roomTypeAdd: MICROSERVICE_URL + "/room_types/add",
 };
 
-// let nestedRotues = [
-//   {
-//     path: "/tourprogram",
-//     name: "TourProgram",
-//     isExact: false,
-//     component: (props) => <Inbox {...props} type="inbox" />,
-//   },
-//   {
-//     path: "/hotel",
-//     name: "Hotel",
-//     isExact: false,
-//     component: (props) => <Inbox {...props} type="inbox" />,
-//   },
-//   {
-//     path: "/services",
-//     name: "Services",
-//     isExact: false,
-//     component: (props) => <Inbox {...props} type="inbox" />,
-//   },
-//   {
-//     path: "/cartype",
-//     name: "CarType",
-//     isExact: false,
-//     component: (props) => <Inbox {...props} type="inbox" />,
-//   },
-// ];
+let nestedRotues = [
+  // {
+  //   path: "/tourprogram",
+  //   name: "TourProgram",
+  //   id: "offers_templates",
+  //   icon: <i className="symbol feather feather-mail text-danger" />,
+  //   isExact: false,
+  //   component: (props) => <TourProgram {...props} type="inbox" draft={true} />,
+  // },
+  // {
+  //   path: "/hotel",
+  //   name: "Hotel",
+  //   icon: <i className="symbol feather feather-mail text-danger" />,
+  //   isExact: false,
+  //   // component: (props) => <Inbox {...props} type="inbox" />,
+  // },
+  // {
+  //   path: "/services",
+  //   name: "Services",
+  //   icon: <i className="symbol feather feather-mail text-danger" />,
+  //   isExact: false,
+  //   // component: (props) => <Inbox {...props} type="inbox" />,
+  // },
+  // {
+  //   path: "/cartype",
+  //   name: "CarType",
+  //   icon: <i className="symbol feather feather-mail text-danger" />,
+  //   isExact: false,
+  //   // component: (props) => <Inbox {...props} type="inbox" />,
+  // },
+];
 
 export const MENU_ROUTES = [
   {
@@ -68,13 +93,45 @@ export const MENU_ROUTES = [
     isExact: false,
     isHidden: false,
     component: (props) => <Tour {...props} />,
-  }
-  // {
-  //   path: "/template",
-  //   name: "Template",
-  //   icon: <i className="symbol feather feather-mail text-danger" />,
-  //   isExact: false,
-  //   isHidden: false,
-  //   nestedRoutes: nestedRotues,
-  // }
+  },
+  {
+    path: "/tourprogram",
+    name: "TourProgram",
+    icon: <i className="symbol feather feather-mail text-danger" />,
+    id: "tours_program",
+    isExact: false,
+    component: (props) => <TourProgram {...props} type="inbox" draft={true} />,
+  },
+  {
+    path: "/hotel",
+    name: "Hotel",
+    icon: <i className="symbol feather feather-mail text-danger" />,
+    id: "tours_hotel",
+    isExact: false,
+    component: (props) => <Hotel {...props} type="inbox" draft={true} />,
+  },
+  {
+    path: "/services",
+    name: "Services",
+    icon: <i className="symbol feather feather-mail text-danger" />,
+    id: "tours_services",
+    isExact: false,
+    component: (props) => <Services {...props} type="inbox" draft={true} />,
+  },
+  {
+    path: "/cartype",
+    name: "CarType",
+    icon: <i className="symbol feather feather-mail text-danger" />,
+    id: "tours_cartype",
+    isExact: false,
+    component: (props) => <CarType {...props} type="inbox" draft={true} />,
+  },
+  {
+    path: "/roomtype",
+    name: "RoomType",
+    icon: <i className="symbol feather feather-mail text-danger" />,
+    id: "tours_roomtype",
+    isExact: false,
+    component: (props) => <RoomType {...props} type="inbox" draft={true} />,
+  },
 ];

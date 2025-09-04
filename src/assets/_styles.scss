@@ -1,0 +1,126 @@
+.input-radius {
+  border-radius: 2rem;
+}
+
+.no-transform {
+  -webkit-transform: translateY(0) !important;
+  transform: translateY(0) !important;
+}
+
+//.frame-modal.sidebar-closed,
+//.frame-modal.sidebar-opened {
+//  width: 100%;
+//  left: 0;
+//}
+
+.comment {
+  .timer {
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    transition: all 0.4s;
+    &.active {
+      opacity: 1;
+      left: -60px;
+    }
+  }
+  .circles {
+    right: -22px;
+    top: -22px;
+    height: 90px;
+    position: absolute;
+    width: 90px;
+    z-index: 0;
+
+    > div {
+      animation: growAndFade 3s infinite ease-out;
+      background-color: dodgerblue;
+      border-radius: 50%;
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+    }
+
+    .circle1 {
+      animation-delay: 1s;
+    }
+
+    .circle2 {
+      animation-delay: 2s;
+    }
+
+    .circle3 {
+      animation-delay: 3s;
+    }
+  }
+
+  @keyframes growAndFade {
+    0% {
+      opacity: 0.5;
+      transform: scale(0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+}
+
+.card-hover {
+  transition: all 0.2s ease;
+  &:hover {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.attribution {
+  display: none !important;
+  visibility: hidden !important;
+  img {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  span {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+.check-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.wcount-badge {
+  width: fit-content;
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+  border-radius: 5rem;
+  padding: 0px 12px 0px 4px;
+  span {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    opacity: 0.7;
+    font-size: 11px;
+    color: var(--dark);
+  }
+  p {
+    text-transform: lowercase;
+    margin: 0 0 0 6px;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+.mr-02 {
+  margin-right: 0.2rem !important;
+}

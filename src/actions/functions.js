@@ -131,3 +131,52 @@ export const historyPushByName = (
   }
   localStorage.setItem(`${frame}-${appID}`, JSON.stringify(localUrl));
 };
+
+
+
+
+
+
+export const convertDateToAgo = (date) => {
+  let seconds = Math.floor(new Date().getTime() / 1000 - date),
+    interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) return `${interval} ${Lang.get('yearAgo')}`;
+
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) return `${interval} ${Lang.get('monthAgo')}`;
+
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) return `${interval} ${Lang.get('dayAgo')}`;
+
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1) return `${interval} ${Lang.get('hourAgo')}`;
+
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) return `${interval} ${Lang.get('minuteAgo')}`;
+
+  return `${Math.floor(seconds)} ${Lang.get('secondAgo')}`;
+};
+
+
+export const getTrackColor = (p) => {
+  let percent = p;
+  let color = '#f5365c';
+  if (percent < 5) {
+    color = '#8a5ed9';
+  } else if (percent < 8) {
+    color = '#fdd74d';
+  }
+  return color;
+};
+
+export const getTrackText = (p) => {
+  let percent = p;
+  let text = 'High';
+  if (percent < 5) {
+    text = 'Low';
+  } else if (percent < 8) {
+    text = 'Medium';
+  }
+  return Lang.get(text);
+};

@@ -290,7 +290,7 @@ export const Attachments = ({ setParams, params }) => {
           onClick={open}
         >
           {Lang.get("AddAttachment")}
-          <i className="feather feather-file ml-2" />
+          <i className="feather feather-paperclip ml-2" />
         </button>
       </div>
     </ErrorBoundary>

@@ -1,0 +1,124 @@
+.filter {
+  position: fixed;
+  background-color: var(--secondary);
+  top: 0px;
+  right: 0;
+  transform: translateX(100%);
+  transition-timing-function: ease;
+  transition-duration: 0.3s;
+  visibility: hidden;
+  opacity: 0;
+  width: 380px;
+  height: 100vh;
+  z-index: 1044;
+  &.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0%);
+  }
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    background-color: var(--white);
+    padding-left: 12px;
+    i {
+      padding: 16px 12px;
+      font-size: 25px;
+      opacity: 0.7;
+      cursor: pointer;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+  .filter-body {
+    width: 100%;
+    height: calc(100% - 110px);
+    overflow-y: auto;
+    position: relative;
+    padding: 0.6rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--secondary);
+  }
+  button {
+    position: relative;
+    .filter-count {
+      position: absolute;
+      top: 9px;
+      right: 10px;
+      width: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 20px;
+      border-radius: 50%;
+      color: var(--primary);
+      background-color: var(--white);
+    }
+  }
+}
+
+.filter-backdrop {
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  height: 100vh;
+  transition-timing-function: ease;
+  transition-duration: 0.3s;
+  position: fixed;
+  z-index: 1043;
+  display: block;
+  overflow: hidden auto;
+  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.3);
+  &.show {
+    opacity: 1;
+  }
+}
+
+body.dark {
+  .filter {
+    background-color: var(--dark);
+    .filter-header {
+      background-color: var(--darker);
+    }
+    .filter-body {
+      background-color: var(--dark);
+    }
+    button {
+      .filter-count {
+        color: var(--primary);
+        background-color: var(--white);
+      }
+    }
+  }
+}
+
+body.night {
+  .filter {
+    background-color: var(--night-dark);
+    .filter-header {
+      background-color: var(--night);
+    }
+    .filter-body {
+      background-color: var(--night-dark);
+    }
+    button {
+      .filter-count {
+        color: var(--primary);
+        background-color: var(--white);
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .filter {
+    width: 100%;
+  }
+}

@@ -1,0 +1,33 @@
+.form-search {
+  .result-container {
+    top: calc(100% + 5px);
+    left: 0;
+    z-index: 9;
+    max-height: 400px;
+    overflow-y: auto;
+    .item {
+      cursor: pointer;
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--black-rgb-10);
+      }
+      &:hover {
+        background-color: var(--primary-rgb-10);
+      }
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control-color {
+  background-color: transparent !important;
+  padding: 0;
+  cursor: pointer;
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 7px;
+    padding: 0;
+  }
+}
