@@ -1,13 +1,13 @@
 import React from "react";
 import FilterBar from "fogito-core-ui/build/components/common/FilterBar";
-import Select from "react-select";
 import { Lang } from "fogito-core-ui";
 import { historyPushByName, onFilterStorageBySection } from "@actions";
+import AsyncSelect from "react-select/async";
+import Select from "react-select";
 
 export const Filters = ({ show, name, filters, setState }) => {
   const defaultModel = {
-    subject: null,
-    range: { start_date: null, end_date: null },
+    note: null,
   };
 
   const options = [
@@ -44,6 +44,25 @@ export const Filters = ({ show, name, filters, setState }) => {
       }}
     >
       <div className="row">
+        <div className="col-12 mb-2">
+          <label className="text-muted mb-1">{Lang.get("Note")}</label>
+          <div className="input-group input-group-alternative">
+            <div className="input-group-prepend">
+              <span className="input-group-text">
+                <i className="feather feather-search" />
+              </span>
+            </div>
+            <input
+              defaultValue={params.note}
+              onChange={(e) => {
+                setParams({ note: e.target.value });
+              }}
+              className="form-control form-control-alternative"
+              placeholder={Lang.get("Note")}
+            />
+          </div>
+        </div>
+
         <div className="form-group col-xl-12 mb-2">
           <label className="text-muted mb-1">{Lang.get("Status")}</label>
           <Select

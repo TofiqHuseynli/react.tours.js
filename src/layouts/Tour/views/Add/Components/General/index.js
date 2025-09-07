@@ -21,7 +21,6 @@ import { Labels } from "@components";
 
 export const General = ({ state, params, setState, setParams, onSubmit }) => {
   const { props } = React.useContext(AppContext);
-  const PROJECT = App.get("PROJECT");
 
   const loadBoards = async (title) => {
     // let response = await boardMinList({
@@ -54,6 +53,29 @@ export const General = ({ state, params, setState, setParams, onSubmit }) => {
     }
   };
 
+  const onStatus = async () => {
+    setState({ loading: true });
+    let response = null;
+    if (!params.completed) {
+      response = await taskComplete({ id: params.id });
+    } else {
+      response = await taskUnComplete({ id: params.id });
+    }
+    if (response) {
+      setState({ loading: false });
+      toast.fire({ icon: response.status, title: response.description });
+      if (response.status === "success") {
+        setState({ updated: true });
+        setParams((prevParams) => ({
+          ...prevParams,
+          completed: !params.completed,
+        }));
+        setState({ updated: true });
+        reloadProject && reloadProject();
+      }
+    }
+  };
+
   const checkCompany = async (list) => {
     const lastUser = list[list.length - 1];
     const branches = state.branches.map((row) => row.id);
@@ -68,7 +90,6 @@ export const General = ({ state, params, setState, setParams, onSubmit }) => {
     }
   };
 
-
   return (
     <ErrorBoundary>
       <div className="row">
@@ -80,8 +101,8 @@ export const General = ({ state, params, setState, setParams, onSubmit }) => {
                 <input
                   className="form-control"
                   placeholder={Lang.get("Write")}
-                  value={state.tourCode}
-                  onChange={(e) => setState({ tourCode: e.target.value })}
+                  value={state.tour_code}
+                  onChange={(e) => setState({ tour_code: e.target.value })}
                 />
               </div>
               <div className="form-group col-xl-4">
@@ -104,19 +125,18 @@ export const General = ({ state, params, setState, setParams, onSubmit }) => {
               <Textarea
                 rows="2"
                 maxLength="1500"
-                value={params.note}
-                onChange={(e) => setParams({ ...params, note: e.target.value })}
+                value={state.note}
+                onChange={(e) => setState({ ...state, note: e.target.value })}
                 placeholder={Lang.get("Note")}
                 className="form-control"
               />
               <span className="text-muted fs-12 mt-1">
                 {Lang.get("MaxLength").replace(
                   "{length}",
-                  1500 - params.note?.length
+                  1500 - state.note?.length
                 )}
               </span>
             </div>
-
             <div className="row">
               <div className="form-group col-xl-6">
                 <label>{Lang.get("ArrivalInformation")}</label>
@@ -209,9 +229,9 @@ export const General = ({ state, params, setState, setParams, onSubmit }) => {
                     <input
                       className="form-control"
                       placeholder={Lang.get("FlightNumber")}
-                      value={state.FlightArriveNumber}
+                      value={state.arrival_flight_number}
                       onChange={(e) =>
-                        setState({ FlightArriveNumber: e.target.value })
+                        setState({ arrival_flight_number: e.target.value })
                       }
                     />
                   </div>
@@ -235,9 +255,9 @@ export const General = ({ state, params, setState, setParams, onSubmit }) => {
                     <input
                       className="form-control"
                       placeholder={Lang.get("FlightNumber")}
-                      value={state.FlightDepartureNumber}
+                      value={state.arrival_airport}
                       onChange={(e) =>
-                        setState({ FlightDepartureNumber: e.target.value })
+                        setState({ arrival_airport: e.target.value })
                       }
                     />
                   </div>
@@ -382,7 +402,7 @@ export const General = ({ state, params, setState, setParams, onSubmit }) => {
             {/* Check button */}
             <button
               className="btn btn-block btn-secondary text-left d-flex align-items-center"
-              // onClick={onStatus}
+              onClick={onStatus}
             >
               <i
                 className={`feather feather-${

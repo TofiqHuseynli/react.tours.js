@@ -20,6 +20,7 @@ export const Add = ({ onClose, reload }) => {
       title: "",
       description: "",
       status: false,
+      updateLoading: false,
     }
   );
 

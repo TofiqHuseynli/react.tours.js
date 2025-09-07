@@ -14,6 +14,7 @@ import {
   mailsDelete,
   tourList,
   roomTypeList,
+  roomTypeDelete,
 } from "@actions";
 import moment from "moment";
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
@@ -22,7 +23,7 @@ import { config } from "@config";
 export const RoomType = ({ name, history, match: { path, url } }) => {
   const toast = useToast();
   const modal = useModal();
-  const VIEW = "hotel";
+  const VIEW = "room_types";
   const { setProps } = React.useContext(AppContext);
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
@@ -32,6 +33,7 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
       selectedIDs: [],
       data: [],
       count: 0,
+      title: getFilterToLocal(name, "title") || "",
       limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
       skip: 0,
       nextPageToken: null,
@@ -43,19 +45,12 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
       showFilter: false,
       tourCode: "",
       filters: {
-        subject: "",
-        range: {
-          start_date: getFilterToLocal(name, "date")
-            ? moment
-                .unix(getFilterToLocal(name, "date")?.split("T")[0] || "")
-                .format("YYYY-MM-DD")
-            : null,
-          end_date: getFilterToLocal(name, "date")
-            ? moment
-                .unix(getFilterToLocal(name, "date")?.split("T")[1] || "")
-                .format("YYYY-MM-DD")
-            : null,
-        },
+        status: getFilterToLocal(name, "status")
+          ? {
+              label: "",
+              value: getFilterToLocal(name, "status"),
+            }
+          : null,
       },
     }
   );
@@ -66,6 +61,8 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
       limit: state.limit || "",
       skip: params?.skip || 0,
       sort: "created_at",
+      title: state.title,
+      status: state.filters.status,
       ...params,
     });
     if (response) {
@@ -102,8 +99,9 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
             ids.map(async (selectedId) => {
               setState({ setLoading: true });
               let response = null;
-              response = await mailsDelete({
-                data: { id: selectedId, google_user_id: state.googleUserId },
+              response = await roomTypeDelete({
+                id: selectedId,
+                google_user_id: state.googleUserId,
               });
               if (response) {
                 setState({ loading: false, selectedIDs: [] });
@@ -148,10 +146,9 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
 
   const onClearFilters = () => {
     setState({
-      recipient: null,
+      title: "",
       filters: {
-        subject: "",
-        range: { start_date: null, end_date: null },
+        status: null,
       },
     });
     onFilterStorageBySection(name);
@@ -171,7 +168,7 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
 
   React.useEffect(() => {
     loadData();
-  }, [state.recipient, state.limit, state.filters, state.email]);
+  }, [state.recipient, state.limit, state.filters, state.title]);
 
   React.useEffect(() => {
     setProps({ activeRoute: { name, path } });
@@ -181,24 +178,19 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
   }, []);
 
   const filters = {
-    recipient: state.recipient === "" ? null : state.recipient,
-    subject: state.filters.subject === "" ? null : state.filters.subject,
-    range:
-      state.filters.range?.start_date === null &&
-      state.filters.range?.end_date === null
-        ? null
-        : state.filters.range,
+    title: state.title,
+    status: state.filters.status,
   };
   return (
     <ErrorBoundary>
-      {/* <Filters
+      <Filters
         show={state.showFilter}
         name={name}
         paramsList={state.paramsList}
         filters={state.filters}
         state={state}
         setState={(key, value) => setState({ [key]: value })}
-      /> */}
+      />
       <ViewRoutes
         onClose={goBack}
         loadData={loadData}
@@ -216,6 +208,7 @@ export const RoomType = ({ name, history, match: { path, url } }) => {
         path={path}
         VIEW={VIEW}
         filters={filters}
+        name={name}
       />
       <section className="container-fluid">
         <TableCustom

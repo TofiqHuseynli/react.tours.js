@@ -10,63 +10,65 @@ export const TableCustom = ({
   VIEW,
   onDelete,
 }) => {
-  
   const columns = [
     {
       name: Lang.get("TourCode"),
       center: false,
+      key: "tour_code",
       render: (data) => <div>{data.sender_data.fullname}</div>,
     },
     {
       name: Lang.get("Arrival"),
       center: false,
+      key: "arrival",
       render: (data) => <div>{data.recipient_data.fullname}</div>,
     },
     {
       name: Lang.get("Departure"),
       center: false,
-      key: "subject",
+      key: "departure",
       render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("CarType"),
       center: false,
-      key: "subject",
+      key: "car_type",
       render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("Night"),
       center: false,
-      key: "subject",
+      key: "night",
       render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("SimCards"),
       center: false,
-      key: "subject",
+      key: "sim_cards",
       render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("Partner"),
       center: false,
-      key: "subject",
+      key: "partner",
       render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("Customer"),
       center: false,
-      key: "subject",
+      key: "customer",
       render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("Status"),
       center: false,
-      key: "subject",
+      key: "status",
       render: (data) => <div>{data.subject}</div>,
     },
     {
       name: Lang.get("CreateDate"),
       sort: "date",
+      key: "created_at",
       center: false,
       width: 150,
       render: (data) => <SimpleDate date={data.created_at} />,
@@ -74,6 +76,7 @@ export const TableCustom = ({
     {
       name: Lang.get("Actions"),
       width: 10,
+      key: "actions",
       center: true,
       render: (data) => {
         return (
@@ -124,7 +127,7 @@ export const TableCustom = ({
         loading={state.loading}
         progressLoading={state.progressVisible}
         data={state.data}
-        columns={{ all: columns, hidden: state.hiddenColumns}}
+        columns={{ all: columns, hidden: state.hiddenColumns }}
         pagination={{
           skip: state.skip,
           limit: state.limit,

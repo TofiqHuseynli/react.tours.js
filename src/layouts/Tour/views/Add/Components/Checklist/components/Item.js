@@ -160,7 +160,7 @@ export const Item = React.memo(
                         <div className="d-flex align-items-center">
                           <img
                             {...provided.dragHandleProps}
-                            src={`${process.env.publicPath}/assets/images/icons/grid.svg`}
+                            src={`${process.env.publicPath}/assets/icons/grid.svg`}
                             alt=""
                             style={{ width: 13 }}
                             className="mr-2"

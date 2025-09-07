@@ -15,19 +15,18 @@ export const HeaderCustom = ({
   filters,
   name,
 }) => {
- 
   const columns = [
-    { name: Lang.get("TourCode") },
-    { name: Lang.get("Arrival") },
-    { name: Lang.get("Departure") },
-    { name: Lang.get("CarType") },
-    { name: Lang.get("Night") },
-    { name: Lang.get("SimCards") },
-    { name: Lang.get("Partner") },
-    { name: Lang.get("Customer") },
-    { name: Lang.get("Status") },
-    { name: Lang.get("CreateDate") },
-    { name: Lang.get("Actions") },
+    { key: "tour_code", name: Lang.get("TourCode") },
+    { key: "arrival", name: Lang.get("Arrival") },
+    { key: "departure", name: Lang.get("Departure") },
+    { key: "car_type", name: Lang.get("CarType") },
+    { key: "night", name: Lang.get("Night") },
+    { key: "sim_cards", name: Lang.get("SimCards") },
+    { key: "partner", name: Lang.get("Partner") },
+    { key: "customer", name: Lang.get("Customer") },
+    { key: "status", name: Lang.get("Status") },
+    { key: "created_at", name: Lang.get("CreateDate") },
+    { key: "actions", name: Lang.get("Actions") },
   ];
 
   return (
@@ -55,7 +54,7 @@ export const HeaderCustom = ({
               </button>
             </div>
           )}
-          <div className="col-md-3 col-12 mt-md-0 mt-3 order-md-2 order-3">
+          <div className="col-lg-5 col-md-3 col-12 mt-md-0 mt-md-0 mt-3 order-md-2 order-6">
             <div className="input-group input-group-alternative d-flex align-items-center">
               <div className="input-group-prepend">
                 <span className="input-group-text">
@@ -63,24 +62,24 @@ export const HeaderCustom = ({
                 </span>
               </div>
               <InputLazy
-                value={state.tourCode}
+                value={state.tour_code}
                 onChange={(e) => {
-                  setState({ tourCode: e.target.value });
+                  setState({ tour_code: e.target.value });
                   historyPushByName(
                     {
-                      label: "tourCode",
+                      label: "tour_code",
                       value: e.target.value,
                     },
                     name
                   );
                 }}
-                action={() => { }}
+                action={() => {}}
                 className="form-control form-control-alternative"
                 placeholder={Lang.get("Tour Code")}
               />
             </div>
           </div>
-          
+
           <div className="col-md-auto col-6 mt-md-0 ml-md-auto order-md-2 order-2">
             <Table.ColumnFilter
               className="btn btn-block btn-white"
@@ -88,6 +87,7 @@ export const HeaderCustom = ({
                 all: columns,
                 hidden: state.hiddenColumns,
                 view: VIEW,
+                required: "tour_code",
               }}
               setColumns={(hiddenColumns) => setState({ hiddenColumns })}
             >

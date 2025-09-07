@@ -9,6 +9,7 @@ import {
   Auth,
   Actions,
   useToast,
+  useModal,
 } from "fogito-core-ui";
 import { coreTimezonesList, taskPermissionList, tourAdd } from "@actions";
 import { Spinner, Tab, TabPanel, Tabs } from "@components";
@@ -24,21 +25,23 @@ export const Add = ({
 }) => {
   const toast = useToast();
   const { props } = React.useContext(AppContext);
+  const modal = useModal();
   const PROJECT = App.get("PROJECT");
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     {
       loading: false,
-      tourCode: "",
-      FlightArriveNumber: "",
-      FlightDepartureNumber: "",
+      tour_code: "",
+      note: "",
+      arrival_flight_number: "",
+      arrival_airport: "",
       days: "",
       nights: "",
       options: [],
       pax: "",
       updated: false,
       smallLoading: false,
-      activeTab: "extra",
+      activeTab: "accommodation",
       permissions: [],
       timezones: [],
       owner: null,
@@ -78,7 +81,7 @@ export const Add = ({
 
   const [params, setParams] = React.useState({
     title: selectedItem?.title || "",
-    note: "",
+
     car_type: "",
     driver: "",
     accounting_settings: {
@@ -89,7 +92,7 @@ export const Add = ({
       invoice_days: "",
       next_invoice_number: "",
     },
-    items: [
+    accommodations: [
       // {
       //   description: "test",
       //   // type: "",
@@ -118,16 +121,20 @@ export const Add = ({
         // description: "",
       },
     ],
-    extra_service: [{ service1: 0, service2: 0,
-      service3: 0,
-      service4: 0,
-      service5: 0,
-      service6: 0,
-      service7: 0,
-      service8: 0,
-      service9: 0,
-      service10: 0,
-     }],
+    extra_service: [
+      {
+        service1: 0,
+        service2: 0,
+        service3: 0,
+        service4: 0,
+        service5: 0,
+        service6: 0,
+        service7: 0,
+        service8: 0,
+        service9: 0,
+        service10: 0,
+      },
+    ],
 
     custom_default: "",
     address: "",
@@ -182,16 +189,42 @@ export const Add = ({
     }
   };
 
-  console.log("active " + params.extra_service.service8);
-
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!state.smallLoading) {
       if (props?.check_attachments_finish === "ready") {
         setState({ smallLoading: true });
         let response = await tourAdd({
+          title: state.tour_code,
+          description: state.note,
+          arrival:
+            state.start_date !== ""
+              ? {
+                  date: state.start_date,
+                  time: !state.start_time ? "00:00" : state.start_time,
+                  // timezone: state.start_timezone?.id,
+                }
+              : false,
+          departure:
+            state.end_date !== ""
+              ? {
+                  date: state.end_date,
+                  time: !state.end_time ? "00:00" : state.end_time,
+                  // timezone: state.end_timezone?.id,
+                }
+              : false,
+          arrival_flight_number: state.arrival_flight_number,
+          // arrival_airport: ,
+          departure_flight_number: state.arrival_airport,
+          // departure_airport
+
           ...params,
-          tourCode: state.tourCode,
+          file_ids: params.file_ids.map((item) => item.id),
+          label_ids: params?.labels.map((item) => item.id),
+          priority: params.priority,
+
+          //**************************************** */
+
           invoice: {
             ...params.invoice,
             sending: {
@@ -202,22 +235,6 @@ export const Add = ({
               },
             },
           },
-          start:
-            state.start_date !== ""
-              ? {
-                  date: state.start_date,
-                  time: !state.start_time ? "00:00" : state.start_time,
-                  timezone: state.start_timezone?.id,
-                }
-              : false,
-          end:
-            state.end_date !== ""
-              ? {
-                  date: state.end_date,
-                  time: !state.end_time ? "00:00" : state.end_time,
-                  timezone: state.end_timezone?.id,
-                }
-              : false,
           users: state.users.map((item) => ({
             id: item.id,
             owner: item.owner,
@@ -231,8 +248,7 @@ export const Add = ({
             custom_permission_status: item.custom_permission,
           })),
           branches: state.branches?.map((branch) => branch.id) || null,
-          file_ids: params.file_ids.map((item) => item.id),
-          labels: params.labels.map((item) => item.id),
+
           board: params.board?.value || "",
           watch: !params.watch ? 0 : 1,
         });
@@ -267,6 +283,7 @@ export const Add = ({
           params={params}
           setParams={setParams}
           setState={setState}
+          modal={modal}
           onSubmit={onSubmit}
           onClose={onClose}
         />
@@ -424,6 +441,62 @@ export const Add = ({
 
   return (
     <ErrorBoundary>
+      {/* <Popup
+        size="xl"
+        onlyLarge
+        show={modal.modals.includes("convert")}
+        onClose={() => {
+          if (props?.check_attachments_finish === "ready") {
+            modal.hide("convert");
+            setParams({ ...params, title: params.title });
+            setState({ updated: true });
+          } else {
+            toast.fire({
+              icon: "error",
+              title: Lang.get("PleaseWaitForAttachmentsToComplete"),
+            });
+          }
+        }}
+        header={
+          <Modal.Header
+            onClose={() => {
+              if (props?.check_attachments_finish === "ready") {
+                modal.hide("convert");
+                setParams({ ...params, title: params.title });
+                setState({ updated: true });
+              } else {
+                toast.fire({
+                  icon: "error",
+                  title: Lang.get("PleaseWaitForAttachmentsToComplete"),
+                });
+              }
+            }}
+          >
+            <div
+              ref={(el) => {
+                if (el) {
+                  el.parentElement.style.display = "flex";
+                  el.parentElement.style.width = "100%";
+                }
+              }}
+              className="w-100"
+            >
+              {props?.customModalHeader}
+            </div>
+          </Modal.Header>
+        }
+      >
+        <Modal.Body>
+          <Duplicate
+            id={id}
+            selectedItem={params}
+            setParentParams={setParams}
+            setParentSetState={setState}
+            parentState={state}
+            onClose={() => modal.hide("convert")}
+          />
+        </Modal.Body>
+      </Popup> */}
       {/* <Popup
         show
         size="xl"

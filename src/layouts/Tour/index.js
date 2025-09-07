@@ -13,6 +13,7 @@ import {
   onFilterStorageBySection,
   mailsDelete,
   tourList,
+  tourDelete,
 } from "@actions";
 import moment from "moment";
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
@@ -40,16 +41,21 @@ export const Tour = ({ name, history, match: { path, url } }) => {
       paramsList: [],
       recipient: getFilterToLocal(name, "recipient") || null,
       showFilter: false,
-      tourCode: "",
+      tour_code: getFilterToLocal(name, "tour_code") || "",
       filters: {
-        subject: "",
+        status: getFilterToLocal(name, "status")
+          ? {
+              label: "",
+              value: getFilterToLocal(name, "status"),
+            }
+          : null,
         range: {
-          start_date: getFilterToLocal(name, "date")
+          arrival_date: getFilterToLocal(name, "date")
             ? moment
                 .unix(getFilterToLocal(name, "date")?.split("T")[0] || "")
                 .format("YYYY-MM-DD")
             : null,
-          end_date: getFilterToLocal(name, "date")
+          departure_date: getFilterToLocal(name, "date")
             ? moment
                 .unix(getFilterToLocal(name, "date")?.split("T")[1] || "")
                 .format("YYYY-MM-DD")
@@ -65,14 +71,14 @@ export const Tour = ({ name, history, match: { path, url } }) => {
       limit: state.limit || "",
       skip: params?.skip || 0,
       sort: "created_at",
-      // recipient: state.recipient || "",
-      // subject: state.filters.subject,
-      // start_date: state.filters.range.start_date
-      //   ? moment(`${state.filters.range.start_date} 00:00:00`).unix()
-      //   : "",
-      // end_date: state.filters.range.end_date
-      //   ? moment(`${state.filters.range.end_date} 23:59:59`).unix()
-      //   : "",
+      tour_code: state.tour_code,
+      status: state.filters.status,
+      arrival_date: state.filters.range.arrival_date
+        ? moment(`${state.filters.range.arrival_date} 00:00:00`).unix()
+        : "",
+      departure_date: state.filters.range.departure_date
+        ? moment(`${state.filters.range.departure_date} 23:59:59`).unix()
+        : "",
       ...params,
     });
     if (response) {
@@ -88,77 +94,79 @@ export const Tour = ({ name, history, match: { path, url } }) => {
     }
   };
 
-  const onDelete = (ids) =>
-    toast
-      .fire({
-        position: "center",
-        toast: false,
-        timer: null,
-        text: Lang.get("DeleteAlertDescription"),
-        buttonsStyling: false,
-        showConfirmButton: true,
-        showCancelButton: true,
-        confirmButtonClass: "btn btn-success",
-        cancelButtonClass: "btn btn-secondary",
-        confirmButtonText: Lang.get("Confirm"),
-        cancelButtonText: Lang.get("Cancel"),
-      })
-      .then(async (res) => {
-        if (res?.value) {
-          if (ids?.length === 1) {
-            ids.map(async (selectedId) => {
-              setState({ setLoading: true });
-              let response = null;
-              response = await mailsDelete({
-                data: { id: selectedId, google_user_id: state.googleUserId },
-              });
-              if (response) {
-                setState({ loading: false, selectedIDs: [] });
-                toast.fire({
-                  icon: response.status,
+    const onDelete = (ids) =>
+      toast
+        .fire({
+          position: "center",
+          toast: false,
+          timer: null,
+          text: Lang.get("DeleteAlertDescription"),
+          buttonsStyling: false,
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonClass: "btn btn-success",
+          cancelButtonClass: "btn btn-secondary",
+          confirmButtonText: Lang.get("Confirm"),
+          cancelButtonText: Lang.get("Cancel"),
+        })
+        .then(async (res) => {
+          if (res?.value) {
+            if (ids?.length === 1) {
+              ids.map(async (selectedId) => {
+                setState({ setLoading: true });
+                let response = null;
+                response = await tourDelete({
+                  id: selectedId,
+                  google_user_id: state.googleUserId,
                 });
-                if (response?.status === "success") {
-                  const skip =
-                    state.data?.length === 1 && state.skip >= state.limit
-                      ? state.skip - state.limit
-                      : state.skip;
-                  loadData({ skip });
+                if (response) {
+                  setState({ loading: false, selectedIDs: [] });
+                  toast.fire({
+                    icon: response.status,
+                  });
+                  if (response?.status === "success") {
+                    const skip =
+                      state.data?.length === 1 && state.skip >= state.limit
+                        ? state.skip - state.limit
+                        : state.skip;
+                    loadData({ skip });
+                  }
                 }
-              }
-            });
-          } else {
-            setState({ progressVisible: true });
-            Actions.multiAction({
-              ids,
-              limit: state.limit,
-              skip: state.skip,
-              dataLength: state.data?.length,
-              url: "mailsDelete",
-              reload: (skip) => loadData({ skip }),
-              getData: ({
-                total,
-                TotalItems,
-                successPercent,
-                errorPercent,
-              }) => {
-                setState({
+              });
+            } else {
+              setState({ progressVisible: true });
+              Actions.multiAction({
+                ids,
+                limit: state.limit,
+                skip: state.skip,
+                dataLength: state.data?.length,
+                url: "mailsDelete",
+                reload: (skip) => loadData({ skip }),
+                getData: ({
                   total,
                   TotalItems,
                   successPercent,
                   errorPercent,
-                });
-              },
-            });
+                }) => {
+                  setState({
+                    total,
+                    TotalItems,
+                    successPercent,
+                    errorPercent,
+                  });
+                },
+              });
+            }
           }
-        }
-      });
+        });
+  
 
   const onClearFilters = () => {
     setState({
-      recipient: null,
+      tour_code: "",
       filters: {
-        subject: "",
-        range: { start_date: null, end_date: null },
+        status: null,
+        range: { arrival_date: null, departure_date: null },
       },
     });
     onFilterStorageBySection(name);
@@ -178,7 +186,7 @@ export const Tour = ({ name, history, match: { path, url } }) => {
 
   React.useEffect(() => {
     loadData();
-  }, [state.recipient, state.limit, state.filters, state.email]);
+  }, [state.recipient, state.limit, state.filters, state.tour_code]);
 
   React.useEffect(() => {
     setProps({ activeRoute: { name, path } });
@@ -188,24 +196,24 @@ export const Tour = ({ name, history, match: { path, url } }) => {
   }, []);
 
   const filters = {
-    recipient: state.recipient === "" ? null : state.recipient,
-    subject: state.filters.subject === "" ? null : state.filters.subject,
+    tour_code: state.tour_code,
+    status: state.filters.status === "" ? null : state.filters.status,
     range:
-      state.filters.range?.start_date === null &&
-      state.filters.range?.end_date === null
+      state.filters.range?.arrival_date === null &&
+      state.filters.range?.departure_date === null
         ? null
         : state.filters.range,
   };
   return (
     <ErrorBoundary>
-      {/* <Filters
+      <Filters
         show={state.showFilter}
         name={name}
         paramsList={state.paramsList}
         filters={state.filters}
         state={state}
         setState={(key, value) => setState({ [key]: value })}
-      /> */}
+      />
       <ViewRoutes
         onClose={goBack}
         loadData={loadData}
@@ -223,6 +231,7 @@ export const Tour = ({ name, history, match: { path, url } }) => {
         path={path}
         VIEW={VIEW}
         filters={filters}
+        name={name}
       />
       <section className="container-fluid">
         <TableCustom

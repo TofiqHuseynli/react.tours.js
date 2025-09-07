@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorBoundary } from "fogito-core-ui";
 import { Route } from "react-router-dom";
-import { Add, Info } from "../views";
+import { Add, Edit } from "../views";
 
 export const ViewRoutes = ({ onClose, loadData, path, loadMailList }) => {
   return (
@@ -9,15 +9,20 @@ export const ViewRoutes = ({ onClose, loadData, path, loadMailList }) => {
       <Route
         path={`${path}/add`}
         render={(routeProps) => (
-          <Add loadMailList={loadMailList} {...routeProps} reload={() => loadData()} onClose={onClose} />
+          <Add
+            loadMailList={loadMailList}
+            {...routeProps}
+            reload={() => loadData()}
+            onClose={onClose}
+          />
         )}
       />
-      {/* <Route
-        path={`${path}/info/:id`}
+      <Route
+        path={`${path}/edit/:id`}
         render={(routeProps) => (
-          <Info {...routeProps} reload={() => loadData()} onClose={onClose} />
+          <Edit {...routeProps} reload={() => loadData()} onClose={onClose} />
         )}
-      /> */}
+      />
     </ErrorBoundary>
   );
 };

@@ -10,72 +10,50 @@ export const TableCustom = ({
   VIEW,
   onDelete,
 }) => {
-  
   const columns = [
     {
       name: Lang.get("Title"),
       center: false,
-      render: (data) => <div>{data.sender_data.fullname}</div>,
+      key: "title",
+      render: (data) => <div>{data.title}</div>,
     },
     {
       name: Lang.get("Type"),
       center: false,
-      render: (data) => <div>{data.recipient_data.fullname}</div>,
+      key: "type",
+      render: (data) => <div>{data.type}</div>,
     },
     {
-          name: Lang.get("Status"),
-          width: 200,
-          key: "status",
-          center: false,
-          render: (data) => (
-            <div className="d-flex flex-column">
-              <div className="d-flex align-items-center">
-                <div>
-                  <div
-                    style={{
-                      width: 10,
-                      height: 10,
-                      backgroundColor: App.getData().getStatusColor(
-                        data.status?.id
-                      ),
-                      borderRadius: "50%",
-                      marginTop: 2,
-                    }}
-                  />
-                </div>
-                <p className="mb-0 ml-2 fw-400 lh-20 fs-14">
-                  {Lang.get(data.status?.value)}
-                </p>
-              </div>
-              {data.cancelled_by && (
-                <span className="fs-14">
-                  <b>{Lang.get("By")}:</b>{" "}
-                  {data.cancelled_by.user === ""
-                    ? Lang.get(data.cancelled_by.type)
-                    : data.cancelled_by.user?.fullname}
-                </span>
-              )}
-              {data.cancelled_reason ? (
-                <span className="text-purple fs-13">
-                  {data.cancelled_reason?.title}
-                </span>
-              ) : (
-                <React.Fragment>
-                  {data.cancelled_by && (
-                    <span className="text-purple fs-13">
-                      {data.cancelled_description?.slice(0, 70)}
-                      {data.cancelled_description?.length > 70 ? "..." : ""}
-                    </span>
-                  )}
-                </React.Fragment>
-              )}
+      name: Lang.get("Status"),
+      width: 200,
+      key: "status",
+      center: false,
+      render: (data) => (
+        <div className="d-flex flex-column">
+          <div className="d-flex align-items-center">
+            <div>
+              <div
+                style={{
+                  width: 10,
+                  height: 10,
+                  backgroundColor: data.status ? "#27C840" : "#F5D00C",
+                  borderRadius: "50%",
+                  marginTop: 2,
+                }}
+              />
             </div>
-          ),
-        },
-    
+            <p className="mb-0 ml-2 fw-400 lh-20 fs-14">
+              {Lang.get(data.status ? "Active" : "InActive")}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+
     {
       name: Lang.get("CreateDate"),
       sort: "date",
+      key: "created_at",
       center: false,
       width: 150,
       render: (data) => <SimpleDate date={data.created_at} />,
@@ -83,6 +61,7 @@ export const TableCustom = ({
     {
       name: Lang.get("Actions"),
       width: 10,
+      key: "actions",
       center: true,
       render: (data) => {
         return (
@@ -133,7 +112,7 @@ export const TableCustom = ({
         loading={state.loading}
         progressLoading={state.progressVisible}
         data={state.data}
-        columns={{ all: columns, hidden: state.hiddenColumns}}
+        columns={{ all: columns, hidden: state.hiddenColumns }}
         pagination={{
           skip: state.skip,
           limit: state.limit,

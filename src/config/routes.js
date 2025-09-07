@@ -18,38 +18,59 @@ export const API_ROUTES = {
   coreActivitiesList: CORE_API_URL + "/activities/list",
   coreTimezonesList: CORE_API_URL + "/data/timezones",
 
-  // oauthConnect: MICROSERVICE_URL + "/mails/oauth",
+  //Data
+  dataStatusList: MICROSERVICE_URL + "/data/status",
+  dataLocationList: MICROSERVICE_URL + "/locations/search",
+  dataParameters: MICROSERVICE_URL + "/data/parameters",
+  timezonesList: CORE_API_URL + "/data/timezones",
+
+  //Users
+  userList: MICROSERVICE_URL + "/users/search",
+
+  //Branches
+  branchesList: MICROSERVICE_URL + "/branches/query",
+  branchesAdd: MICROSERVICE_URL + "/branches/add",
+  branchesDelete: MICROSERVICE_URL + "/branches/delete",
+
+  //Task Labels
+  labelsList: MICROSERVICE_URL + "/labels/list",
+  labelsCheck: MICROSERVICE_URL + "/labels/check",
+  labelsAdd: MICROSERVICE_URL + "/labels/add",
+  labelsEdit: MICROSERVICE_URL + "/labels/edit",
+  labelsDelete: MICROSERVICE_URL + "/labels/delete",
+  labelsMoveLabel: MICROSERVICE_URL + "/cards/Movelabel",
 
   // Tour
   tourList: MICROSERVICE_URL + "/tours/list",
   tourAdd: MICROSERVICE_URL + "/tours/add",
-  // mailsDelete: MICROSERVICE_URL + "/mails/delete",
-  // mailsInfo: MICROSERVICE_URL + "/mails/info",
-  // mailList: MICROSERVICE_URL + "/mails/listmails",
-  // mailMessage: MICROSERVICE_URL + "/mails/singlemessage",
-  // mailsForward: MICROSERVICE_URL + "/mails/forward",
-  // mailsReply: MICROSERVICE_URL + "/mails/reply",
+  tourDelete: MICROSERVICE_URL + "/tours/delete",
 
-  // Connected
-  // connectedList: MICROSERVICE_URL + "/mails/oauth/info",
-  // connectedDelete: MICROSERVICE_URL + "/mailconnections/delete",
-  // connectedAdd: MICROSERVICE_URL + "/mailconnections/add",
-  // connectedEdit: MICROSERVICE_URL + "/mailconnections/edit",
-  // connectedInfo: MICROSERVICE_URL + "/mailconnections/info",
-  // connectedConnect: MICROSERVICE_URL + "/mailconnections/connect",
+  // Tour program
+  tourProgramList: MICROSERVICE_URL + "/tour_programmes/list",
+  tourProgramAdd: MICROSERVICE_URL + "/tour_programmes/add",
+  tourProgramDelete: MICROSERVICE_URL + "/tour_programmes/delete",
+  tourProgramInfo: MICROSERVICE_URL + "/tour_programmes/info",
+
+  // Hotel
+  hotelList: MICROSERVICE_URL + "/hotel_templates/list",
+  hotelAdd: MICROSERVICE_URL + "/hotel_templates/add",
+  hotelDelete: MICROSERVICE_URL + "/hotel_templates/delete",
 
   // Service
-
   serviceList: MICROSERVICE_URL + "/service_templates/list",
   serviceAdd: MICROSERVICE_URL + "/service_templates/add",
+  serviceDelete: MICROSERVICE_URL + "/service_templates/delete",
 
   //Car Type
   carTypeList: MICROSERVICE_URL + "/car_types/list",
   carTypeAdd: MICROSERVICE_URL + "/car_types/add",
+  carTypeDelete: MICROSERVICE_URL + "/car_types/delete",
 
   //Room Type
   roomTypeList: MICROSERVICE_URL + "/room_types/list",
+  roomTypeMinList: MICROSERVICE_URL + "/room_types/minlist",
   roomTypeAdd: MICROSERVICE_URL + "/room_types/add",
+  roomTypeDelete: MICROSERVICE_URL + "/room_types/delete",
 };
 
 let nestedRotues = [

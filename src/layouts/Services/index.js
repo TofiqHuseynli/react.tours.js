@@ -13,6 +13,7 @@ import {
   onFilterStorageBySection,
   mailsDelete,
   serviceList,
+  serviceDelete,
 } from "@actions";
 import moment from "moment";
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
@@ -31,6 +32,7 @@ export const Services = ({ name, history, match: { path, url } }) => {
       selectedIDs: [],
       data: [],
       count: 0,
+      title: getFilterToLocal(name, "title") || "",
       limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
       skip: 0,
       nextPageToken: null,
@@ -43,19 +45,12 @@ export const Services = ({ name, history, match: { path, url } }) => {
       showFilter: false,
       tourCode: "",
       filters: {
-        subject: "",
-        range: {
-          start_date: getFilterToLocal(name, "date")
-            ? moment
-                .unix(getFilterToLocal(name, "date")?.split("T")[0] || "")
-                .format("YYYY-MM-DD")
-            : null,
-          end_date: getFilterToLocal(name, "date")
-            ? moment
-                .unix(getFilterToLocal(name, "date")?.split("T")[1] || "")
-                .format("YYYY-MM-DD")
-            : null,
-        },
+        status: getFilterToLocal(name, "status")
+          ? {
+              label: "",
+              value: getFilterToLocal(name, "status"),
+            }
+          : null,
       },
     }
   );
@@ -66,8 +61,8 @@ export const Services = ({ name, history, match: { path, url } }) => {
       limit: state.limit || "",
       skip: params?.skip || 0,
       sort: "created_at",
-      // title: state.title,
-      // status: state.status
+      title: state.title,
+      status: state.filters.status,
       ...params,
     });
     if (response) {
@@ -84,76 +79,76 @@ export const Services = ({ name, history, match: { path, url } }) => {
   };
 
   const onDelete = (ids) =>
-    toast
-      .fire({
-        position: "center",
-        toast: false,
-        timer: null,
-        text: Lang.get("DeleteAlertDescription"),
-        buttonsStyling: false,
-        showConfirmButton: true,
-        showCancelButton: true,
-        confirmButtonClass: "btn btn-success",
-        cancelButtonClass: "btn btn-secondary",
-        confirmButtonText: Lang.get("Confirm"),
-        cancelButtonText: Lang.get("Cancel"),
-      })
-      .then(async (res) => {
-        if (res?.value) {
-          if (ids?.length === 1) {
-            ids.map(async (selectedId) => {
-              setState({ setLoading: true });
-              let response = null;
-              response = await mailsDelete({
-                data: { id: selectedId, google_user_id: state.googleUserId },
-              });
-              if (response) {
-                setState({ loading: false, selectedIDs: [] });
-                toast.fire({
-                  icon: response.status,
+      toast
+        .fire({
+          position: "center",
+          toast: false,
+          timer: null,
+          text: Lang.get("DeleteAlertDescription"),
+          buttonsStyling: false,
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonClass: "btn btn-success",
+          cancelButtonClass: "btn btn-secondary",
+          confirmButtonText: Lang.get("Confirm"),
+          cancelButtonText: Lang.get("Cancel"),
+        })
+        .then(async (res) => {
+          if (res?.value) {
+            if (ids?.length === 1) {
+              ids.map(async (selectedId) => {
+                setState({ setLoading: true });
+                let response = null;
+                response = await serviceDelete({
+                  id: selectedId,
+                  google_user_id: state.googleUserId,
                 });
-                if (response?.status === "success") {
-                  const skip =
-                    state.data?.length === 1 && state.skip >= state.limit
-                      ? state.skip - state.limit
-                      : state.skip;
-                  loadData({ skip });
+                if (response) {
+                  setState({ loading: false, selectedIDs: [] });
+                  toast.fire({
+                    icon: response.status,
+                  });
+                  if (response?.status === "success") {
+                    const skip =
+                      state.data?.length === 1 && state.skip >= state.limit
+                        ? state.skip - state.limit
+                        : state.skip;
+                    loadData({ skip });
+                  }
                 }
-              }
-            });
-          } else {
-            setState({ progressVisible: true });
-            Actions.multiAction({
-              ids,
-              limit: state.limit,
-              skip: state.skip,
-              dataLength: state.data?.length,
-              url: "mailsDelete",
-              reload: (skip) => loadData({ skip }),
-              getData: ({
-                total,
-                TotalItems,
-                successPercent,
-                errorPercent,
-              }) => {
-                setState({
+              });
+            } else {
+              setState({ progressVisible: true });
+              Actions.multiAction({
+                ids,
+                limit: state.limit,
+                skip: state.skip,
+                dataLength: state.data?.length,
+                url: "mailsDelete",
+                reload: (skip) => loadData({ skip }),
+                getData: ({
                   total,
                   TotalItems,
                   successPercent,
                   errorPercent,
-                });
-              },
-            });
+                }) => {
+                  setState({
+                    total,
+                    TotalItems,
+                    successPercent,
+                    errorPercent,
+                  });
+                },
+              });
+            }
           }
-        }
-      });
-
+        });
+  
   const onClearFilters = () => {
     setState({
-      recipient: null,
+      title: "",
       filters: {
-        subject: "",
-        range: { start_date: null, end_date: null },
+        status: null,
       },
     });
     onFilterStorageBySection(name);
@@ -173,7 +168,7 @@ export const Services = ({ name, history, match: { path, url } }) => {
 
   React.useEffect(() => {
     loadData();
-  }, [state.recipient, state.limit, state.filters, state.email]);
+  }, [state.recipient, state.limit, state.filters, state.title]);
 
   React.useEffect(() => {
     setProps({ activeRoute: { name, path } });
@@ -183,24 +178,19 @@ export const Services = ({ name, history, match: { path, url } }) => {
   }, []);
 
   const filters = {
-    recipient: state.recipient === "" ? null : state.recipient,
-    subject: state.filters.subject === "" ? null : state.filters.subject,
-    range:
-      state.filters.range?.start_date === null &&
-      state.filters.range?.end_date === null
-        ? null
-        : state.filters.range,
+    title: state.title,
+    status: state.filters.status,
   };
   return (
     <ErrorBoundary>
-      {/* <Filters
+      <Filters
         show={state.showFilter}
         name={name}
         paramsList={state.paramsList}
         filters={state.filters}
         state={state}
         setState={(key, value) => setState({ [key]: value })}
-      /> */}
+      />
       <ViewRoutes
         onClose={goBack}
         loadData={loadData}
@@ -218,6 +208,7 @@ export const Services = ({ name, history, match: { path, url } }) => {
         path={path}
         VIEW={VIEW}
         filters={filters}
+        name={name}
       />
       <section className="container-fluid">
         <TableCustom

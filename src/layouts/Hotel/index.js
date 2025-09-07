@@ -13,6 +13,8 @@ import {
   onFilterStorageBySection,
   mailsDelete,
   tourList,
+  hotelList,
+  hotelDelete,
 } from "@actions";
 import moment from "moment";
 import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
@@ -31,6 +33,7 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
       selectedIDs: [],
       data: [],
       count: 0,
+      title: getFilterToLocal(name, "title") || "",
       limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
       skip: 0,
       nextPageToken: null,
@@ -42,37 +45,30 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
       showFilter: false,
       tourCode: "",
       filters: {
-        subject: "",
-        range: {
-          start_date: getFilterToLocal(name, "date")
-            ? moment
-                .unix(getFilterToLocal(name, "date")?.split("T")[0] || "")
-                .format("YYYY-MM-DD")
-            : null,
-          end_date: getFilterToLocal(name, "date")
-            ? moment
-                .unix(getFilterToLocal(name, "date")?.split("T")[1] || "")
-                .format("YYYY-MM-DD")
-            : null,
-        },
+        country: "",
+        room_type: getFilterToLocal(name, "room_type")
+          ? { value: getFilterToLocal(name, "room_type"), label: "" }
+          : null,
+        status: getFilterToLocal(name, "status")
+          ? {
+              label: "",
+              value: getFilterToLocal(name, "status"),
+            }
+          : null,
       },
     }
   );
 
   const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
-    let response = await tourList({
+    let response = await hotelList({
       limit: state.limit || "",
       skip: params?.skip || 0,
       sort: "created_at",
-      // recipient: state.recipient || "",
-      // subject: state.filters.subject,
-      // start_date: state.filters.range.start_date
-      //   ? moment(`${state.filters.range.start_date} 00:00:00`).unix()
-      //   : "",
-      // end_date: state.filters.range.end_date
-      //   ? moment(`${state.filters.range.end_date} 23:59:59`).unix()
-      //   : "",
+      title: state.title,
+      country: state.filters.country,
+      room_type: state.filters.room_type,
+      status: state.filters.status,
       ...params,
     });
     if (response) {
@@ -109,8 +105,9 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
             ids.map(async (selectedId) => {
               setState({ setLoading: true });
               let response = null;
-              response = await mailsDelete({
-                data: { id: selectedId, google_user_id: state.googleUserId },
+              response = await hotelDelete({
+                id: selectedId,
+                google_user_id: state.googleUserId,
               });
               if (response) {
                 setState({ loading: false, selectedIDs: [] });
@@ -155,10 +152,11 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
 
   const onClearFilters = () => {
     setState({
-      recipient: null,
+      title: "",
       filters: {
-        subject: "",
-        range: { start_date: null, end_date: null },
+        country: "",
+        room_type: "",
+        status: null,
       },
     });
     onFilterStorageBySection(name);
@@ -178,7 +176,7 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
 
   React.useEffect(() => {
     loadData();
-  }, [state.recipient, state.limit, state.filters, state.email]);
+  }, [state.recipient, state.limit, state.filters, state.title]);
 
   React.useEffect(() => {
     setProps({ activeRoute: { name, path } });
@@ -188,24 +186,21 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
   }, []);
 
   const filters = {
-    recipient: state.recipient === "" ? null : state.recipient,
-    subject: state.filters.subject === "" ? null : state.filters.subject,
-    range:
-      state.filters.range?.start_date === null &&
-      state.filters.range?.end_date === null
-        ? null
-        : state.filters.range,
+    title: state.title,
+    country: state.filters.country,
+    room_type: state.filters.room_type,
+    status: state.filters?.status,
   };
   return (
     <ErrorBoundary>
-      {/* <Filters
+      <Filters
         show={state.showFilter}
         name={name}
         paramsList={state.paramsList}
         filters={state.filters}
         state={state}
         setState={(key, value) => setState({ [key]: value })}
-      /> */}
+      />
       <ViewRoutes
         onClose={goBack}
         loadData={loadData}
@@ -223,6 +218,7 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
         path={path}
         VIEW={VIEW}
         filters={filters}
+        name={name}
       />
       <section className="container-fluid">
         <TableCustom

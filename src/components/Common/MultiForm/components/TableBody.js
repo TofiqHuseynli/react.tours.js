@@ -8,12 +8,13 @@ import Textarea from "fogito-core-ui/build/components/form/Textarea";
 import { Lang, Picker } from "fogito-core-ui";
 import { Computations } from "../../library";
 import moment from "moment";
+import { roomTypeMinList } from "@actions";
 
 export const TableBody = (props) => {
   const { params, setParams, provided, setState, state } = props;
 
   const onActiveRow = (rowKey, isActive) => {
-    const updatedItems = [...params?.items];
+    const updatedItems = [...params?.accommodations];
     if (!isActive) {
       updatedItems.forEach((item, index) => {
         updatedItems[index].active = rowKey === index;
@@ -23,22 +24,22 @@ export const TableBody = (props) => {
     }
     setParams({
       ...params,
-      items: updatedItems,
+      accommodations: updatedItems,
     });
   };
 
   const onDeleteRow = (index) => {
-    const updatedItems = [...params.items];
+    const updatedItems = [...params.accommodations];
     updatedItems.splice(index, 1);
     // setParams({ items: updatedItems });
     setParams({
       ...params,
-      items: updatedItems,
+      accommodations: updatedItems,
     });
   };
 
   const onChangeFunction = (index, fieldName, value) => {
-    const updatedItems = [...params.items];
+    const updatedItems = [...params.accommodations];
     let regex;
 
     switch (fieldName) {
@@ -101,14 +102,55 @@ export const TableBody = (props) => {
     // setParams({ items: updatedItems });
     setParams({
       ...params,
-      items: updatedItems,
+      accommodations: updatedItems,
     });
+  };
+
+  // React.useEffect(() => {
+  //   setParams({
+  //     result: Computations.calculate(
+  //       params.accounting_settings.discount_level?.value == "item"
+  //         ? params.items
+  //         : params.items.map((item) => {
+  //             item.discount = {
+  //               type: "percent",
+  //               value: "",
+  //             };
+  //             item.amount = item.rate * item.quantity;
+  //             return item;
+  //           }),
+  //       params.accounting_settings.tax_method?.value,
+  //       params.discount_data,
+  //       params.accounting_settings.discount_level?.value,
+  //       params.accounting_settings.rounding
+  //     ),
+  //   });
+  // }, [
+  //   params.items,
+  //   params.accounting_settings,
+  //   params.discount_after_tax,
+  //   params.discount_data,
+  // ]);
+
+  const loadRoomType = async (title) => {
+    let response = await roomTypeMinList({
+      archived: 0,
+      skip: 0,
+      limit: 20,
+      title,
+    });
+    if (response?.status !== "success") {
+      return response.data?.map((item) => ({
+        value: item.value,
+        label: item.label,
+      }));
+    }
   };
 
   return (
     <ErrorBoundary>
       <div className="t-main-body">
-        {params.items?.map((row, index) => {
+        {params.accommodations?.map((row, index) => {
           let uniq_id = "_id_" + index;
           return (
             <Draggable key={uniq_id} draggableId={uniq_id} index={index}>
@@ -125,13 +167,13 @@ export const TableBody = (props) => {
                     onClick={() => onActiveRow(index, row.active)}
                     style={{ cursor: "default" }}
                     ref={provided.innerRef}
-                    {...(params.items.length > 1 && {
+                    {...(params.accommodations.length > 1 && {
                       ...provided.draggableProps,
                     })}
                     {...provided.dragHandleProps}
                   >
                     <div className="t-main-body-row hover-affected-row">
-                      {params.items?.length > 1 && (
+                      {params.accommodations?.length > 1 && (
                         <div
                           style={{ flex: 1 }}
                           className=" d-flex align-items-center"
@@ -169,8 +211,6 @@ export const TableBody = (props) => {
                           {row.roomType}
                         </div>
 
-                       
-
                         <div
                           className=" d-flex justify-content-center cursor-pointer"
                           style={{ flex: 1 }}
@@ -203,10 +243,10 @@ export const TableBody = (props) => {
                     {!!row.active && (
                       <>
                         <div className="t-main-body-row">
-                          {params.items?.length > 1 && (
+                          {params.accommodations?.length > 1 && (
                             <div className="" style={{ flex: 1 }}></div>
                           )}
-                         
+
                           <div
                             style={{
                               height: "145.5px",
@@ -245,7 +285,7 @@ export const TableBody = (props) => {
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
-                                <Select
+                                {/* <Select
                                   styles={{
                                     menuPortal: (base) => ({
                                       ...base,
@@ -261,7 +301,19 @@ export const TableBody = (props) => {
                                   onChange={(e) =>
                                     onChangeFunction(index, "room_type", e)
                                   }
-                                />{" "}
+                                />{" "} */}
+                                <AsyncSelect
+                                  isClearable
+                                  cacheOptions
+                                  defaultOptions
+                                  value={row.room_type}
+                                  loadOptions={loadRoomType}
+                                  placeholder={Lang.get("Select")}
+                                  onChange={(e) =>
+                                    onChangeFunction(index, "room_type", e)
+                                  }
+                                  className="form-control"
+                                />
                               </div>
 
                               <div
@@ -313,7 +365,9 @@ export const TableBody = (props) => {
                                   time={state.check_in_time.slice(0, 5)}
                                   timezoneCondition={false}
                                   onChangeDate={(date) =>
-                                    setState({
+                                    onChangeFunction({
+                                      index,
+                                      
                                       ...state,
                                       check_in_date: moment(
                                         date !== null ? date : new Date()

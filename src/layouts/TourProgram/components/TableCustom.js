@@ -21,50 +21,16 @@ export const TableCustom = ({
 }) => {
   const columns = [
     {
-      width: 500,
       name: Lang.get("Title"),
+      center: false,
       key: "title",
-      render: (data) => (
-        <React.Fragment>
-          <Link
-            to={`${path}/edit/${data.id}/view`}
-            className="text-primary-alternative"
-            style={{
-              maxWidth: 450,
-              overflow: "hidden",
-              display: "-webkit-box",
-              textOverflow: "ellipsis",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 3,
-            }}
-          >
-            {data?.title || Lang.get("NoData")}
-          </Link>
-        </React.Fragment>
-      ),
+      render: (data) => <div> {data.title}</div>,
     },
     {
-      width: 500,
       name: Lang.get("Description"),
-      key: "title",
-      render: (data) => (
-        <React.Fragment>
-          <Link
-            to={`${path}/edit/${data.id}/view`}
-            className="text-primary-alternative"
-            style={{
-              maxWidth: 450,
-              overflow: "hidden",
-              display: "-webkit-box",
-              textOverflow: "ellipsis",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 3,
-            }}
-          >
-            {data?.title || Lang.get("NoData")}
-          </Link>
-        </React.Fragment>
-      ),
+      center: false,
+      key: "description",
+      render: (data) => <div> {data.description}</div>,
     },
     {
       name: Lang.get("Status"),
@@ -79,82 +45,56 @@ export const TableCustom = ({
                 style={{
                   width: 10,
                   height: 10,
-                  backgroundColor: App.getData().getStatusColor(
-                    data.status?.id
-                  ),
+                  backgroundColor: data.status ? "#27C840" : "#F5D00C",
                   borderRadius: "50%",
                   marginTop: 2,
                 }}
               />
             </div>
             <p className="mb-0 ml-2 fw-400 lh-20 fs-14">
-              {Lang.get(data.status?.value)}
+              {Lang.get(data.status ? "Active" : "InActive")}
             </p>
           </div>
-          {data.cancelled_by && (
-            <span className="fs-14">
-              <b>{Lang.get("By")}:</b>{" "}
-              {data.cancelled_by.user === ""
-                ? Lang.get(data.cancelled_by.type)
-                : data.cancelled_by.user?.fullname}
-            </span>
-          )}
-          {data.cancelled_reason ? (
-            <span className="text-purple fs-13">
-              {data.cancelled_reason?.title}
-            </span>
-          ) : (
-            <React.Fragment>
-              {data.cancelled_by && (
-                <span className="text-purple fs-13">
-                  {data.cancelled_description?.slice(0, 70)}
-                  {data.cancelled_description?.length > 70 ? "..." : ""}
-                </span>
-              )}
-            </React.Fragment>
-          )}
         </div>
       ),
     },
+
     {
-      name: Lang.get("CreatedDate"),
-      center: false,
-      sort: "expires_date",
+      name: Lang.get("CreateDate"),
+      sort: "date",
       key: "created_at",
+      center: false,
+      width: 150,
       render: (data) => <SimpleDate date={data.created_at} />,
     },
     {
       name: Lang.get("Actions"),
+      width: 10,
       center: true,
-      width: 50,
       key: "actions",
-      render: (data) => (
-        <React.Fragment>
-          <div className="d-flex flex-row justify-content-center">
-            <Tooltip title={Lang.get("Edit")}>
-              {data.permissions?.can_edit_template && (
-                <Link
-                  className="btn btn-outline-warning btn-sm h-auto lh-10 p-1 mb-2 mb-lg-0 mr-0"
-                  to={`${path}/edit/${data?.id}/info`}
-                >
-                  <i className="feather feather-edit-2" />
-                </Link>
-              )}
-            </Tooltip>
-            <Tooltip title={Lang.get("Delete")}>
-              {data.permissions?.can_delete_template && (
-                <button
-                  className="btn btn-outline-danger btn-sm h-auto lh-10 p-1 mb-2 mb-lg-0 mr-0 ml-2"
-                  style={{ borderRadius: "50%" }}
-                  onClick={() => onDelete([data?.id])}
-                >
-                  <i className="feather feather-x" />
-                </button>
-              )}
-            </Tooltip>
+      render: (data) => {
+        return (
+          <div className="dropleft">
+            <button
+              data-toggle="dropdown"
+              className="btn shadow-none bg-transparent feather feather-more-vertical p-0"
+              style={{ fontSize: "1.2rem", height: "22px", lineHeight: "1px" }}
+            />
+            <div className="dropdown-menu">
+              <Link className="text-dark" to={`${path}/edit/${data?.id}`}>
+                <button className="dropdown-item">{Lang.get("Edit")}</button>
+              </Link>
+              {/* <button className="dropdown-item">{Lang.get("Edit")}</button> */}
+              <button
+                className="dropdown-item text-danger"
+                onClick={() => onDelete([data.id])}
+              >
+                {Lang.get("Delete")}
+              </button>
+            </div>
           </div>
-        </React.Fragment>
-      ),
+        );
+      },
     },
   ];
 

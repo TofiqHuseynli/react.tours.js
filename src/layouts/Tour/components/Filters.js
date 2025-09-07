@@ -3,23 +3,20 @@ import FilterBar from "fogito-core-ui/build/components/common/FilterBar";
 import Tooltip from "antd/lib/tooltip";
 import DatePicker from "antd/lib/date-picker";
 import moment from "moment";
+import Select from "react-select";
 import { Lang } from "fogito-core-ui";
-import {
-  historyPushByName,
-  onFilterStorageBySection,
-} from "@actions";
+import { historyPushByName, onFilterStorageBySection } from "@actions";
 
-export const Filters = ({
-  show,
-  name,
-  filters,
-  setState,
-}) => {
-  
+export const Filters = ({ show, name, filters, setState }) => {
   const defaultModel = {
     subject: null,
     range: { start_date: null, end_date: null },
   };
+
+  const options = [
+    { value: true, label: "Active" },
+    { value: false, label: "InActive" },
+  ];
 
   const [params, setParams] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
@@ -50,21 +47,40 @@ export const Filters = ({
       }}
     >
       <div className="row">
-      <div className="col-12 mb-2">
-            <div className="input-group input-group-alternative">
-              <div className="input-group-prepend">
-                <span className="input-group-text">
-                  <i className="feather feather-search" />
-                </span>
-              </div>
-              <input
-                defaultValue={params.subject}
-                onChange={(e) =>{setParams({subject: e.target.value})}}
-                className="form-control form-control-alternative"
-                placeholder={Lang.get("Subject")}
-              />
-            </div>
-          </div>
+        <div className="form-group col-xl-12 mb-2">
+          <label className="text-muted mb-1">{Lang.get("Status")}</label>
+          <Select
+            isClearable
+            components={{
+              Control: ({ innerProps, children, innerRef }) => {
+                return (
+                  <div
+                    className="input-group-prepend m-1"
+                    {...innerProps}
+                    ref={innerRef}
+                  >
+                    {children}
+                  </div>
+                );
+              },
+            }}
+            value={params.status ?? null}
+            options={options}
+            onChange={(data) => {
+              setParams({ status: data });
+              historyPushByName(
+                {
+                  label: "status",
+                  value: data ? data?.value : "",
+                },
+                name
+              );
+            }}
+            placeholder={Lang.get("All")}
+            name="value"
+            className="form-control form-control-alternative"
+          />
+        </div>
         <div className="col-12 mb-2">
           <label className="text-muted mb-1">{Lang.get("Date")}</label>
           <div className="input-group input-group-alternative">
@@ -135,7 +151,7 @@ export const Filters = ({
               className="form-control"
             />
           </div>
-        </div>       
+        </div>
       </div>
     </FilterBar>
   );

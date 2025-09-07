@@ -16,10 +16,10 @@ export const HeaderCustom = ({
   name,
 }) => {
   const columns = [
-    { name: Lang.get("Title") },
-    { name: Lang.get("Status") },
-    { name: Lang.get("CreateDate") },
-    { name: Lang.get("Actions") },
+    { key: "title", name: Lang.get("Title") },
+    { key: "status", name: Lang.get("Status") },
+    { key: "created_at", name: Lang.get("CreateDate") },
+    { key: "actions", name: Lang.get("Actions") },
   ];
 
   return (
@@ -90,6 +90,7 @@ export const HeaderCustom = ({
                 all: columns,
                 hidden: state.hiddenColumns,
                 view: VIEW,
+                required: "title"
               }}
               setColumns={(hiddenColumns) => setState({ hiddenColumns })}
             >

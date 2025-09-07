@@ -6,14 +6,20 @@ import {
   useToast,
   Actions,
 } from "fogito-core-ui";
-import { connectedList, connectedDelete } from "@actions";
+import {
+  connectedList,
+  connectedDelete,
+  tourProgramList,
+  getFilterToLocal,
+  tourProgramDelete,
+} from "@actions";
 
-import { HeaderCustom, TableCustom, ViewRoutes } from "./components";
+import { Filters, HeaderCustom, TableCustom, ViewRoutes } from "./components";
 import { config } from "@config";
 
 export const TourProgram = ({ name, history, match: { path, url } }) => {
   const toast = useToast();
-  const VIEW = "tourProgram";
+  const VIEW = "tour_programmes";
 
   const { setProps } = React.useContext(AppContext);
 
@@ -27,8 +33,16 @@ export const TourProgram = ({ name, history, match: { path, url } }) => {
       count: 0,
       limit: localStorage.getItem(`${VIEW}_tb_limit`) || "10",
       skip: 0,
-      title: "",
-      mail: "",
+      title: getFilterToLocal(name, "title") || "",
+      filters: {
+        note: "",
+        status: getFilterToLocal(name, "status")
+          ? {
+              label: "",
+              value: getFilterToLocal(name, "status"),
+            }
+          : null,
+      },
       showFilter: false,
       hiddenColumns:
         JSON.parse(localStorage.getItem(`${VIEW}_columns_${config.appID}`)) ||
@@ -39,11 +53,12 @@ export const TourProgram = ({ name, history, match: { path, url } }) => {
 
   const loadData = async (params) => {
     setState({ loading: true, skip: params?.skip || 0 });
-    let response = await connectedList({
+    let response = await tourProgramList({
       limit: state.limit || "",
-      // user_id: mailId,
       skip: params?.skip || 0,
-      mail: state.mail,
+      title: state.title,
+      note: state.filters.note,
+      status: state.filters.status?.value,
       ...params,
     });
     if (response) {
@@ -55,68 +70,71 @@ export const TourProgram = ({ name, history, match: { path, url } }) => {
       }
     }
   };
-  const onDelete = (ids) =>
-    toast
-      .fire({
-        position: "center",
-        toast: false,
-        timer: null,
-        text: Lang.get("DeleteAlertDescription"),
-        buttonsStyling: false,
-        showConfirmButton: true,
-        showCancelButton: true,
-        confirmButtonClass: "btn btn-success",
-        cancelButtonClass: "btn btn-secondary",
-        confirmButtonText: Lang.get("Confirm"),
-        cancelButtonText: Lang.get("Cancel"),
-      })
-      .then(async (res) => {
-        // loadMailList();
-        if (res?.value) {
-          if (state.selectedIDs?.length === 1) {
-            setState({ setLoading: true });
-            let response = null;
-            response = await connectedDelete({ data: { id: ids[0] } });
-            if (response) {
-              setState({ loading: false, selectedIDs: [] });
-              toast.fire({
-                icon: response.status,
+   const onDelete = (ids) =>
+      toast
+        .fire({
+          position: "center",
+          toast: false,
+          timer: null,
+          text: Lang.get("DeleteAlertDescription"),
+          buttonsStyling: false,
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonClass: "btn btn-success",
+          cancelButtonClass: "btn btn-secondary",
+          confirmButtonText: Lang.get("Confirm"),
+          cancelButtonText: Lang.get("Cancel"),
+        })
+        .then(async (res) => {
+          if (res?.value) {
+            if (ids?.length === 1) {
+              ids.map(async (selectedId) => {
+                setState({ setLoading: true });
+                let response = null;
+                response = await tourProgramDelete({
+                  id: selectedId,
+                  google_user_id: state.googleUserId,
+                });
+                if (response) {
+                  setState({ loading: false, selectedIDs: [] });
+                  toast.fire({
+                    icon: response.status,
+                  });
+                  if (response?.status === "success") {
+                    const skip =
+                      state.data?.length === 1 && state.skip >= state.limit
+                        ? state.skip - state.limit
+                        : state.skip;
+                    loadData({ skip });
+                  }
+                }
               });
-              if (response?.status === "success") {
-                const skip =
-                  state.data?.length === 1 && state.skip >= state.limit
-                    ? state.skip - state.limit
-                    : state.skip;
-                loadData({ skip });
-              }
-            }
-          } else {
-            setState({ progressVisible: true });
-            Actions.multiAction({
-              ids,
-              limit: state.limit,
-              skip: state.skip,
-              dataLength: state.data?.length,
-              url: "connectedDelete",
-              reload: (skip) => loadData({ skip }),
-              getData: ({
-                total,
-                TotalItems,
-                successPercent,
-                errorPercent,
-              }) => {
-                // loadMailList();
-                setState({
+            } else {
+              setState({ progressVisible: true });
+              Actions.multiAction({
+                ids,
+                limit: state.limit,
+                skip: state.skip,
+                dataLength: state.data?.length,
+                url: "mailsDelete",
+                reload: (skip) => loadData({ skip }),
+                getData: ({
                   total,
                   TotalItems,
                   successPercent,
                   errorPercent,
-                });
-              },
-            });
+                }) => {
+                  setState({
+                    total,
+                    TotalItems,
+                    successPercent,
+                    errorPercent,
+                  });
+                },
+              });
+            }
           }
-        }
-      });
+        });
 
   const onClose = () => {
     history.push(url);
@@ -130,9 +148,20 @@ export const TourProgram = ({ name, history, match: { path, url } }) => {
     }
   };
 
+  const onClearFilters = () => {
+    setState({
+      title: "",
+      filters: {
+        note: "",
+        status: null,
+      },
+    });
+    onFilterStorageBySection(name);
+  };
+
   React.useEffect(() => {
     loadData();
-  }, [state.limit, state.mail]);
+  }, [state.limit, state.title, state.filters]);
 
   React.useEffect(() => {
     setProps({ activeRoute: { name, path } });
@@ -141,8 +170,22 @@ export const TourProgram = ({ name, history, match: { path, url } }) => {
     };
   }, []);
 
+  const filters = {
+    ...state.filters,
+    title: state.title,
+    note: state.filters.note === "" ? null : state.filters.note,
+  };
+
   return (
     <ErrorBoundary>
+      <Filters
+        show={state.showFilter}
+        name={name}
+        paramsList={state.paramsList}
+        filters={state.filters}
+        state={state}
+        setState={(key, value) => setState({ [key]: value })}
+      />
       <ViewRoutes
         onClose={goBack}
         loadData={loadData}
@@ -155,8 +198,11 @@ export const TourProgram = ({ name, history, match: { path, url } }) => {
         setState={setState}
         onDelete={onDelete}
         loadData={loadData}
+        onClearFilters={onClearFilters}
+        filters={filters}
         path={path}
         VIEW={VIEW}
+        name={name}
       />
       <section className="container-fluid">
         <TableCustom

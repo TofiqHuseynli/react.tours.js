@@ -13,7 +13,7 @@ export const MultiForm = ({ state, params, setParams, setState }) => {
   const [isEditingInput, setIsEditingInput] = React.useState(false);
 
   const onAddItem = (type) => {
-    const updatedItems = [...params?.items];
+    const updatedItems = [...params?.accommodations];
     if (updatedItems?.length) {
       updatedItems.map((item, index) => (updatedItems[index].active = false));
     }
@@ -23,23 +23,25 @@ export const MultiForm = ({ state, params, setParams, setState }) => {
       id: uuid(),
       active: true,
       description: "",
+      room_type: params.accommodations.room_type,
+      unit: "",
     });
     setParams({
       ...params,
-      items: updatedItems,
+      accommodations: updatedItems,
     });
     
   };
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
-    const reorderedRows = Array.from(params.items);
+    const reorderedRows = Array.from(params.accommodations);
     const [movedRow] = reorderedRows.splice(result.source.index, 1);
     reorderedRows.splice(result.destination.index, 0, movedRow);
     // setParams({ items: reorderedRows });
     setParams({
       ...params,
-      items: reorderedRows,
+      accommodations: reorderedRows,
     });
   };
 

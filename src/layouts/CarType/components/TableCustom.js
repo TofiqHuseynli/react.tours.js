@@ -14,19 +14,48 @@ export const TableCustom = ({
     {
       name: Lang.get("Title"),
       center: false,
-      render: (data) => <div>{data.title}</div>,
+      key: "title",
+      render: (data) => <div> {data.title}</div>,
+    },
+    {
+      name: Lang.get("Status"),
+      width: 200,
+      key: "status",
+      center: false,
+      render: (data) => (
+        <div className="d-flex flex-column">
+          <div className="d-flex align-items-center">
+            <div>
+              <div
+                style={{
+                  width: 10,
+                  height: 10,
+                  backgroundColor: data.status ? "#27C840" : "#F5D00C",
+                  borderRadius: "50%",
+                  marginTop: 2,
+                }}
+              />
+            </div>
+            <p className="mb-0 ml-2 fw-400 lh-20 fs-14">
+              {Lang.get(data.status ? "Active" : "InActive")}
+            </p>
+          </div>
+        </div>
+      ),
     },
 
     {
       name: Lang.get("CreateDate"),
       sort: "date",
       center: false,
+      key: "created_at",
       width: 150,
       render: (data) => <SimpleDate date={data.created_at} />,
     },
     {
       name: Lang.get("Actions"),
       width: 10,
+      key: "actions",
       center: true,
       render: (data) => {
         return (

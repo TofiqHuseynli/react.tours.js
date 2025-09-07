@@ -21,15 +21,14 @@ export const HeaderCustom = ({
   onClearFilters,
   VIEW,
   filters,
- 
 }) => {
   const columns = [
-    { name: Lang.get("Title") },
-    { name: Lang.get("Description") },
-    { name: Lang.get("Status") },
-    { name: Lang.get("CreatedDate") },
-    { name: Lang.get("Actions") },
-  ];
+     { key: "title", name: Lang.get("Title") },
+     { key: "description", name: Lang.get("Description") },
+     { key: "status", name: Lang.get("Status") },
+     { key: "created_at", name: Lang.get("CreateDate") },
+     { key: "actions", name: Lang.get("Actions") },
+   ];
   return (
     <ErrorBoundary>
       <Header>
@@ -101,26 +100,24 @@ export const HeaderCustom = ({
                 hidden: state.hiddenColumns,
                 required: "title",
               }}
-              setColumns={(hiddenColumns) =>
-                setState({ hiddenColumns: hiddenColumns })
-              }
+              setColumns={(hiddenColumns) => setState({ hiddenColumns })}
             >
               <i className="feather feather-sliders mr-2" />
               {Lang.get("Columns")}
             </Table.ColumnFilter>
           </div>
-          {/* <div className="col-md-auto col-6 mt-md-0 mt-3 order-md-3 order-3">
+          <div className="col-md-auto col-6 mt-md-0 mt-3 order-md-3 order-3">
             <Header.FilterButton
-              // onClick={() => setState({ showFilter: true })}
+              onClick={() => setState({ showFilter: true })}
               containerClassName="h-100 w-100"
-              // onClear={onClearFilters}
+              onClear={onClearFilters}
               className="btn btn-white"
               count={Object.keys(filters).filter((key) => filters[key]).length}
             >
               <i className="feather feather-filter mr-2" />
               {Lang.get("Filters")}
             </Header.FilterButton>
-          </div> */}
+          </div>
           {Auth.isPermitted("contract_templates", "create") && (
             <div className="col-md-auto col-6 order-md-6 order-2">
               <Link to={`${path}/add`} className="btn btn-success btn-block">
