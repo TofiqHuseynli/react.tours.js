@@ -4,68 +4,54 @@ import {
   Lang,
   useToast,
   Popup,
-  Auth,
   Textarea,
   InputCheckbox,
 } from "fogito-core-ui";
 import { Spinner } from "@components";
-import AsyncSelect from "react-select/async";
-import { hotelAdd, offersAdd, roomTypeMinList } from "@actions";
+import { serviceAdd, serviceEdit, serviceInfo } from "@actions";
 
-export const Add = ({ onClose, reload }) => {
+export const Edit = ({
+  onClose,
+  reload,
+  match: {
+    params: { id },
+    url,
+  },
+}) => {
   const toast = useToast();
 
   const [state, setState] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     {
       loading: false,
-      updateLoading: false,
-      room_type: "",
+      title: "",
       description: "",
       status: false,
+      updateLoading: false,
     }
   );
 
-  const [params, setParams] = React.useState({
-    active: 0,
-    items: [],
-    fines: [],
-    user_id: "",
-    comment: "",
-    date: null,
-    template_id: null,
-    currency_id: null,
-    timezone_id: Auth.get("timezone")
-      ? {
-          label: Auth.get("timezone")?.title,
-          value: Auth.get("timezone")?.id,
-        }
-      : null,
-    expires_date: "",
-    payment: "",
-    currency: "",
-    timezone: "",
-    terms: null,
-    vat_inclusive: 0,
-    vat_included: 0,
-    total_excluded_vat: 0,
-    total_vat_amount: 0,
-    total_included_vat: 0,
-    total_to_pay: 0,
-  });
-
-  const loadRoomType = async (title) => {
-    let response = await roomTypeMinList({
-      archived: 0,
-      skip: 0,
-      limit: 20,
-      title,
+  const loadData = async () => {
+    setState({ loading: true });
+    let response = await serviceInfo({
+      id,
     });
-    if (response?.status === "success") {
-      return response.data?.map((item) => ({
-        value: item.value,
-        label: item.label,
-      }));
+    if (response) {
+      setState({ loading: false });
+      if (response.status === "success") {
+        console.log("fff");
+        setState({
+          title: response.data.title,
+          note: response.data.note,
+          description: response.data.description,
+          status: response.data.status,
+        });
+      }
+    } else {
+      toast.fire({
+        title: response.message,
+        icon: response.status,
+      });
     }
   };
 
@@ -74,12 +60,11 @@ export const Add = ({ onClose, reload }) => {
     setState({ updateLoading: true });
     let response = null;
     if (!state.updateLoading) {
-      response = await hotelAdd({
-        title: "fddf",
-        country: "dd",
-        room_type: state.room_type,
+      response = await serviceEdit({
+        id: id,
+        title: state.title,
+        description: state.description,
         status: state.status,
-        description: state.description
       });
 
       if (response) {
@@ -101,7 +86,11 @@ export const Add = ({ onClose, reload }) => {
     }
   };
 
-  const renderModalHeader = () => <div>{Lang.get("Add")}</div>;
+  React.useEffect(() => {
+    loadData();
+  }, []);
+
+  const renderModalHeader = () => <div>{Lang.get("Edit")}</div>;
 
   return (
     <ErrorBoundary>
@@ -109,43 +98,13 @@ export const Add = ({ onClose, reload }) => {
         <Popup.Body>
           <div className="form-group">
             <div className="row">
-              <div className="col-xl-8">
-                <label>{Lang.get("Hotel")}</label>
-                <AsyncSelect
-                  isClearable
-                  cacheOptions
-                  defaultOptions
-                  // value={params.board}
-                  // loadOptions={loadBoards}
-                  placeholder={Lang.get("Select")}
-                  onChange={(board) => setParams({ ...params, board })}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group col-xl-4">
-                <label>{Lang.get("Country")}</label>
-                <AsyncSelect
-                  isClearable
-                  cacheOptions
-                  defaultOptions
-                  // value={params.board}
-                  // loadOptions={loadBoards}
-                  placeholder={Lang.get("Select")}
-                  onChange={(board) => setParams({ ...params, board })}
-                  className="form-control"
-                />
-              </div>
               <div className="form-group col-xl-12">
-                <label>{Lang.get("RoomType")}</label>
-                <AsyncSelect
-                  isClearable
-                  cacheOptions
-                  defaultOptions
-                  value={state.room_type}
-                  loadOptions={loadRoomType}
-                  placeholder={Lang.get("Select")}
-                  onChange={(room_type) => setState({ ...state, room_type })}
+                <label>{Lang.get("Title")}</label>
+                <input
                   className="form-control"
+                  placeholder={Lang.get("Title")}
+                  value={state.title}
+                  onChange={(e) => setState({ title: e.target.value })}
                 />
               </div>
               <div className="col-xl-12 form-group">
@@ -188,7 +147,7 @@ export const Add = ({ onClose, reload }) => {
               {state.saveLoading ? (
                 <Spinner color="#fff" style={{ width: 30 }} />
               ) : (
-                Lang.get("Add")
+                Lang.get("Save")
               )}
             </button>
             <button onClick={() => onClose()} className="btn btn-danger w-100">

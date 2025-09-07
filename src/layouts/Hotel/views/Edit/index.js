@@ -10,9 +10,22 @@ import {
 } from "fogito-core-ui";
 import { Spinner } from "@components";
 import AsyncSelect from "react-select/async";
-import { hotelAdd, offersAdd, roomTypeMinList } from "@actions";
+import {
+  hotelAdd,
+  hotelEdit,
+  hotelInfo,
+  offersAdd,
+  roomTypeMinList,
+} from "@actions";
 
-export const Add = ({ onClose, reload }) => {
+export const Edit = ({
+  onClose,
+  reload,
+  match: {
+    params: { id },
+    url,
+  },
+}) => {
   const toast = useToast();
 
   const [state, setState] = React.useReducer(
@@ -54,6 +67,30 @@ export const Add = ({ onClose, reload }) => {
     total_to_pay: 0,
   });
 
+  const loadData = async () => {
+    setState({ loading: true });
+    let response = await hotelInfo({
+      id,
+    });
+    if (response) {
+      setState({ loading: false });
+      if (response.status === "success") {
+        setState({
+          room_type: response.data.room_type,
+          description: response.data.description,
+          status: response.data.status,
+        });
+      }
+    } else {
+      toast.fire({
+        title: response.message,
+        icon: response.status,
+      });
+    }
+  };
+
+  console.log("room: " + state.room_type)
+
   const loadRoomType = async (title) => {
     let response = await roomTypeMinList({
       archived: 0,
@@ -74,12 +111,12 @@ export const Add = ({ onClose, reload }) => {
     setState({ updateLoading: true });
     let response = null;
     if (!state.updateLoading) {
-      response = await hotelAdd({
-        title: "fddf",
-        country: "dd",
+      response = await hotelEdit({
+        id: id,
+        country: "",
         room_type: state.room_type,
         status: state.status,
-        description: state.description
+        description: state.description,
       });
 
       if (response) {
@@ -100,6 +137,10 @@ export const Add = ({ onClose, reload }) => {
       }
     }
   };
+
+  React.useEffect(() => {
+    loadData();
+  }, []);
 
   const renderModalHeader = () => <div>{Lang.get("Add")}</div>;
 

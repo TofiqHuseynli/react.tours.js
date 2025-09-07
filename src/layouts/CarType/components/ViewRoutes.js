@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorBoundary, Modal } from "fogito-core-ui";
 import { Route } from "react-router-dom";
-import { Add } from "../views";
+import { Add, Edit } from "../views";
 
 export const ViewRoutes = ({
   onClose,
@@ -20,22 +20,12 @@ export const ViewRoutes = ({
           <Add {...routeProps} reload={() => loadData()} onClose={onClose} />
         )}
       />
-      {/* <Route
-        path={`${path}/info/:id`}
+      <Route
+        path={`${path}/edit/:id`}
         render={(routeProps) => (
-          <Modal show>
-            <Modal.Header onClose={() => history.push(url)}></Modal.Header>
-            <Modal.Body>
-              <Info
-                {...routeProps}
-                reloadTable={loadData}
-                inboxState={inboxState}
-                modal={modal}
-              />
-            </Modal.Body>
-          </Modal>
+          <Edit {...routeProps} reload={() => loadData()} onClose={onClose} />
         )}
-      /> */}
+      />
     </ErrorBoundary>
   );
 };

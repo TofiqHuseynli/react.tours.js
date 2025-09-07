@@ -1,2 +1,2 @@
-export * from "./Add"; 
- 
+export * from "./Add";
+export * from "./Edit";

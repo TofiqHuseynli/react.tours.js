@@ -67,8 +67,8 @@ export const TableCustom = ({
                style={{ fontSize: "1.2rem", height: "22px", lineHeight: "1px" }}
              />
              <div className="dropdown-menu">
-               <Link className="text-dark" to={`${path}/info/${data?.id}`}>
-                 <button className="dropdown-item">{Lang.get("Info")}</button>
+               <Link className="text-dark" to={`${path}/edit/${data?.id}`}>
+                 <button className="dropdown-item">{Lang.get("Edit")}</button>
                </Link>
                {/* <button className="dropdown-item">{Lang.get("Edit")}</button> */}
                <button
