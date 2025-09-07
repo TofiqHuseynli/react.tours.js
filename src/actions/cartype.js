@@ -11,3 +11,11 @@ export const carTypeAdd = (params) => {
 export const carTypeDelete = (params) => {
   return Api.post("carTypeDelete", { data: params });
 };
+
+export const carTypeInfo = (params) => {
+  return Api.post("carTypeInfo", { data: params });
+};
+
+export const carTypeEdit = (params) => {
+  return Api.post("carTypeEdit", { data: params });
+};

@@ -15,3 +15,7 @@ export const tourProgramAdd = (params) => {
   export const tourProgramInfo = (params) => {
     return Api.post("tourProgramInfo", { data: params });
   };
+
+  export const tourProgramEdit = (params) => {
+    return Api.post("tourProgramEdit", { data: params });
+  };

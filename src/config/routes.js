@@ -44,33 +44,44 @@ export const API_ROUTES = {
   tourList: MICROSERVICE_URL + "/tours/list",
   tourAdd: MICROSERVICE_URL + "/tours/add",
   tourDelete: MICROSERVICE_URL + "/tours/delete",
+  tourInfo: MICROSERVICE_URL + "/tours/info",
+  tourEdit: MICROSERVICE_URL + "/tours/edit",
 
   // Tour program
   tourProgramList: MICROSERVICE_URL + "/tour_programmes/list",
   tourProgramAdd: MICROSERVICE_URL + "/tour_programmes/add",
   tourProgramDelete: MICROSERVICE_URL + "/tour_programmes/delete",
   tourProgramInfo: MICROSERVICE_URL + "/tour_programmes/info",
+  tourProgramEdit: MICROSERVICE_URL + "/tour_programmes/edit",
 
   // Hotel
   hotelList: MICROSERVICE_URL + "/hotel_templates/list",
   hotelAdd: MICROSERVICE_URL + "/hotel_templates/add",
   hotelDelete: MICROSERVICE_URL + "/hotel_templates/delete",
+  hotelInfo: MICROSERVICE_URL + "/hotel_templates/info",
+  hotelEdit: MICROSERVICE_URL + "/hotel_templates/edit",
 
   // Service
   serviceList: MICROSERVICE_URL + "/service_templates/list",
   serviceAdd: MICROSERVICE_URL + "/service_templates/add",
   serviceDelete: MICROSERVICE_URL + "/service_templates/delete",
+  serviceInfo: MICROSERVICE_URL + "/service_templates/info",
+  serviceEdit: MICROSERVICE_URL + "/service_templates/edit",
 
   //Car Type
   carTypeList: MICROSERVICE_URL + "/car_types/list",
   carTypeAdd: MICROSERVICE_URL + "/car_types/add",
   carTypeDelete: MICROSERVICE_URL + "/car_types/delete",
+  carTypeInfo: MICROSERVICE_URL + "/car_types/info",
+  carTypeEdit: MICROSERVICE_URL + "/car_types/edit",
 
   //Room Type
   roomTypeList: MICROSERVICE_URL + "/room_types/list",
   roomTypeMinList: MICROSERVICE_URL + "/room_types/minlist",
   roomTypeAdd: MICROSERVICE_URL + "/room_types/add",
   roomTypeDelete: MICROSERVICE_URL + "/room_types/delete",
+  roomTypeInfo: MICROSERVICE_URL + "/room_types/info",
+  roomTypeEdit: MICROSERVICE_URL + "/room_types/edit",
 };
 
 let nestedRotues = [

@@ -11,3 +11,12 @@ export const tourAdd = (params) => {
 export const tourDelete = (params) => {
   return Api.post("tourDelete", { data: params });
 };
+
+export const tourInfo = (params) => {
+  return Api.post("tourInfo", { data: params });
+};
+
+export const tourEdit = (params) => {
+  return Api.post("tourEdit", { data: params });
+};
+

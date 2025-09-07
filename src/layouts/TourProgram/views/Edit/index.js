@@ -8,9 +8,16 @@ import {
   InputCheckbox,
 } from "fogito-core-ui";
 import { Spinner } from "@components";
-import { tourProgramAdd, tourProgramInfo } from "@actions";
+import { tourProgramAdd, tourProgramEdit, tourProgramInfo } from "@actions";
 
-export const Edit = ({ onClose, reload }) => {
+export const Edit = ({
+  onClose,
+  reload,
+  match: {
+    params: { id },
+    url,
+  },
+}) => {
   const toast = useToast();
 
   const [state, setState] = React.useReducer(
@@ -25,25 +32,29 @@ export const Edit = ({ onClose, reload }) => {
     }
   );
 
-  const loadData = async (type = "load") => {
-    if (type === "load") setState({ loading: true });
+  const loadData = async () => {
+    setState({ loading: true });
     let response = await tourProgramInfo({
       id,
     });
     if (response) {
       setState({ loading: false });
       if (response.status === "success") {
+        console.log("fff");
         setState({
-          title: response.title,
-          // hash: response.data.hash,
+          title: response.data.title,
+          note: response.data.note,
+          description: response.data.description,
+          status: response.data.status,
         });
       }
+    } else {
+      toast.fire({
+        title: response.message,
+        icon: response.status,
+      });
     }
   };
-
-  React.useEffect(() => {
-    loadData();
-  }, []);
 
   const goBack = () => {
     if (typeof onClose === "function") {
@@ -58,7 +69,8 @@ export const Edit = ({ onClose, reload }) => {
     setState({ updateLoading: true });
     let response = null;
     if (!state.updateLoading) {
-      response = await tourProgramAdd({
+      response = await tourProgramEdit({
+        id: id,
         title: state.title,
         note: state.note,
         description: state.description,
@@ -83,6 +95,10 @@ export const Edit = ({ onClose, reload }) => {
       }
     }
   };
+
+  React.useEffect(() => {
+    loadData();
+  }, []);
 
   const renderModalHeader = () => <div>{Lang.get("Edit")}</div>;
 
@@ -150,7 +166,7 @@ export const Edit = ({ onClose, reload }) => {
               {state.saveLoading ? (
                 <Spinner color="#fff" style={{ width: 30 }} />
               ) : (
-                Lang.get("Add")
+                Lang.get("Save")
               )}
             </button>
             <button onClick={() => onClose()} className="btn btn-danger w-100">

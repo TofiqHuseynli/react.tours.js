@@ -15,3 +15,12 @@ export const roomTypeAdd = (params) => {
 export const roomTypeDelete = (params) => {
   return Api.post("roomTypeDelete", { data: params });
 };
+
+export const roomTypeInfo = (params) => {
+  return Api.post("roomTypeInfo", { data: params });
+};
+
+export const roomTypeEdit = (params) => {
+  return Api.post("roomTypeEdit", { data: params });
+};
+
