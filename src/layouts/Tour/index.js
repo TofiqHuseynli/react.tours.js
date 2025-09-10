@@ -70,7 +70,7 @@ export const Tour = ({ name, history, match: { path, url } }) => {
     let response = await tourList({
       limit: state.limit || "",
       skip: params?.skip || 0,
-      sort: "created_at",
+      // sort: "created_at",
       tour_code: state.tour_code,
       status: state.filters.status,
       arrival_date: state.filters.range.arrival_date

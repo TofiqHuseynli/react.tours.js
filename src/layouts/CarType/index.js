@@ -57,7 +57,7 @@ export const CarType = ({ name, history, match: { path, url } }) => {
     let response = await carTypeList({
       limit: state.limit || "",
       skip: params?.skip || 0,
-      sort: "created_at",
+      // sort: "created_at",
       title: state.title,
       status: state.filters.status,
       ...params,

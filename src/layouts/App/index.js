@@ -124,7 +124,7 @@ export const App = () => {
     Api.setRoutes(API_ROUTES);
     Api.setParams({
       app_id: config.appID,
-       test: true
+      test: true,
     });
     AppLib.setData({
       appName: config.appName,
@@ -187,7 +187,6 @@ export const App = () => {
   if (!Auth.isAuthorized() && url !== "tour") {
     return <Error message={Lang.get("NotAuthorized")} />;
   }
- 
 
   const routes =
     url !== "tour"
@@ -196,7 +195,7 @@ export const App = () => {
 
   return (
     <ErrorBoundary>
-       <Sidebar {...{ routes }} />
+      <Sidebar {...{ routes }} />
       <Content>
         <Switch>
           {renderRoutes(routes)}

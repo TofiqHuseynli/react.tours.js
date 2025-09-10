@@ -5,6 +5,10 @@ export const hotelList = (params) => {
     return Api.post("hotelList", { data: params });
   };
 
+  export const hotelMinList = (params) => {
+    return Api.post("hotelMinList", { data: params });
+  };
+
   export const hotelAdd = (params) => {
     return Api.post("hotelAdd", { data: params });
   };

@@ -60,6 +60,7 @@ export const API_ROUTES = {
   hotelDelete: MICROSERVICE_URL + "/hotel_templates/delete",
   hotelInfo: MICROSERVICE_URL + "/hotel_templates/info",
   hotelEdit: MICROSERVICE_URL + "/hotel_templates/edit",
+  hotelMinList: MICROSERVICE_URL + "/hotel_templates/minlist",
 
   // Service
   serviceList: MICROSERVICE_URL + "/service_templates/list",

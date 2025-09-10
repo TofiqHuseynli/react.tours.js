@@ -10,20 +10,13 @@ import {
 } from "fogito-core-ui";
 import { Spinner } from "@components";
 import AsyncSelect from "react-select/async";
-import {
-  hotelAdd,
-  hotelEdit,
-  hotelInfo,
-  offersAdd,
-  roomTypeMinList,
-} from "@actions";
+import { hotelEdit, hotelInfo, roomTypeMinList } from "@actions";
 
 export const Edit = ({
   onClose,
   reload,
   match: {
     params: { id },
-    url,
   },
 }) => {
   const toast = useToast();
@@ -39,34 +32,6 @@ export const Edit = ({
     }
   );
 
-  const [params, setParams] = React.useState({
-    active: 0,
-    items: [],
-    fines: [],
-    user_id: "",
-    comment: "",
-    date: null,
-    template_id: null,
-    currency_id: null,
-    timezone_id: Auth.get("timezone")
-      ? {
-          label: Auth.get("timezone")?.title,
-          value: Auth.get("timezone")?.id,
-        }
-      : null,
-    expires_date: "",
-    payment: "",
-    currency: "",
-    timezone: "",
-    terms: null,
-    vat_inclusive: 0,
-    vat_included: 0,
-    total_excluded_vat: 0,
-    total_vat_amount: 0,
-    total_included_vat: 0,
-    total_to_pay: 0,
-  });
-
   const loadData = async () => {
     setState({ loading: true });
     let response = await hotelInfo({
@@ -76,6 +41,8 @@ export const Edit = ({
       setState({ loading: false });
       if (response.status === "success") {
         setState({
+          title: "Hotel1",
+          country: "Aze",
           room_type: response.data.room_type,
           description: response.data.description,
           status: response.data.status,
@@ -89,7 +56,7 @@ export const Edit = ({
     }
   };
 
-  console.log("room: " + state.room_type)
+  console.log("room: " + state.room_type);
 
   const loadRoomType = async (title) => {
     let response = await roomTypeMinList({
@@ -158,8 +125,8 @@ export const Edit = ({
                   defaultOptions
                   // value={params.board}
                   // loadOptions={loadBoards}
-                  placeholder={Lang.get("Select")}
-                  onChange={(board) => setParams({ ...params, board })}
+                  // placeholder={Lang.get("Select")}
+                  // onChange={(board) => setParams({ ...params, board })}
                   className="form-control"
                 />
               </div>
@@ -171,8 +138,8 @@ export const Edit = ({
                   defaultOptions
                   // value={params.board}
                   // loadOptions={loadBoards}
-                  placeholder={Lang.get("Select")}
-                  onChange={(board) => setParams({ ...params, board })}
+                  // placeholder={Lang.get("Select")}
+                  // onChange={(board) => setParams({ ...params, board })}
                   className="form-control"
                 />
               </div>

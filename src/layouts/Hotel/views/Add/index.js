@@ -10,7 +10,7 @@ import {
 } from "fogito-core-ui";
 import { Spinner } from "@components";
 import AsyncSelect from "react-select/async";
-import { hotelAdd, offersAdd, roomTypeMinList } from "@actions";
+import { hotelAdd, hotelMinList, offersAdd, roomTypeMinList } from "@actions";
 
 export const Add = ({ onClose, reload }) => {
   const toast = useToast();
@@ -21,38 +21,11 @@ export const Add = ({ onClose, reload }) => {
       loading: false,
       updateLoading: false,
       room_type: "",
+      hotel: "",
       description: "",
       status: false,
     }
   );
-
-  const [params, setParams] = React.useState({
-    active: 0,
-    items: [],
-    fines: [],
-    user_id: "",
-    comment: "",
-    date: null,
-    template_id: null,
-    currency_id: null,
-    timezone_id: Auth.get("timezone")
-      ? {
-          label: Auth.get("timezone")?.title,
-          value: Auth.get("timezone")?.id,
-        }
-      : null,
-    expires_date: "",
-    payment: "",
-    currency: "",
-    timezone: "",
-    terms: null,
-    vat_inclusive: 0,
-    vat_included: 0,
-    total_excluded_vat: 0,
-    total_vat_amount: 0,
-    total_included_vat: 0,
-    total_to_pay: 0,
-  });
 
   const loadRoomType = async (title) => {
     let response = await roomTypeMinList({
@@ -69,17 +42,32 @@ export const Add = ({ onClose, reload }) => {
     }
   };
 
+  const loadHotel = async (title) => {
+    let response = await hotelMinList({
+      archived: 0,
+      skip: 0,
+      limit: 20,
+      title,
+    });
+    if (response?.status !== "success") {
+      return response.data?.map((item) => ({
+        value: item.value,
+        label: item.label,
+      }));
+    }
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setState({ updateLoading: true });
     let response = null;
     if (!state.updateLoading) {
       response = await hotelAdd({
-        title: "fddf",
+        title: "Hotel1",
         country: "dd",
-        room_type: state.room_type,
+        room_type: state.room_type.label,
         status: state.status,
-        description: state.description
+        description: state.description,
       });
 
       if (response) {
@@ -115,10 +103,10 @@ export const Add = ({ onClose, reload }) => {
                   isClearable
                   cacheOptions
                   defaultOptions
-                  // value={params.board}
-                  // loadOptions={loadBoards}
+                  value={state.hotel}
+                  loadOptions={loadHotel}
                   placeholder={Lang.get("Select")}
-                  onChange={(board) => setParams({ ...params, board })}
+                  onChange={(board) => setState({ ...state, hotel })}
                   className="form-control"
                 />
               </div>
@@ -130,8 +118,8 @@ export const Add = ({ onClose, reload }) => {
                   defaultOptions
                   // value={params.board}
                   // loadOptions={loadBoards}
-                  placeholder={Lang.get("Select")}
-                  onChange={(board) => setParams({ ...params, board })}
+                  // placeholder={Lang.get("Select")}
+                  // onChange={(board) => setParams({ ...params, board })}
                   className="form-control"
                 />
               </div>

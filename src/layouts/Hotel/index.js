@@ -64,7 +64,7 @@ export const Hotel = ({ name, history, match: { path, url } }) => {
     let response = await hotelList({
       limit: state.limit || "",
       skip: params?.skip || 0,
-      sort: "created_at",
+      // sort: "created_at",
       title: state.title,
       country: state.filters.country,
       room_type: state.filters.room_type,
